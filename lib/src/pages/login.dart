@@ -1,3 +1,4 @@
+import 'package:equipro/src/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/pages/signUp.dart'; // Importer la page d'inscription
 
@@ -87,7 +88,13 @@ class MyLoginPage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // Ajouter la logique de connexion ici
-                        print('Connexion...');
+                                                  // Navigation vers HousesScreen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MyHomePage(),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
