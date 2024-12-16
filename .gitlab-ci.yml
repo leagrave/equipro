@@ -1,0 +1,22 @@
+image: cirrusci/flutter:3.13.0
+
+stages:
+  - test
+  - build
+
+before_script:
+  - flutter doctor
+  - flutter pub get
+
+test_job:
+  stage: test
+  script:
+    - flutter test
+
+build_job:
+  stage: build
+  script:
+    - flutter build apk --release
+  artifacts:
+    paths:
+      - build/app/outputs/flutter-apk/app-release.apk
