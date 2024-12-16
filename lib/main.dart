@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:equipro/src/pages/login.dart';
+import 'package:equipro/router/router.dart';
 
 
 void main() {
@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // Définit directement MyLoginPage comme la page principale
-      home: MyLoginPage(),
+      initialRoute: '/login', // Route par défaut
+      onGenerateRoute: AppRouter.generateRoute, // Gestion des routes
     );
   }
 }

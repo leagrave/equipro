@@ -5,18 +5,20 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String logoPath;
   final Function onNotificationTap;
+  final Color backgroundColor;
 
   const MyWidgetAppBar({
     Key? key,
     required this.title,
     required this.logoPath,
     required this.onNotificationTap,
+    required this.backgroundColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Color(0xFF28313E),
+      backgroundColor: backgroundColor,
       elevation: 0,
       title: Row(
         children: [

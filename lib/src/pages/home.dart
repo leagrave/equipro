@@ -1,9 +1,10 @@
-import 'package:equipro/src/widgets/appBar.dart';
-import 'package:equipro/src/widgets/navBar.dart';
+import 'package:equipro/src/widgets/bar/appBarWidget.dart';
+import 'package:equipro/src/widgets/bar/navBarWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/src/widgets/evenementsList.dart';
+import 'package:equipro/src/widgets/home/evenementsListWidget.dart';
+import 'package:equipro/style/appColor.dart';
 
-// Widget pour la barre de navigation
+/// Widget pour la barre de navigation
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,11 +16,12 @@ class MyHomePage extends StatelessWidget {
           // Action lors du clic sur l'icône de notification
           print('Notifications');
         },
+        backgroundColor: AppColors.appBarBackgroundColor, // Utilisation de la couleur pour l'AppBar
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF28313E),Color(0xFF1BD5DB)],
+            colors: [AppColors.gradientStartColor, AppColors.gradientEndColor], // Utilisation des couleurs pour le gradient
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -37,8 +39,8 @@ class MyHomePage extends StatelessWidget {
                     // Naviguer vers d'autres pages ou modules
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Color(0xFF28313E),
+                    backgroundColor: AppColors.buttonBackgroundColor, // Couleur de fond du bouton
+                    foregroundColor: AppColors.buttonTextColor, // Couleur du texte du bouton
                     padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -59,5 +61,3 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
-
-

@@ -1,7 +1,11 @@
 import 'package:equipro/src/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:equipro/src/widgets/form/signUpFormWidget.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class MySignupPage extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,11 +32,12 @@ class MySignupPage extends StatelessWidget {
                     // Logo ou image en haut
                     const CircleAvatar(
                       radius: 50,
-                      backgroundImage: AssetImage('assets/images/image-logo.jpg'), // Remplace par ton logo
+                      backgroundImage: AssetImage(
+                          'assets/images/image-logo.jpg'), 
                     ),
                     const SizedBox(height: 20),
                     // Texte d'en-tête
-                    const Text(
+                    const AutoSizeText(
                       'Bienvenue sur EquiPro',
                       style: TextStyle(
                         fontSize: 24,
@@ -41,7 +46,7 @@ class MySignupPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
+                    const AutoSizeText(
                       'Créez votre compte pour commencer',
                       style: TextStyle(
                         fontSize: 16,
@@ -49,56 +54,9 @@ class MySignupPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    // Champ d'e-mail
-                    TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.email, color: Colors.white),
-                        hintText: 'Adresse e-mail',
-                        hintStyle: const TextStyle(color: Colors.white70),
-                        filled: true,
-                        fillColor: Colors.white.withOpacity(0.2),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    const SizedBox(height: 20),
-                    // Champ de mot de passe
-                    TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.lock, color: Colors.white),
-                        hintText: 'Mot de passe',
-                        hintStyle: const TextStyle(color: Colors.white70),
-                        filled: true,
-                        fillColor: Colors.white.withOpacity(0.2),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    const SizedBox(height: 20),
-                    // Champ de confirmation de mot de passe
-                    TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.lock, color: Colors.white),
-                        hintText: 'Confirmer le mot de passe',
-                        hintStyle: const TextStyle(color: Colors.white70),
-                        filled: true,
-                        fillColor: Colors.white.withOpacity(0.2),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      style: const TextStyle(color: Colors.white),
-                    ),
+
+                    SignUpFormWidget(),
+
                     const SizedBox(height: 30),
                     // Bouton de création de compte
                     ElevatedButton(
@@ -117,7 +75,7 @@ class MySignupPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
+                      child: const AutoSizeText(
                         'Créer un compte',
                         style: TextStyle(fontSize: 16),
                       ),
@@ -127,7 +85,7 @@ class MySignupPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        const AutoSizeText(
                           "Déjà un compte ? ",
                           style: TextStyle(color: Colors.white70),
                         ),
@@ -137,11 +95,12 @@ class MySignupPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => MyLoginPage(), // Page d'inscription
+                                builder: (context) =>
+                                    MyLoginPage(), // Page d'inscription
                               ),
                             );
                           },
-                          child: const Text(
+                          child: const AutoSizeText(
                             'Se connecter',
                             style: TextStyle(
                               color: Colors.white,
