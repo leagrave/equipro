@@ -6,8 +6,12 @@ import 'package:equipro/src/pages/client/listClient.dart';
 import 'package:equipro/src/pages/client/createClient.dart';
 import 'package:equipro/src/pages/client/managementClient.dart';
 import 'package:equipro/src/models/client.dart';
-import 'package:equipro/src/pages/horse/listHorse.dart'; // Importer la page des factures
-import 'package:equipro/src/pages/facture/listFacture.dart'; // Importer la page des chevaux
+import 'package:equipro/src/models/horse.dart';
+import 'package:equipro/src/pages/horse/listHorse.dart'; 
+import 'package:equipro/src/pages/horse/managementHorse.dart'; 
+import 'package:equipro/src/pages/facture/listFacture.dart'; 
+import 'package:equipro/src/pages/agenda.dart';
+
 
 class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
@@ -18,6 +22,12 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => MyHomePage());
       case '/signup':
         return MaterialPageRoute(builder: (_) => MySignupPage());
+      case '/agenda':
+        // Récupérer les arguments passés dans la navigation
+        final bool? isClientList = settings.arguments as bool?;
+        return MaterialPageRoute(
+          builder: (_) => MyAgendaPage(isClientList: isClientList ?? true), // Valeur par défaut true
+        );
       case '/listClient':
         return MaterialPageRoute(builder: (_) => ListClientPage());
       case '/createClient':
@@ -35,8 +45,19 @@ class AppRouter {
       // Ajouter les nouvelles routes ici
       case '/facture':
         return MaterialPageRoute(builder: (_) => ListfacturePage());
-      case '/horse':
+      case '/listHorse':
         return MaterialPageRoute(builder: (_) => ListHorsePage());
+      case '/createHorse':
+        return MaterialPageRoute(builder: (_) => CreateClientPage());
+      case '/managementHorse':
+        // Vérifier si des arguments sont passés
+        final horse = settings.arguments as Horse?;
+        if (horse != null) {
+          return MaterialPageRoute(
+            builder: (_) => ManagementHorsePage(horse: horse), // Passer le client
+          );
+        }
+        return _errorRoute();
 
       default:
         return _errorRoute();

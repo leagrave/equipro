@@ -39,6 +39,7 @@ dependencies:
   url_launcher: ^6.0.12
   auto_size_text: ^3.0.0
   google_maps_flutter: ^2.10.0
+  intl: ^0.18.0
 
 
 dev_dependencies:

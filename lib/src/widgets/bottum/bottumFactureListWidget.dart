@@ -12,7 +12,7 @@ class ButtonFactureListWidget extends StatelessWidget {
           backgroundColor: AppColors.gradientStartColor, // Couleur du bouton
         ),
         onPressed: () {
-          // Navigation vers la page des chevaux (ListHorsePage)
+          // Navigation vers la page des chevaux (ListHorsePage) // ajouter arguments: horse.id
           Navigator.pushNamed(context, '/facture');
         },
         child: Text(

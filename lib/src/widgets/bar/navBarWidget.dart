@@ -15,7 +15,7 @@ class MyWidgetBottomNavBar extends StatelessWidget {
           label: 'Accueil',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.folder),  // Icône pour le répertoire
+          icon: Icon(Icons.view_agenda_outlined), 
           label: 'Répertoire',
         ),
         BottomNavigationBarItem(
@@ -36,7 +36,7 @@ class MyWidgetBottomNavBar extends StatelessWidget {
             Navigator.pushNamed(context, '/');  // Accueil
             break;
           case 1:
-            Navigator.pushNamed(context, '/listClient');  // Répertoire
+            Navigator.pushNamed(context, '/agenda');  // Répertoire
             break;
           case 2:
             Navigator.pushNamed(context, '/calendar');  // Rendez-vous

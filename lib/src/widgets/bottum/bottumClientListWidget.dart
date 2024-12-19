@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:equipro/style/appColor.dart';
 import 'package:equipro/router/router.dart'; // Assurez-vous que votre routeur est bien importé
 
-class ButtonHorseListWidget extends StatelessWidget {
+class ButtonClientListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,12 +16,12 @@ class ButtonHorseListWidget extends StatelessWidget {
           Navigator.pushNamed(
             context,
             '/agenda',
-            arguments: false, // Exemple : envoie `false` pour la liste des chevaux
+            arguments: true, // Exemple : envoie `false` pour la liste des chevaux
           );
         },
 
         child: Text(
-          "Chevaux",
+          "Propriètaire",
           style: TextStyle(
             color: Colors.white, // Couleur du texte
           ),

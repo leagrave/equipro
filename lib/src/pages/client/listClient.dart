@@ -101,16 +101,16 @@ void navigateToManagementClientPage(Client client) async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyWidgetAppBar(
-        title: 'Agenda clients',
-        logoPath: 'assets/images/image-logo.jpg', // Le chemin du logo
-        onNotificationTap: () {
-          // Action lors du clic sur l'icône de notification
-          print('Notifications');
-        },
-        backgroundColor: AppColors.appBarBackgroundColor, 
+      // appBar: MyWidgetAppBar(
+      //   title: 'Agenda clients',
+      //   logoPath: 'assets/images/image-logo.jpg', // Le chemin du logo
+      //   onNotificationTap: () {
+      //     // Action lors du clic sur l'icône de notification
+      //     print('Notifications');
+      //   },
+      //   backgroundColor: AppColors.appBarBackgroundColor, 
         
-      ),
+      // ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -167,11 +167,11 @@ void navigateToManagementClientPage(Client client) async {
         backgroundColor: AppColors.appBarBackgroundColor, // Gris ardoise
         child: const Icon(Icons.add, color: AppColors.buttonBackgroundColor),
       ),
-      bottomNavigationBar: MyWidgetBottomNavBar(
-        onTap: (index) {
-          // Navigation selon l'index sélectionné
-        },
-      ),
+      // bottomNavigationBar: MyWidgetBottomNavBar(
+      //   onTap: (index) {
+      //     // Navigation selon l'index sélectionné
+      //   },
+      // ),
     );
   }
 }
