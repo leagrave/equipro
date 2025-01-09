@@ -17,9 +17,10 @@ class ListHorsePage extends StatefulWidget {
 }
 
 class _ListHorsePageState extends State<ListHorsePage> {
-  List<Horse> horses = [
-    Horse(
+ List<Horse> horses = [
+      Horse(
       id: 1,
+      idClient: 1,
       name: "Eclair",
       ownerId: 1,
       adresse: "123 Rue Principale, Paris",
@@ -30,6 +31,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
     ),
     Horse(
       id: 2,
+      idClient: 1,
       name: "Tempête",
       ownerId: 2,
       adresse: "123 Rue Principale, Paris",
@@ -40,6 +42,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
     ),
     Horse(
       id: 3,
+      idClient: 2,
       name: "Foudre",
       ownerId: 1,
       adresse: "123 Rue Principale, Paris",
@@ -50,6 +53,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
     ),
     Horse(
       id: 4,
+      idClient: 1,
       name: "Brume",
       ownerId: 3,
       adresse: "123 Rue Principale, Paris",
@@ -58,8 +62,42 @@ class _ListHorsePageState extends State<ListHorsePage> {
       lastAppointmentDate: null,
       notes: ""
     ),
+    Horse(
+      id: 5,
+      idClient: 1,
+      name: "Bubule",
+      ownerId: 2,
+      adresse: "123 Rue Principale, Paris",
+      age: 5,
+      race: "Frison",
+      lastAppointmentDate: null,
+      notes: "Bouge la tête"
+    ),
+    Horse(
+      id: 6,
+      idClient: 1,
+      name: "Truck",
+      ownerId: 2,
+      adresse: "123 Rue Principale, Paris",
+      age: 5,
+      race: "Frison",
+      lastAppointmentDate: null,
+      notes: "Bouge la tête"
+    ),
+    Horse(
+      id: 7,
+      idClient: 1,
+      name: "Chouette",
+      ownerId: 2,
+      adresse: "123 Rue Principale, Paris",
+      age: 5,
+      race: "Frison",
+      lastAppointmentDate: null,
+      notes: "Bouge la tête"
+    )
   ];
 
+  
   List<Horse> filteredHorses = [];
   String searchQuery = "";
 
@@ -67,20 +105,37 @@ class _ListHorsePageState extends State<ListHorsePage> {
   void initState() {
     super.initState();
     if (widget.idClient != null) {
-      filteredHorses = horses.where((horse) => horse.ownerId == widget.idClient).toList();
+      // Si idClient est non nul, on filtre les chevaux selon l'idClient
+      filteredHorses = horses.where((horse) => horse.idClient == widget.idClient).toList();
     } else {
+      // Sinon, on affiche tous les chevaux
       filteredHorses = horses;
     }
   }
 
-  void filterHorses(String query) {
+  // void filterHorses(String query) {
+  //   setState(() {
+  //     searchQuery = query;
+  //     filteredHorses = horses.where((horse) {
+  //       return horse.name.toLowerCase().contains(query.toLowerCase()) &&
+  //           (widget.idClient == null || horse.idClient == widget.idClient);
+  //     }).toList();
+  //   });
+  // }
+
+    void filterHorses(String query) {
     setState(() {
       searchQuery = query;
-      filteredHorses = horses.where((horse) {
-        return horse.name.toLowerCase().contains(query.toLowerCase());
-      }).toList();
+      if (query.isEmpty) {
+        filteredHorses = horses; // Si la recherche est vide, on affiche tous les chevaux
+      } else {
+        filteredHorses = horses.where((horse) {
+          return horse.name.toLowerCase().contains(query.toLowerCase());
+        }).toList();
+      }
     });
   }
+
 
   void navigateToManagementHorsePage(Horse horse) async {
     await Navigator.pushNamed(
@@ -98,7 +153,9 @@ class _ListHorsePageState extends State<ListHorsePage> {
     if (newHorse != null) {
       setState(() {
         horses.add(newHorse);
-        filteredHorses = horses;
+        filteredHorses = widget.idClient != null
+            ? horses.where((horse) => horse.idClient == widget.idClient).toList()
+            : horses;
       });
     }
   }
@@ -106,14 +163,14 @@ class _ListHorsePageState extends State<ListHorsePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: MyWidgetAppBar(
-      //   title: 'Chevaux',
-      //   logoPath: 'assets/images/image-logo.jpg',
-      //   onNotificationTap: () {
-      //     print('Notifications');
-      //   },
-      //   backgroundColor: AppColors.appBarBackgroundColor,
-      // ),
+      appBar: MyWidgetAppBar(
+        title: 'Chevaux',
+        logoPath: 'assets/images/image-logo.jpg',
+        onNotificationTap: () {
+          print('Notifications');
+        },
+        backgroundColor: AppColors.appBarBackgroundColor,
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -150,14 +207,23 @@ class _ListHorsePageState extends State<ListHorsePage> {
                 ),
               ),
               const SizedBox(height: 16),
+              
+              // Text(
+              //   "Liste des chevaux de ${widget.idClient ?? 'inconnu'}",
+              //   style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              // ),
+
+
               Expanded(
                 child: HorseListWidget(
                   horses: filteredHorses,
                   onHorseTap: (horse) {
                     navigateToManagementHorsePage(horse);
                   },
+                  isFromListHorsePage: true, // Indiquer que c'est la page ListHorsePage
                 ),
               ),
+
             ],
           ),
         ),
@@ -167,11 +233,11 @@ class _ListHorsePageState extends State<ListHorsePage> {
         backgroundColor: AppColors.appBarBackgroundColor,
         child: const Icon(Icons.add, color: AppColors.buttonBackgroundColor),
       ),
-      // bottomNavigationBar: MyWidgetBottomNavBar(
-      //   onTap: (index) {
-      //     // Navigation selon l'index sélectionné
-      //   },
-      // ),
+      bottomNavigationBar: MyWidgetBottomNavBar(
+        onTap: (index) {
+          // Navigation selon l'index sélectionné
+        },
+      ),
     );
   }
 }

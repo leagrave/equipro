@@ -29,7 +29,7 @@ class _SwitchableListWidgetState extends State<SwitchableListWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'Clients', 
+                  'Chevaux', 
                   style: TextStyle(fontSize: 16, color: Colors.white), // Texte en blanc
                 ),
                 Container(
@@ -50,7 +50,7 @@ class _SwitchableListWidgetState extends State<SwitchableListWidget> {
                   ),
                 ),
                 const Text(
-                  'Chevaux', 
+                  'Clients', 
                   style: TextStyle(fontSize: 16, color: Colors.white), 
                 ),
               ],

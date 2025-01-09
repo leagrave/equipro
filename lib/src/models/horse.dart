@@ -1,5 +1,6 @@
 class Horse {
   final int id;
+  final int idClient;
   final String name;
   final int ownerId;
   final String? adresse;
@@ -14,6 +15,7 @@ class Horse {
 
   Horse({
     required this.id,
+    required this.idClient,
     required this.name,
     required this.ownerId,
     this.adresse,

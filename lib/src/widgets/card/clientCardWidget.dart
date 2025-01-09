@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:equipro/style/appColor.dart';
 
 class ClientCardWidget extends StatefulWidget {
+  final int idClient;
   final String initialName;
   final String initialSurname;
   final String tel;
@@ -15,6 +16,7 @@ class ClientCardWidget extends StatefulWidget {
 
   const ClientCardWidget({
     Key? key,
+    required this.idClient,
     required this.initialName,
     required this.initialSurname,
     required this.tel,

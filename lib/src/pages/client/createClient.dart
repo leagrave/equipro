@@ -3,7 +3,6 @@ import 'package:equipro/src/models/client.dart';
 import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:equipro/src/widgets/bar/navBarWidget.dart';
-import 'package:equipro/src/widgets/form/clientFormWidget.dart';
 import 'package:equipro/src/widgets/card/clientCardWidget.dart';  
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
 import 'package:equipro/src/widgets/card/clientAdresseCardWidget.dart';
@@ -15,6 +14,7 @@ class CreateClientPage extends StatefulWidget {
 
 class _CreateClientPageState extends State<CreateClientPage> {
   final _formKey = GlobalKey<FormState>();
+  int idClient = 0;
   String nom = '';
   String prenom = '';
   String tel = '';
@@ -56,6 +56,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
             child: Column(
               children: [
                 ClientCardWidget(
+                  idClient: 4,
                   initialName: nom,
                   initialSurname: prenom,
                   tel: tel,
@@ -88,6 +89,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             final newClient = Client(
+              idClient: idClient,
               nom: nom,
               prenom: prenom,
               tel: tel,

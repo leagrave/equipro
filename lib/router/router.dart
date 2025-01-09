@@ -23,11 +23,7 @@ class AppRouter {
       case '/signup':
         return MaterialPageRoute(builder: (_) => MySignupPage());
       case '/agenda':
-        // Récupérer les arguments passés dans la navigation
-        final bool? isClientList = settings.arguments as bool?;
-        return MaterialPageRoute(
-          builder: (_) => MyAgendaPage(isClientList: isClientList ?? true), // Valeur par défaut true
-        );
+        return MaterialPageRoute(builder: (_) => MyAgendaPage());
       case '/listClient':
         return MaterialPageRoute(builder: (_) => ListClientPage());
       case '/createClient':
@@ -46,7 +42,16 @@ class AppRouter {
       case '/facture':
         return MaterialPageRoute(builder: (_) => ListfacturePage());
       case '/listHorse':
-        return MaterialPageRoute(builder: (_) => ListHorsePage());
+        // Vérifier si des arguments sont passés
+        final arguments = settings.arguments as Map<String, dynamic>?;
+
+        // Récupérer l'idClient des arguments s'il existe
+        final int? idClient = arguments?['idClient'];
+
+        return MaterialPageRoute(
+          builder: (_) => ListHorsePage(idClient: idClient), // Passer idClient à la page
+        );
+        
       case '/createHorse':
         return MaterialPageRoute(builder: (_) => CreateClientPage());
       case '/managementHorse':

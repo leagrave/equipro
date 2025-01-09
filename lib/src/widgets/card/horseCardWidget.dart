@@ -31,6 +31,7 @@ class _HorseCardWidgetState extends State<HorseCardWidget> {
     setState(() {
       _horse = Horse(
         id: _horse.id,
+        idClient: _horse.idClient,
         name: name ?? _horse.name,
         ownerId: _horse.ownerId,
         race: race ?? _horse.race,

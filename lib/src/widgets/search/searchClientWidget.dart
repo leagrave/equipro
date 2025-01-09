@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/client.dart';
+import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/widgets/list/clientListWidget.dart';
 
-class searchClientWidget extends StatefulWidget {
+class SearchClientWidget extends StatefulWidget {
   final Function(Client) onClientTap;
   final VoidCallback onCreateClient;
+  final List<Horse> horses;
 
-  const searchClientWidget({
+  const SearchClientWidget({
     Key? key,
     required this.onClientTap,
     required this.onCreateClient,
+    required this.horses,
   }) : super(key: key);
 
   @override
-  _searchClientWidgetState createState() => _searchClientWidgetState();
+  _SearchClientWidgetState createState() => _SearchClientWidgetState();
 }
 
-class _searchClientWidgetState extends State<searchClientWidget> {
+class _SearchClientWidgetState extends State<SearchClientWidget> {
   List<Client> clients = [
     Client(
+      idClient: 1,
       nom: "Dupont",
       prenom: "Jean",
       tel: "0123456789",
@@ -36,6 +40,7 @@ class _searchClientWidgetState extends State<searchClientWidget> {
       notes: "Client important",
     ),
     Client(
+      idClient: 2,
       nom: "Martin",
       prenom: "Pierre",
       tel: "0123456489",
@@ -65,14 +70,23 @@ class _searchClientWidgetState extends State<searchClientWidget> {
 
   void filterClients(String query) {
     setState(() {
-      searchQuery = query;
+      searchQuery = query.toLowerCase();
       filteredClients = clients.where((client) {
         final fullName = "${client.nom} ${client.prenom}".toLowerCase();
         final fullTel = "${client.tel} ".toLowerCase();
         final cityRegion = "${client.ville} ${client.region ?? ''}".toLowerCase();
-        return fullName.contains(query.toLowerCase()) ||
-            cityRegion.contains(query.toLowerCase()) ||
-            fullTel.contains(query.toLowerCase());
+
+        // Recherche de chevaux appartenant à ce client
+        final hasMatchingHorse = widget.horses.any((horse) {
+          return horse.idClient == client.idClient &&
+              horse.name.toLowerCase().contains(searchQuery);
+        });
+
+        // Retourne vrai si correspondance dans les champs du client ou par cheval
+        return fullName.contains(searchQuery) ||
+            cityRegion.contains(searchQuery) ||
+            fullTel.contains(searchQuery) ||
+            hasMatchingHorse;
       }).toList();
     });
   }
@@ -98,7 +112,7 @@ class _searchClientWidgetState extends State<searchClientWidget> {
             onChanged: filterClients,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.search, color: Color(0xFF28313E)),
-              hintText: "Rechercher par nom, prénom, tel ou ville",
+              hintText: "Rechercher par nom, prénom, tel, ville ou cheval",
               hintStyle: TextStyle(color: Colors.grey[600]),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(vertical: 16),
@@ -112,6 +126,7 @@ class _searchClientWidgetState extends State<searchClientWidget> {
           child: ClientListWidget(
             filteredClients: filteredClients,
             onClientTap: widget.onClientTap, // Appelle la fonction passée depuis le parent
+            horses: widget.horses, // Passe la liste des chevaux au widget
           ),
         ),
       ],

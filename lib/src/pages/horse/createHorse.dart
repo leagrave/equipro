@@ -59,6 +59,7 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
             _formKey.currentState!.save();
             final newHorse = Horse(
               id: DateTime.now().millisecondsSinceEpoch, // Générer un ID unique
+              idClient: 1,
               ownerId: 1,
               name: name,
               race: race,
