@@ -1,4 +1,7 @@
+import 'package:equipro/src/pages/facture/createFacture.dart';
+import 'package:equipro/src/pages/facture/managementInvoice.dart';
 import 'package:equipro/src/pages/horse/createHorse.dart';
+import 'package:equipro/src/pages/invoice.dart';
 import 'package:go_router/go_router.dart';
 import 'package:equipro/src/pages/home.dart';
 import 'package:equipro/src/pages/login.dart';
@@ -11,10 +14,10 @@ import 'package:equipro/src/pages/client/createClient.dart';
 import 'package:equipro/src/pages/client/managementClient.dart';
 import 'package:equipro/src/pages/horse/listHorse.dart'; 
 import 'package:equipro/src/pages/horse/managementHorse.dart'; 
-import 'package:equipro/src/pages/facture/listFacture.dart'; 
 import 'package:equipro/src/widgets/bar/navBarWidget.dart';
 import 'package:equipro/src/models/client.dart';
 import 'package:equipro/src/models/horse.dart';
+import 'package:equipro/src/models/invoice.dart';
 
 final GoRouter go = GoRouter(
   initialLocation: '/login',
@@ -31,6 +34,12 @@ final GoRouter go = GoRouter(
         return MySignupPage();
       },
     ),
+    GoRoute(
+      path: '/settings',
+      builder: (context, state) {
+        return SettingsPage();
+      },
+    ),    
     GoRoute(
       path: '/',
       builder: (context, state) {
@@ -53,12 +62,6 @@ final GoRouter go = GoRouter(
           path: '/meet',
           builder: (context, state) {
             return MeetPage();
-          },
-        ),
-        GoRoute(
-          path: '/settings',
-          builder: (context, state) {
-            return SettingsPage();
           },
         ),
         GoRoute(
@@ -102,9 +105,28 @@ final GoRouter go = GoRouter(
           },
         ),
         GoRoute(
-          path: '/facture',
+          path: '/invoice',
           builder: (context, state) {
-            return ListfacturePage();
+            return InvoicePage();
+          },
+        ),
+        GoRoute(
+          path: '/listInvoice',
+          builder: (context, state) {
+            return ListClientPage();
+          },
+        ),
+        GoRoute(
+          path: '/managementInvoice',
+          builder: (context, state) {
+            final invoice = state.extra as Invoice?;
+            return ManagementInvoicePage(invoice: invoice!);
+          },
+        ),
+        GoRoute(
+          path: '/createInvoice',
+          builder: (context, state) {
+            return CreateInvoicePage();
           },
         ),
       ],

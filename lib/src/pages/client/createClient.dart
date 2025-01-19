@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:equipro/src/models/client.dart';
 import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:equipro/src/widgets/bar/navBarWidget.dart';
 import 'package:equipro/src/widgets/card/clientCardWidget.dart';  
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
 import 'package:equipro/src/widgets/card/clientAdresseCardWidget.dart';

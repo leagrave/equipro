@@ -1,9 +1,9 @@
+import 'package:equipro/src/pages/facture/listFacture.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/src/pages/client/listClient.dart';
 import 'package:equipro/src/utils/constants.dart';
 
-class MyAgendaPage extends StatelessWidget {
-  const MyAgendaPage({Key? key}) : super(key: key);
+class InvoicePage extends StatelessWidget {
+  const InvoicePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class MyAgendaPage extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
         ),
-        child: ListClientPage(), 
+        child: ListInvoicePage(), 
       ),
     );
   }

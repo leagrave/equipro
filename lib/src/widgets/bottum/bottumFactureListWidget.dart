@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:equipro/style/appColor.dart';
-import 'package:equipro/router/router.dart'; // Assurez-vous que votre routeur est bien importé
+import 'package:go_router/go_router.dart'; 
 
 class ButtonFactureListWidget extends StatelessWidget {
   @override
@@ -9,22 +9,27 @@ class ButtonFactureListWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.gradientStartColor, // Couleur du bouton
+          backgroundColor: AppColors.gradientStartColor, 
         ),
         onPressed: () {
-          // Navigation vers la page des chevaux (ListHorsePage) // ajouter arguments: horse.id
-          Navigator.pushNamed(context, '/facture');
+          context.go('/facture');
         },
-        child: Text(
-          "Factures",
-          style: TextStyle(
-            color: Colors.white, // Couleur du texte
-          ),
+        child: const Column(
+          mainAxisSize: MainAxisSize.min, 
+          children: <Widget>[
+            Icon(
+              Icons.receipt, 
+              color: Colors.white,
+              size: 30, 
+            ),
+            Text(
+              "Mes Factures",
+              style: TextStyle(
+                color: Colors.white, 
+              ),
+            ),
+          ],
         ),
-        // Icon(
-        //   Icons.picture_as_pdf_outlined, 
-        //   color: Colors.white, // Couleur de l'icône
-        // ),
       ),
     );
   }

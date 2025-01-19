@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:equipro/style/appColor.dart';
-import 'package:equipro/router/router.dart';
-import 'package:go_router/go_router.dart'; // Assurez-vous que votre routeur est bien importé
+import 'package:go_router/go_router.dart'; 
 
 class ButtonHorseListWidget extends StatelessWidget {
   @override
@@ -10,22 +9,27 @@ class ButtonHorseListWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.gradientStartColor, // Couleur du bouton
+          backgroundColor: AppColors.gradientStartColor, 
         ),
         onPressed: () {
-          context.go('/', extra: false);
-          // Navigator.pushNamed(
-          //   context,
-          //   '/agenda',
-          //   arguments: false, // Exemple : envoie `false` pour la liste des chevaux
-          // );
+          context.go('/listHorse', extra: 1);
         },
 
-        child: Text(
-          "Chevaux",
-          style: TextStyle(
-            color: Colors.white, // Couleur du texte
-          ),
+        child: const Column(
+          mainAxisSize: MainAxisSize.min, 
+          children: <Widget>[
+            Icon(
+              Icons.list, 
+              color: Colors.white,
+              size: 30, 
+            ),
+            Text(
+              "Mes Chevaux",
+              style: TextStyle(
+                color: Colors.white, 
+              ),
+            ),
+          ],
         ),
       ),
     );

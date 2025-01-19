@@ -1,11 +1,9 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/widgets/list/horseListWidget.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:equipro/src/widgets/bar/navBarWidget.dart';
-import 'package:equipro/src/pages/horse/managementHorse.dart';
-import 'package:equipro/src/pages/horse/createHorse.dart';
 import 'package:go_router/go_router.dart';
 
 class ListHorsePage extends StatefulWidget {
@@ -165,17 +163,17 @@ void navigateToCreateHorsePage() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyWidgetAppBar(
-        title: 'Chevaux',
-        logoPath: 'assets/images/image-logo.jpg',
+        title: 'Mes Chevaux',
+        logoPath: Constants.logo,
         onNotificationTap: () {
           print('Notifications');
         },
-        backgroundColor: AppColors.appBarBackgroundColor,
+        backgroundColor: Constants.appBarBackgroundColor,
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.gradientStartColor, AppColors.gradientEndColor],
+            colors: [Constants.appBarBackgroundColor, Constants.turquoise],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

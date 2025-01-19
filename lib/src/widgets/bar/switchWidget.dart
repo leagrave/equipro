@@ -19,10 +19,10 @@ class _SwitchableListWidgetState extends State<SwitchableListWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.transparent, // Rendre le fond transparent
+      color: Colors.transparent, 
       child: Column(
         children: [
-          // Barre de switch
+          
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Row(
@@ -30,11 +30,11 @@ class _SwitchableListWidgetState extends State<SwitchableListWidget> {
               children: [
                 const Text(
                   'Chevaux', 
-                  style: TextStyle(fontSize: 16, color: Colors.white), // Texte en blanc
+                  style: TextStyle(fontSize: 16, color: Colors.white), 
                 ),
                 Container(
                   decoration: const BoxDecoration(
-                    color: Colors.transparent, // Fond transparent
+                    color: Colors.transparent, 
                   ),
                   child: Switch(
                     value: _isClientList,
@@ -42,7 +42,7 @@ class _SwitchableListWidgetState extends State<SwitchableListWidget> {
                       setState(() {
                         _isClientList = value;
                       });
-                      widget.onSwitchChanged(value); // Appel du callback pour envoyer la nouvelle valeur au parent
+                      widget.onSwitchChanged(value); 
                     },
                     activeColor: AppColors.buttonBackgroundColor, // Couleur active
                     inactiveThumbColor: Colors.grey, // Couleur inactive

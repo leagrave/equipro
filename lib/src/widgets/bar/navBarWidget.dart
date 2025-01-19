@@ -1,5 +1,5 @@
+import 'package:equipro/src/pages/invoice.dart';
 import 'package:equipro/src/pages/meet.dart';
-import 'package:equipro/src/pages/settings.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/pages/home.dart';
@@ -21,7 +21,7 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
      MyHomePage(),       // Page d'accueil
      MyAgendaPage(), // Page de répertoire
      MeetPage(), // Page des rendez-vous
-     SettingsPage(), // Page des paramètres
+     InvoicePage(), // Page des factures
   ];
 
   @override
@@ -67,7 +67,7 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
           NavigationDestination(
             icon: Icon(Icons.settings_outlined),
             selectedIcon: Icon(Icons.settings, color: Constants.turquoiseBright),
-            label: 'Paramètres',
+            label: 'Factures',
           ),
         ],
       ),

@@ -7,7 +7,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String logoPath;
   final Function onNotificationTap;
   final Color backgroundColor;
-  final bool isBackButtonVisible; // Nouveau paramètre
+  final bool isBackButtonVisible; 
 
   const MyWidgetAppBar({
     Key? key,
@@ -15,7 +15,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.logoPath,
     required this.onNotificationTap,
     required this.backgroundColor,
-    this.isBackButtonVisible = true, // Par défaut, le bouton de retour est visible
+    this.isBackButtonVisible = true, 
   }) : super(key: key);
 
   @override
@@ -27,12 +27,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? IconButton(
               icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
               onPressed: () {
-                // Vérifier si la pile de navigation peut pop
-                if (Navigator.canPop(context)) {
-                  Navigator.pop(context); 
-                } else {
-                  context.go('/');
-                }
+                  //Navigator.pop(context); 
               },
             )
           : null, 
@@ -40,7 +35,6 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           GestureDetector(
             onTap: () {
-              // Lorsque le logo est cliqué, naviguer vers la page d'accueil avec un index
               context.go('/');
             },
             child: CircleAvatar(
@@ -60,18 +54,25 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
-        // Icône de profil avant l'icône de notification
+        // Icône de paramètres à gauche du profil
+        IconButton(
+          icon: const Icon(Icons.settings, color: Colors.white),
+          onPressed: () {
+            context.go('/settings'); 
+          },
+        ),
+        // Icône de profil
         IconButton(
           icon: const Icon(Icons.account_circle, color: Colors.white),
           onPressed: () {
-            context.go('/profile');
+            context.go('/profile'); 
           },
         ),
         // Icône de notification
         IconButton(
           icon: const Icon(Icons.notifications, color: Constants.white),
           onPressed: () {
-            onNotificationTap();
+            onNotificationTap(); 
           },
         ),
       ],

@@ -12,7 +12,7 @@ class MyHomePage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.turquoise], // Utilisation des couleurs pour le gradient
+            colors: [Constants.appBarBackgroundColor, Constants.turquoise], 
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

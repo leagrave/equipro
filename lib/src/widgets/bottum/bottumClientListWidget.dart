@@ -12,21 +12,25 @@ class ButtonClientListWidget extends StatelessWidget {
           backgroundColor: AppColors.gradientStartColor, 
         ),
         onPressed: () {
-          //context.go('/agenda', extra: true);
-          // Navigator.pushNamed(
-          //   context,
-          //   '/agenda',
-          //   arguments: true, 
-          // );
-          context.go('/',  extra: true);  
-
+          // afficher la fiche du proprio ou la liste des proprio dans l'agenda
+          context.go('/');  
         },
 
-        child: Text(
-          "Propriètaire",
-          style: TextStyle(
-            color: Colors.white, 
-          ),
+        child: const Column(
+          mainAxisSize: MainAxisSize.min, 
+          children: <Widget>[
+            Icon(
+              Icons.person, 
+              color: Colors.white,
+              size: 30, 
+            ),
+            Text(
+              "Mon Propriétaire",
+              style: TextStyle(
+                color: Colors.white, 
+              ),
+            ),
+          ],
         ),
       ),
     );

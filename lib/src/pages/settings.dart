@@ -1,3 +1,4 @@
+import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:go_router/go_router.dart';
@@ -8,22 +9,31 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MyWidgetAppBar(
+        title: 'Settings',
+        logoPath: Constants.logo, 
+        onNotificationTap: () {
+          print('Notifications');
+        },
+        backgroundColor: Constants.appBarBackgroundColor, 
+        isBackButtonVisible: true,
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.turquoise], // Utilisation des couleurs pour le gradient
+            colors: [Constants.appBarBackgroundColor, Constants.turquoise], 
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
-        child: Center( // Placez Center ici, à l'intérieur du Container
+        child: Center( 
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Bouton de déconnexion
               ElevatedButton(
                 onPressed: () {
-                  context.go('/login'); // Redirection vers la page de connexion
+                  context.go('/login'); 
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Constants.secondaryRed, 
