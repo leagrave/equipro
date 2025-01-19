@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:equipro/src/models/client.dart';
 import 'package:equipro/src/models/horse.dart';
@@ -29,11 +30,12 @@ class ClientListWidget extends StatelessWidget {
 
   // Fonction pour naviguer vers la page de gestion des chevaux
   void navigateToManagementHorsePage(BuildContext context, Horse horse) async {
-    await Navigator.pushNamed(
-      context,
-      '/managementHorse',
-      arguments: horse,
-    );
+    context.go('/managementHorse', extra: horse);
+    // await Navigator.pushNamed(
+    //   context,
+    //   '/managementHorse',
+    //   arguments: horse,
+    // );
   }
 
   @override
@@ -91,14 +93,16 @@ class ClientListWidget extends StatelessWidget {
                       ),
                       onTap: () => onClientTap(client),
                     ),
-                    // Liste des chevaux associés
+                    // Liste des chevaux associés avec padding
                     if (clientHorses.isNotEmpty)
-                      HorseListWidget(
-                        horses: clientHorses,
-                        onHorseTap: (horse) => navigateToManagementHorsePage(context, horse),
-                        isFromListHorsePage: false, 
+                      Padding(
+                        padding: const EdgeInsets.only(left: 44.0, right: 18.0, top: 0.0, bottom: 4.0), 
+                        child: HorseListWidget(
+                          horses: clientHorses,
+                          onHorseTap: (horse) => navigateToManagementHorsePage(context, horse),
+                          isFromListHorsePage: false, 
+                        ),
                       ),
-                      
                   ],
                 ),
               );

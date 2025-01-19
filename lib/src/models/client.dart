@@ -6,7 +6,7 @@ class Client {
   final String mobile;
   final String email;
   final String ville;
-  final String? societe; // Propriété ajoutée pour la société
+  final String? societe; 
   final String? civilite;
   final bool? isSociete;
   final DateTime? derniereVisite;
@@ -15,7 +15,7 @@ class Client {
   final String? adresseFacturation;
   final String? region;
   final String? notes;
-  final List<String>? adresses; // Liste des adresses supplémentaires
+  final List<String>? adresses; 
 
   Client({
     required this.idClient,
@@ -25,7 +25,7 @@ class Client {
     required this.mobile,
     required this.email,
     required this.ville,
-    this.societe, // Ajout du paramètre dans le constructeur
+    this.societe, 
     this.civilite,
     this.isSociete,
     this.derniereVisite,

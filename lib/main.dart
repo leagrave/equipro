@@ -11,13 +11,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'EquiPro',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/login', // Route par défaut
-      onGenerateRoute: AppRouter.generateRoute, // Gestion des routes
+      routerConfig: go, 
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:equipro/style/appColor.dart';
-import 'package:equipro/router/router.dart'; // Assurez-vous que votre routeur est bien importé
+import 'package:equipro/router/router.dart';
+import 'package:go_router/go_router.dart'; // Assurez-vous que votre routeur est bien importé
 
 class ButtonHorseListWidget extends StatelessWidget {
   @override
@@ -12,12 +13,12 @@ class ButtonHorseListWidget extends StatelessWidget {
           backgroundColor: AppColors.gradientStartColor, // Couleur du bouton
         ),
         onPressed: () {
-          // Navigation vers la page des chevaux (ListHorsePage) avec le paramètre
-          Navigator.pushNamed(
-            context,
-            '/agenda',
-            arguments: false, // Exemple : envoie `false` pour la liste des chevaux
-          );
+          context.go('/', extra: false);
+          // Navigator.pushNamed(
+          //   context,
+          //   '/agenda',
+          //   arguments: false, // Exemple : envoie `false` pour la liste des chevaux
+          // );
         },
 
         child: Text(

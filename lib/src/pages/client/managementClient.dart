@@ -72,11 +72,6 @@ class ManagementClientPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: MyWidgetBottomNavBar(
-        onTap: (index) {
-          // Navigation selon l'index sélectionné
-        },
-      ),
     );
   }
 }

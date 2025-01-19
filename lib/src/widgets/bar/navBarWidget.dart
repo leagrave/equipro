@@ -1,55 +1,77 @@
-import 'package:equipro/style/appColor.dart';
+import 'package:equipro/src/pages/meet.dart';
+import 'package:equipro/src/pages/settings.dart';
+import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:equipro/src/pages/home.dart';
+import 'package:equipro/src/pages/agenda.dart';
+import 'package:equipro/src/utils/constants.dart';
 
-class MyWidgetBottomNavBar extends StatelessWidget {
-  final Function(int) onTap;
 
-  const MyWidgetBottomNavBar({Key? key, required this.onTap}) : super(key: key);
+class MyWidgetBottomNavBar extends StatefulWidget {
+  const MyWidgetBottomNavBar({Key? key}) : super(key: key);
+
+  @override
+  State<MyWidgetBottomNavBar> createState() => _MyWidgetBottomNavBarState();
+}
+
+class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
+  int currentPageIndex = 0; 
+
+  final List<Widget> _pages = [
+     MyHomePage(),       // Page d'accueil
+     MyAgendaPage(), // Page de répertoire
+     MeetPage(), // Page des rendez-vous
+     SettingsPage(), // Page des paramètres
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Accueil',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.view_agenda_outlined), 
-          label: 'Répertoire',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          label: 'Rendez-vous',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'Paramètres',
-        ),
-      ],
-      onTap: (index) {
-        onTap(index); // Appelle la fonction passée en paramètre
+    return Scaffold(
+      appBar: MyWidgetAppBar(
+        title: 'EquiPro',
+        logoPath: Constants.logo, 
+        onNotificationTap: () {
+          print('Notifications');
+        },
+        backgroundColor: Constants.appBarBackgroundColor, 
+        isBackButtonVisible: false,
+      ),
 
-        // Gère la navigation en fonction de l'index sélectionné
-        switch (index) {
-          case 0:
-            Navigator.pushNamed(context, '/');  // Accueil
-            break;
-          case 1:
-            Navigator.pushNamed(context, '/agenda');  // Répertoire
-            break;
-          case 2:
-            Navigator.pushNamed(context, '/calendar');  // Rendez-vous
-            break;
-          case 3:
-            Navigator.pushNamed(context, '/settings');  // Paramètres
-            break;
-          default:
-            break;
-        }
-      },
-        selectedItemColor: AppColors.gradientEndColor, // Couleur de l'icône sélectionnée
-        unselectedItemColor: AppColors.gradientStartColor, // Couleur des icônes non sélectionnées
+      body: _pages[currentPageIndex],
+      
+      // Barre de navigation en bas
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index; 
+          });
+        },
+        backgroundColor: Colors.white,
+        selectedIndex: currentPageIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home, color: Constants.turquoiseBright),
+            label: 'Accueil',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.view_agenda_outlined),
+            selectedIcon: Icon(Icons.view_agenda, color: Constants.turquoiseBright),
+            label: 'Répertoire',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.calendar_today_outlined),
+            selectedIcon: Icon(Icons.calendar_today, color: Constants.turquoiseBright),
+            label: 'Rendez-vous',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings_outlined),
+            selectedIcon: Icon(Icons.settings, color: Constants.turquoiseBright),
+            label: 'Paramètres',
+          ),
+        ],
+      ),
     );
   }
 }
+

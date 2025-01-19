@@ -67,11 +67,6 @@ class ManagementHorsePage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: MyWidgetBottomNavBar(
-        onTap: (index) {
-          // Navigation selon l'index sélectionné
-        },
-      ),
     );
   }
 }

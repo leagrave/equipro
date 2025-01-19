@@ -1,80 +1,113 @@
-import 'package:flutter/material.dart';
+import 'package:equipro/src/pages/horse/createHorse.dart';
+import 'package:go_router/go_router.dart';
 import 'package:equipro/src/pages/home.dart';
 import 'package:equipro/src/pages/login.dart';
-import 'package:equipro/src/pages/signUp.dart';
+import 'package:equipro/src/pages/signup.dart';
+import 'package:equipro/src/pages/agenda.dart';
+import 'package:equipro/src/pages/meet.dart';
+import 'package:equipro/src/pages/settings.dart';
 import 'package:equipro/src/pages/client/listClient.dart';
 import 'package:equipro/src/pages/client/createClient.dart';
 import 'package:equipro/src/pages/client/managementClient.dart';
-import 'package:equipro/src/models/client.dart';
-import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/pages/horse/listHorse.dart'; 
 import 'package:equipro/src/pages/horse/managementHorse.dart'; 
 import 'package:equipro/src/pages/facture/listFacture.dart'; 
-import 'package:equipro/src/pages/agenda.dart';
+import 'package:equipro/src/widgets/bar/navBarWidget.dart';
+import 'package:equipro/src/models/client.dart';
+import 'package:equipro/src/models/horse.dart';
 
-
-class AppRouter {
-  static Route? generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case '/login':
-        return MaterialPageRoute(builder: (_) => MyLoginPage());
-      case '/':
-        return MaterialPageRoute(builder: (_) => MyHomePage());
-      case '/signup':
-        return MaterialPageRoute(builder: (_) => MySignupPage());
-      case '/agenda':
-        return MaterialPageRoute(builder: (_) => MyAgendaPage());
-      case '/listClient':
-        return MaterialPageRoute(builder: (_) => ListClientPage());
-      case '/createClient':
-        return MaterialPageRoute(builder: (_) => CreateClientPage());
-      case '/managementClient':
-        // Vérifier si des arguments sont passés
-        final client = settings.arguments as Client?;
-        if (client != null) {
-          return MaterialPageRoute(
-            builder: (_) => ManagementClientPage(client: client), // Passer le client
-          );
-        }
-        return _errorRoute();
-
-      // Ajouter les nouvelles routes ici
-      case '/facture':
-        return MaterialPageRoute(builder: (_) => ListfacturePage());
-      case '/listHorse':
-        // Vérifier si des arguments sont passés
-        final arguments = settings.arguments as Map<String, dynamic>?;
-
-        // Récupérer l'idClient des arguments s'il existe
-        final int? idClient = arguments?['idClient'];
-
-        return MaterialPageRoute(
-          builder: (_) => ListHorsePage(idClient: idClient), // Passer idClient à la page
-        );
-        
-      case '/createHorse':
-        return MaterialPageRoute(builder: (_) => CreateClientPage());
-      case '/managementHorse':
-        // Vérifier si des arguments sont passés
-        final horse = settings.arguments as Horse?;
-        if (horse != null) {
-          return MaterialPageRoute(
-            builder: (_) => ManagementHorsePage(horse: horse), // Passer le client
-          );
-        }
-        return _errorRoute();
-
-      default:
-        return _errorRoute();
-    }
-  }
-
-  static Route _errorRoute() {
-    return MaterialPageRoute(
-      builder: (_) => Scaffold(
-        appBar: AppBar(title: Text('Erreur')),
-        body: Center(child: Text('Page non trouvée')),
-      ),
-    );
-  }
-}
+final GoRouter go = GoRouter(
+  initialLocation: '/login',
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/login',
+      builder: (context, state) {
+        return MyLoginPage();
+      },
+    ),
+    GoRoute(
+      path: '/signup',
+      builder: (context, state) {
+        return MySignupPage();
+      },
+    ),
+    GoRoute(
+      path: '/',
+      builder: (context, state) {
+        return MyWidgetBottomNavBar();
+      },
+      routes: [
+        GoRoute(
+          path: '/home',
+          builder: (context, state) {
+            return MyHomePage();
+          },
+        ),
+        GoRoute(
+          path: '/agenda',
+          builder: (context, state) {
+            return MyAgendaPage();
+          },
+        ),
+        GoRoute(
+          path: '/meet',
+          builder: (context, state) {
+            return MeetPage();
+          },
+        ),
+        GoRoute(
+          path: '/settings',
+          builder: (context, state) {
+            return SettingsPage();
+          },
+        ),
+        GoRoute(
+          path: '/listClient',
+          builder: (context, state) {
+            return ListClientPage();
+          },
+        ),
+        GoRoute(
+          path: '/createClient',
+          builder: (context, state) {
+            return CreateClientPage();
+          },
+        ),
+        GoRoute(
+          path: '/createHorse',
+          builder: (context, state) {
+            return CreateHorsePage();
+          },
+        ),
+        GoRoute(
+          path: '/managementClient',
+          builder: (context, state) {
+            final client = state.extra as Client?;
+            return ManagementClientPage(client: client!);
+          },
+        ),
+        GoRoute(
+          path: '/listHorse',
+          builder: (context, state) {
+            final arguments = state.extra as Map<String, dynamic>?;
+            final int? idClient = arguments?['idClient'];
+            return ListHorsePage(idClient: idClient);
+          },
+        ),
+        GoRoute(
+          path: '/managementHorse',
+          builder: (context, state) {
+            final horse = state.extra as Horse?;
+            return ManagementHorsePage(horse: horse!);
+          },
+        ),
+        GoRoute(
+          path: '/facture',
+          builder: (context, state) {
+            return ListfacturePage();
+          },
+        ),
+      ],
+    ),
+  ],
+);

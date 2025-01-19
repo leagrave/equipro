@@ -1,13 +1,15 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/horse.dart';
-import 'package:intl/intl.dart'; // Package pour le formatage des dates
-import 'package:equipro/src/models/client.dart'; // Assurez-vous que cette importation existe
+import 'package:intl/intl.dart'; 
+import 'package:equipro/src/models/client.dart'; 
+import 'package:go_router/go_router.dart'; 
 
 
 class HorseListWidget extends StatefulWidget {
   final List<Horse> horses;
   final Function(Horse) onHorseTap;
-  final bool isFromListHorsePage; // Ajout d'un paramètre pour savoir si c'est ouvert depuis ListHorsePage
+  final bool isFromListHorsePage; 
 
   const HorseListWidget({
     Key? key,
@@ -218,7 +220,7 @@ class _HorseListWidgetState extends State<HorseListWidget> {
           if (!widget.isFromListHorsePage) 
             Row(
               children: [
-                // Bouton d'expansion/réduction
+
                 Expanded(
                   child: Center(
                     child: TextButton(
@@ -227,26 +229,29 @@ class _HorseListWidgetState extends State<HorseListWidget> {
                           _isExpanded = !_isExpanded;
                         });
                       },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Constants.white, 
+                      ),
                       child: Text(_isExpanded ? "Réduire" : "Voir les chevaux"),
                     ),
                   ),
                 ),
-                // Bouton d'expansion/réduction
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _isExpanded = !_isExpanded;
-                    });
-                    if (clientId != null) {
-                      Navigator.pushNamed(
-                        context,
-                        '/listHorse',
-                        arguments: {'idClient': clientId}, // Envoi de l'idClient
-                      );
-                    }
-                  },
-                  child: Text(_isExpanded ? "Voir liste" : ""),
-                ),
+
+                // TextButton(
+                //   onPressed: () {
+                //     setState(() {
+                //       _isExpanded = !_isExpanded;
+                //     });
+                //     if (clientId != null) {
+                //       context.go('/listHorse', extra: {'idClient': clientId});
+                //     }
+                //   },
+                //   style: TextButton.styleFrom(
+                //     foregroundColor: Constants.white,
+                //   ),
+                //   child: Text(_isExpanded ? "Voir liste" : ""),
+                // ),
+
               ],
             ),
         ],

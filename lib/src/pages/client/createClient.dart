@@ -107,11 +107,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
         child: Icon(Icons.save),
         backgroundColor: AppColors.appBarBackgroundColor,
       ),
-      bottomNavigationBar: MyWidgetBottomNavBar(
-        onTap: (index) {
-          // Navigation selon l'index sélectionné
-        },
-      ),
+
     );
   }
 }

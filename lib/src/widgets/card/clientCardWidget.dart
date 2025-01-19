@@ -35,12 +35,11 @@ class ClientCardWidget extends StatefulWidget {
 
 class _ClientCardWidgetState extends State<ClientCardWidget> {
   late bool _isSociete;
-  bool _isEditing = false; // Initialisation de _isEditing directement ici
+  bool _isEditing = false; 
 
   @override
   void initState() {
     super.initState();
-    // Initialiser l'état du client (société ou pas)
     _isSociete = widget.isSociete;
   }
 
@@ -62,7 +61,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.white.withOpacity(0.8), // Background transparent
+        color: Colors.white.withOpacity(0.8), 
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -82,7 +81,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
                 ),
                 controller: TextEditingController(text: widget.initialName),
                 onChanged: widget.onNameChanged,
-                readOnly: !_isEditing, // La zone de texte est modifiable uniquement en mode édition
+                readOnly: !_isEditing,
               ),
               const SizedBox(height: 8),
 
@@ -140,7 +139,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
                       if (widget.onIsSocieteChanged != null) {
                         widget.onIsSocieteChanged!(_isSociete);
                       }
-                    } : null, // Le checkbox ne peut être modifié que si on est en mode édition
+                    } : null, 
                   ),
                   Text('Société'),
                 ],
@@ -152,12 +151,12 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: _cancelEdit, // Annuler les modifications
+                      onPressed: _cancelEdit, 
                       child: Text('Annuler'),
                     ),
                     TextButton(
                       onPressed: () {
-                        _toggleEdit(); // Sauvegarder les modifications et quitter le mode édition
+                        _toggleEdit(); 
                         widget.onNameChanged?.call(widget.initialName);
                         widget.onSurnameChanged?.call(widget.initialSurname);
                         widget.onTelChanged?.call(widget.tel);
@@ -169,7 +168,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
                 ),
               ] else ...[
                 TextButton(
-                  onPressed: _toggleEdit, // Passer en mode édition
+                  onPressed: _toggleEdit, 
                   child: Text('Modifier'),
                 ),
               ],

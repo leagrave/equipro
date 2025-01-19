@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:equipro/src/widgets/bar/navBarWidget.dart';
 import 'package:equipro/src/widgets/form/horseFormWidget.dart';
 
 class CreateHorsePage extends StatefulWidget {
@@ -74,11 +73,6 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
         },
         child: Icon(Icons.save),
         backgroundColor: AppColors.appBarBackgroundColor,
-      ),
-      bottomNavigationBar: MyWidgetBottomNavBar(
-        onTap: (index) {
-          // Navigation selon l'index sélectionné
-        },
       ),
     );
   }

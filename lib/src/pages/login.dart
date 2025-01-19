@@ -1,6 +1,6 @@
-import 'package:equipro/src/pages/home.dart';
+import 'package:go_router/go_router.dart'; 
 import 'package:flutter/material.dart';
-import 'package:equipro/src/pages/signUp.dart'; // Importer la page d'inscription
+import 'package:equipro/src/utils/constants.dart';
 
 class MyLoginPage extends StatelessWidget {
   @override
@@ -12,7 +12,7 @@ class MyLoginPage extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF1BD5DB), Color(0xFF28313E)],
+                colors: [Constants.appBarBackgroundColor, Constants.turquoise], //[Color(0xFF28313E),Color(0xFF1BD5DB)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -29,7 +29,7 @@ class MyLoginPage extends StatelessWidget {
                     // Logo ou image en haut
                     const CircleAvatar(
                       radius: 50,
-                      backgroundImage: AssetImage('assets/images/image-logo.jpg'), // Ajoute un logo ici
+                      backgroundImage: AssetImage(Constants.logo), 
                     ),
                     const SizedBox(height: 20),
                     // Texte d'en-tête
@@ -84,17 +84,11 @@ class MyLoginPage extends StatelessWidget {
                       style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 30),
+
                     // Bouton de connexion
                     ElevatedButton(
                       onPressed: () {
-                        // Ajouter la logique de connexion ici
-                                                  // Navigation vers HousesScreen
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MyHomePage(),
-                          ),
-                        );
+                        context.go('/'); 
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -138,13 +132,7 @@ class MyLoginPage extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigation vers la page de création de compte (MySignupPage)
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MySignupPage(), // Page d'inscription
-                              ),
-                            );
+                            context.go('/signup'); 
                           },
                           child: const Text(
                             'Créer un compte',

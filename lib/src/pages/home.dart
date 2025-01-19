@@ -1,5 +1,5 @@
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:equipro/src/widgets/bar/navBarWidget.dart';
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/widgets/home/evenementsListWidget.dart';
 import 'package:equipro/style/appColor.dart';
@@ -9,19 +9,10 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyWidgetAppBar(
-        title: 'EquiPro',
-        logoPath: 'assets/images/image-logo.jpg', // Le chemin du logo
-        onNotificationTap: () {
-          // Action lors du clic sur l'icône de notification
-          print('Notifications');
-        },
-        backgroundColor: AppColors.appBarBackgroundColor, // Utilisation de la couleur pour l'AppBar
-      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.gradientStartColor, AppColors.gradientEndColor], // Utilisation des couleurs pour le gradient
+            colors: [Constants.appBarBackgroundColor, Constants.turquoise], // Utilisation des couleurs pour le gradient
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -52,11 +43,6 @@ class MyHomePage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: MyWidgetBottomNavBar(
-        onTap: (index) {
-          // Navigation selon l'index sélectionné
-        },
       ),
     );
   }

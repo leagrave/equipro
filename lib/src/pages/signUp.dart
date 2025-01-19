@@ -1,7 +1,9 @@
 import 'package:equipro/src/pages/login.dart';
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/widgets/form/signUpFormWidget.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:go_router/go_router.dart'; 
 
 class MySignupPage extends StatelessWidget {
 
@@ -11,17 +13,15 @@ class MySignupPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Arrière-plan en dégradé
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF1BD5DB), Color(0xFF28313E)],
+                colors: [Constants.appBarBackgroundColor, Constants.turquoise],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
           ),
-          // Contenu principal
           Center(
             child: SingleChildScrollView(
               child: Padding(
@@ -33,7 +33,7 @@ class MySignupPage extends StatelessWidget {
                     const CircleAvatar(
                       radius: 50,
                       backgroundImage: AssetImage(
-                          'assets/images/image-logo.jpg'), 
+                          Constants.logo), 
                     ),
                     const SizedBox(height: 20),
                     // Texte d'en-tête
@@ -61,7 +61,6 @@ class MySignupPage extends StatelessWidget {
                     // Bouton de création de compte
                     ElevatedButton(
                       onPressed: () {
-                        // Ajouter la logique de création de compte ici
                         print('Création de compte...');
                       },
                       style: ElevatedButton.styleFrom(
@@ -91,14 +90,7 @@ class MySignupPage extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Ajouter la logique pour rediriger vers la page de connexion
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    MyLoginPage(), // Page d'inscription
-                              ),
-                            );
+                            context.go('/login');
                           },
                           child: const AutoSizeText(
                             'Se connecter',

@@ -22,11 +22,11 @@ class SignUpFormWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
               ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), // Réduire la hauteur ici
+              contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             ),
             style: const TextStyle(color: Colors.white),
           ),
-          const SizedBox(height: 12), // Réduction de l'espace entre les champs
+          const SizedBox(height: 12), 
           
           // Champ pour le prénom
           TextField(
@@ -60,7 +60,7 @@ class SignUpFormWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
               ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), // Réduire la hauteur ici
+              contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), 
             ),
             style: const TextStyle(color: Colors.white),
           ),
@@ -79,7 +79,7 @@ class SignUpFormWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
               ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), // Réduire la hauteur ici
+              contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), 
             ),
             style: const TextStyle(color: Colors.white),
           ),
@@ -98,7 +98,7 @@ class SignUpFormWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
               ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), // Réduire la hauteur ici
+              contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), 
             ),
             style: const TextStyle(color: Colors.white),
           ),

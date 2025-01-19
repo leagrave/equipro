@@ -56,12 +56,12 @@ class ListbottumClientcardwidget extends StatelessWidget {
               
               SizedBox(height: 2),
 
-              // Les boutons côte à côte
+ 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ButtonHorseListWidget(), // Premier bouton
-                  ButtonFactureListWidget(), // Deuxième bouton
+                  ButtonHorseListWidget(), 
+                  ButtonFactureListWidget(), 
                 ],
               ),
             ],

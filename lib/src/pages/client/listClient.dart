@@ -4,7 +4,8 @@ import 'package:equipro/src/models/client.dart';
 import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/list/clientListWidget.dart';
 import 'package:equipro/src/pages/client/createClient.dart';
-
+import 'package:equipro/src/utils/constants.dart';
+import 'package:go_router/go_router.dart';
 
 class ListClientPage extends StatefulWidget {
   @override
@@ -197,25 +198,22 @@ void filterClients(String query) {
 
 
 void navigateToManagementClientPage(Client client) async {
-  await Navigator.pushNamed(
-    context,
-    '/managementClient',
-    arguments: client,
-  );
+  context.go('/managementClient', extra: client);
 }
 
-  void navigateToCreateClientPage() async {
-    final newClient = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CreateClientPage()),
-    );
-    if (newClient != null) {
-      setState(() {
-        clients.add(newClient);
-        filteredClients = clients;
-      });
-    }
+void navigateToCreateClientPage() async {
+  // Naviguer vers la page de création de client et récupérer le nouveau client
+  final newClient = await context.push('/createClient');
+
+  // Vérifier si le retour est du type Client
+  if (newClient != null && newClient is Client) {
+    setState(() {
+      clients.add(newClient);
+      filteredClients = clients;
+    });
   }
+}
+
 
 
   
@@ -226,7 +224,7 @@ void navigateToManagementClientPage(Client client) async {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.gradientStartColor, AppColors.gradientEndColor],
+            colors: [Constants.appBarBackgroundColor, Constants.turquoise],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -266,7 +264,7 @@ void navigateToManagementClientPage(Client client) async {
               Expanded(
                 child: ClientListWidget(
                   filteredClients: filteredClients,
-                  horses: horses, // Passez la liste des chevaux ici
+                  horses: horses, 
                   onClientTap: (client) {
                     //final clientHorses = horses.where((horse) => horse.idClient == client.idClient).toList();
                     navigateToManagementClientPage(client);

@@ -6,6 +6,7 @@ import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:equipro/src/widgets/bar/navBarWidget.dart';
 import 'package:equipro/src/pages/horse/managementHorse.dart';
 import 'package:equipro/src/pages/horse/createHorse.dart';
+import 'package:go_router/go_router.dart';
 
 class ListHorsePage extends StatefulWidget {
   final int? idClient;
@@ -138,27 +139,27 @@ class _ListHorsePageState extends State<ListHorsePage> {
 
 
   void navigateToManagementHorsePage(Horse horse) async {
-    await Navigator.pushNamed(
-      context,
-      '/managementHorse',
-      arguments: horse,
-    );
+    context.go('/managementHorse',extra: horse);
+    // await Navigator.pushNamed(
+    //   context,
+    //   '/managementHorse',
+    //   arguments: horse,
+    // );
   }
 
-  void navigateToCreateHorsePage() async {
-    final newHorse = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CreateHorsePage()),
-    );
-    if (newHorse != null) {
-      setState(() {
-        horses.add(newHorse);
-        filteredHorses = widget.idClient != null
-            ? horses.where((horse) => horse.idClient == widget.idClient).toList()
-            : horses;
-      });
-    }
+void navigateToCreateHorsePage() async {
+  final newHorse = await context.push('/createHorse');
+  if (newHorse != null && newHorse is Horse) {
+    setState(() {
+      horses.add(newHorse);
+      filteredHorses = widget.idClient != null
+          ? horses.where((horse) => horse.idClient == widget.idClient).toList()
+          : horses;
+    });
   }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +221,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
                   onHorseTap: (horse) {
                     navigateToManagementHorsePage(horse);
                   },
-                  isFromListHorsePage: true, // Indiquer que c'est la page ListHorsePage
+                  isFromListHorsePage: true, 
                 ),
               ),
 
@@ -232,11 +233,6 @@ class _ListHorsePageState extends State<ListHorsePage> {
         onPressed: navigateToCreateHorsePage,
         backgroundColor: AppColors.appBarBackgroundColor,
         child: const Icon(Icons.add, color: AppColors.buttonBackgroundColor),
-      ),
-      bottomNavigationBar: MyWidgetBottomNavBar(
-        onTap: (index) {
-          // Navigation selon l'index sélectionné
-        },
       ),
     );
   }
