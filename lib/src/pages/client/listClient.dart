@@ -1,11 +1,10 @@
+import 'package:equipro/src/models/horse.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/client.dart';
 import 'package:equipro/style/appColor.dart';
-import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:equipro/src/widgets/bar/navBarWidget.dart';
 import 'package:equipro/src/widgets/list/clientListWidget.dart';
 import 'package:equipro/src/pages/client/createClient.dart';
-import 'package:equipro/router/router.dart';
+
 
 class ListClientPage extends StatefulWidget {
   @override
@@ -15,6 +14,7 @@ class ListClientPage extends StatefulWidget {
 class _ListClientPageState extends State<ListClientPage> {
   List<Client> clients = [
   Client(
+    idClient: 1,
     nom: "Dupont",
     prenom: "Jean",
     tel: "0123456789",
@@ -32,6 +32,7 @@ class _ListClientPageState extends State<ListClientPage> {
     notes: "Client important",
   ),
     Client(
+    idClient: 2,
     nom: "Martin",
     prenom: "Pierre",
     tel: "0123456489",
@@ -48,7 +49,125 @@ class _ListClientPageState extends State<ListClientPage> {
     ville : "Lyon",
     notes: "Client important",
     ),
+      Client(
+    idClient: 3,
+    nom: "Sophie",
+    prenom: "Lacroix",
+    tel: "0123456489",
+    mobile: "0123456489",
+    email: "pierre.martin@example.com",
+    societe: "", // Exemple de société
+    civilite: "Monsieur",
+    isSociete: false,
+    derniereVisite: DateTime(2024, 12, 1),
+    prochaineIntervention: DateTime(2024, 12, 15),
+    adresse: "456 Rue des Champs, Paris",
+    adresseFacturation: "789 Rue de Paris, Pertuis",
+    adresses: ["456 Rue des Champs, Lyon", "789 Rue de Paris, Pertuis"],
+    ville : "Paris",
+    notes: "Client important",
+    ),
+  Client(
+    idClient: 4,
+    nom: "Eve",
+    prenom: "Gomez",
+    tel: "0123456489",
+    mobile: "0123456489",
+    email: "pierre.martin@example.com",
+    societe: "", // Exemple de société
+    civilite: "Monsieur",
+    isSociete: false,
+    derniereVisite: DateTime(2024, 12, 1),
+    prochaineIntervention: DateTime(2024, 12, 15),
+    adresse: "456 Rue des Champs, Marseille",
+    adresseFacturation: "789 Rue de Paris, Pertuis",
+    adresses: ["456 Rue des Champs, Marseille", "789 Rue de Paris, Pertuis"],
+    ville : "Marseille",
+    notes: "Client important",
+    ),
   ];
+
+List<Horse> horses = [
+      Horse(
+      id: 1,
+      idClient: 1,
+      name: "Eclair",
+      ownerId: 1,
+      adresse: "123 Rue Principale, Paris",
+      age: 7,
+      race: "Pur-sang",
+      lastAppointmentDate: DateTime(2024, 12, 10),
+      notes: "Sage durant le soin"
+    ),
+    Horse(
+      id: 2,
+      idClient: 1,
+      name: "Tempête",
+      ownerId: 2,
+      adresse: "123 Rue Principale, Paris",
+      age: 5,
+      race: "Frison",
+      lastAppointmentDate: null,
+      notes: "Bouge la tête"
+    ),
+    Horse(
+      id: 3,
+      idClient: 2,
+      name: "Foudre",
+      ownerId: 1,
+      adresse: "123 Rue Principale, Paris",
+      age: 9,
+      race: "Arabe",
+      lastAppointmentDate: DateTime(2024, 11, 20),
+      notes: "Doit tourner"
+    ),
+    Horse(
+      id: 4,
+      idClient: 1,
+      name: "Brume",
+      ownerId: 3,
+      adresse: "123 Rue Principale, Paris",
+      age: 6,
+      race: "Camarguais",
+      lastAppointmentDate: null,
+      notes: ""
+    ),
+    Horse(
+      id: 5,
+      idClient: 1,
+      name: "Bubule",
+      ownerId: 2,
+      adresse: "123 Rue Principale, Paris",
+      age: 5,
+      race: "Frison",
+      lastAppointmentDate: null,
+      notes: "Bouge la tête"
+    ),
+    Horse(
+      id: 6,
+      idClient: 1,
+      name: "Truck",
+      ownerId: 2,
+      adresse: "123 Rue Principale, Paris",
+      age: 5,
+      race: "Frison",
+      lastAppointmentDate: null,
+      notes: "Bouge la tête"
+    ),
+    Horse(
+      id: 7,
+      idClient: 1,
+      name: "Chouette",
+      ownerId: 2,
+      adresse: "123 Rue Principale, Paris",
+      age: 5,
+      race: "Frison",
+      lastAppointmentDate: null,
+      notes: "Bouge la tête"
+    )
+  ];
+
+  
 
   List<Client> filteredClients = [];
   String searchQuery = "";
@@ -80,8 +199,8 @@ void filterClients(String query) {
 void navigateToManagementClientPage(Client client) async {
   await Navigator.pushNamed(
     context,
-    '/managementClient',  // Le nom de la route
-    arguments: client,     // Passer le client comme argument
+    '/managementClient',
+    arguments: client,
   );
 }
 
@@ -98,19 +217,12 @@ void navigateToManagementClientPage(Client client) async {
     }
   }
 
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyWidgetAppBar(
-        title: 'Agenda clients',
-        logoPath: 'assets/images/image-logo.jpg', // Le chemin du logo
-        onNotificationTap: () {
-          // Action lors du clic sur l'icône de notification
-          print('Notifications');
-        },
-        backgroundColor: AppColors.appBarBackgroundColor, 
-        
-      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -123,7 +235,7 @@ void navigateToManagementClientPage(Client client) async {
           padding: const EdgeInsets.all(16.0), // Padding autour du contenu
           child: Column(
             children: [
-              // Recherche
+              // Barre de Recherche
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -140,7 +252,7 @@ void navigateToManagementClientPage(Client client) async {
                   onChanged: filterClients,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search, color: Color(0xFF28313E)), // Bleu-gris profond
-                    hintText: "Rechercher par nom, prénom, tel ou ville",
+                    hintText: "Rechercher par nom, prénom, cheval, tel ou ville",
                     hintStyle: TextStyle(color: Colors.grey[600]),
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(vertical: 16),
@@ -149,14 +261,19 @@ void navigateToManagementClientPage(Client client) async {
               ),
               const SizedBox(height: 16),
 
+
+              // Liste des clients avec leurs chevaux
               Expanded(
                 child: ClientListWidget(
                   filteredClients: filteredClients,
+                  horses: horses, // Passez la liste des chevaux ici
                   onClientTap: (client) {
-                    navigateToManagementClientPage(client);  // Passer le client sélectionné à la page de gestion
+                    //final clientHorses = horses.where((horse) => horse.idClient == client.idClient).toList();
+                    navigateToManagementClientPage(client);
                   },
                 ),
               ),
+
 
             ],
           ),
@@ -166,11 +283,6 @@ void navigateToManagementClientPage(Client client) async {
         onPressed: navigateToCreateClientPage,
         backgroundColor: AppColors.appBarBackgroundColor, // Gris ardoise
         child: const Icon(Icons.add, color: AppColors.buttonBackgroundColor),
-      ),
-      bottomNavigationBar: MyWidgetBottomNavBar(
-        onTap: (index) {
-          // Navigation selon l'index sélectionné
-        },
       ),
     );
   }

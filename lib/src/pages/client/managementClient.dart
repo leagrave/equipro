@@ -48,6 +48,7 @@ class ManagementClientPage extends StatelessWidget {
             child: Column(
               children: [
                 ClientCardWidget(
+                  idClient: client.idClient,
                   email: client.email,
                   tel: client.tel,
                   initialName: client.nom,

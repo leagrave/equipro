@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:equipro/style/appColor.dart';
 
 class ClientCardWidget extends StatefulWidget {
+  final int idClient;
   final String initialName;
   final String initialSurname;
   final String tel;
@@ -15,6 +16,7 @@ class ClientCardWidget extends StatefulWidget {
 
   const ClientCardWidget({
     Key? key,
+    required this.idClient,
     required this.initialName,
     required this.initialSurname,
     required this.tel,
@@ -33,12 +35,27 @@ class ClientCardWidget extends StatefulWidget {
 
 class _ClientCardWidgetState extends State<ClientCardWidget> {
   late bool _isSociete;
+  bool _isEditing = false; // Initialisation de _isEditing directement ici
 
   @override
   void initState() {
     super.initState();
     // Initialiser l'état du client (société ou pas)
     _isSociete = widget.isSociete;
+  }
+
+  // Fonction pour activer/désactiver le mode édition
+  void _toggleEdit() {
+    setState(() {
+      _isEditing = !_isEditing;
+    });
+  }
+
+  // Fonction pour annuler les changements
+  void _cancelEdit() {
+    setState(() {
+      _isEditing = false;
+    });
   }
 
   @override
@@ -65,6 +82,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
                 ),
                 controller: TextEditingController(text: widget.initialName),
                 onChanged: widget.onNameChanged,
+                readOnly: !_isEditing, // La zone de texte est modifiable uniquement en mode édition
               ),
               const SizedBox(height: 8),
 
@@ -78,6 +96,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
                 ),
                 controller: TextEditingController(text: widget.initialSurname),
                 onChanged: widget.onSurnameChanged,
+                readOnly: !_isEditing,
               ),
               const SizedBox(height: 8),
 
@@ -91,6 +110,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
                 ),
                 controller: TextEditingController(text: widget.tel),
                 onChanged: widget.onTelChanged,
+                readOnly: !_isEditing,
               ),
               const SizedBox(height: 8),
 
@@ -104,15 +124,15 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
                 ),
                 controller: TextEditingController(text: widget.email),
                 onChanged: widget.onEmailChanged,
+                readOnly: !_isEditing,
               ),
-
 
               // Checkbox pour déterminer si le client est une société
               Row(
                 children: [
                   Checkbox(
                     value: _isSociete,
-                    onChanged: (bool? newValue) {
+                    onChanged: _isEditing ? (bool? newValue) {
                       setState(() {
                         _isSociete = newValue ?? false;
                       });
@@ -120,11 +140,39 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
                       if (widget.onIsSocieteChanged != null) {
                         widget.onIsSocieteChanged!(_isSociete);
                       }
-                    },
+                    } : null, // Le checkbox ne peut être modifié que si on est en mode édition
                   ),
                   Text('Société'),
                 ],
               ),
+
+              // Affichage des boutons "Modifier", "Annuler", "Sauvegarder"
+              if (_isEditing) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: _cancelEdit, // Annuler les modifications
+                      child: Text('Annuler'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        _toggleEdit(); // Sauvegarder les modifications et quitter le mode édition
+                        widget.onNameChanged?.call(widget.initialName);
+                        widget.onSurnameChanged?.call(widget.initialSurname);
+                        widget.onTelChanged?.call(widget.tel);
+                        widget.onEmailChanged?.call(widget.email);
+                      },
+                      child: Text('Sauvegarder'),
+                    ),
+                  ],
+                ),
+              ] else ...[
+                TextButton(
+                  onPressed: _toggleEdit, // Passer en mode édition
+                  child: Text('Modifier'),
+                ),
+              ],
             ],
           ),
         ),

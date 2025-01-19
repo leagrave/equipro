@@ -1,4 +1,5 @@
 class Client {
+  final int idClient;
   final String nom;
   final String prenom;
   final String tel;
@@ -17,6 +18,7 @@ class Client {
   final List<String>? adresses; // Liste des adresses supplémentaires
 
   Client({
+    required this.idClient,
     required this.nom,
     required this.prenom,
     required this.tel,
