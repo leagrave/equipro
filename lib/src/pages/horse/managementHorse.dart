@@ -1,32 +1,136 @@
+import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';
+import 'package:equipro/src/widgets/card/client/clientsComboCardWidget.dart';
+import 'package:equipro/src/widgets/card/ecurie/ecurieCardWidget.dart';
+import 'package:equipro/src/widgets/card/ecurie/ecuriesComboCardWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/horse.dart';
-import 'package:equipro/src/widgets/card/horseAdresseCardWidget.dart';
+import 'package:equipro/src/models/client.dart';
+import 'package:equipro/src/models/ecurie.dart';
+import 'package:equipro/src/widgets/card/horse/horseAdresseCardWidget.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:equipro/src/widgets/bar/navBarWidget.dart';
 import 'package:equipro/style/appColor.dart';
-import 'package:equipro/src/widgets/card/horseCardWidget.dart';
+import 'package:equipro/src/widgets/card/horse/horseCardWidget.dart';
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
-import 'package:equipro/src/widgets/card/listBottumHorseCardWidget.dart';
+import 'package:equipro/src/widgets/card/horse/listBottumHorseCardWidget.dart';
 
-class ManagementHorsePage extends StatelessWidget {
+class ManagementHorsePage extends StatefulWidget {
   final Horse horse;
 
   const ManagementHorsePage({Key? key, required this.horse}) : super(key: key);
 
   @override
+  _ManagementHorsePageState createState() => _ManagementHorsePageState();
+}
+
+class _ManagementHorsePageState extends State<ManagementHorsePage> {
+  List<Client> clientList = [];
+  Client? selectedClient;
+
+  List<Ecurie> ecurieList = [];
+  Ecurie? selectedEcurie;
+
+  bool showClientCard = false;
+  bool showEcurieCard = false;
+
+    // Champs pour l'écurie
+  int idEcurie = 0;
+  String nameEcurie = "";
+  int ownerId = 0;
+  String adresseEcurie = "";
+
+  // Champs pour le client
+  int idClient = 0;
+  String nom = '';
+  String prenom = '';
+  String tel = '';
+  String tel2 = '';
+  String email = '';
+  String adressePerso = '';
+  String adresseEcuries = '';
+  String ville = '';
+  String region = '';
+  DateTime derniereVisite = DateTime.now();
+  bool isSociete = false;
+
+  // Champs pour le cheval
+  String name = '';
+  int age = 0;
+  String race = '';
+  String? color;
+  String? feedingType;
+  String? activityType;
+  DateTime? lastAppointmentDate;
+  String? adresse;
+  String? notes;
+  int? idEcurieCheval;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadClients();
+    _loadEcuries();
+  }
+
+  void _loadClients() {
+    setState(() {
+      clientList = [
+        Client(idClient: 1, nom: "Dupont", prenom: "Jean", tel: "0123456789"),
+        Client(idClient: 2, nom: "Martin", prenom: "Pierre", tel: "0123456489"),
+        Client(idClient: 3, nom: "Sophie", prenom: "Lacroix", tel: "0123456489"),
+        Client(idClient: 4, nom: "Eve", prenom: "Gomez", tel: "0123456489"),
+      ];
+    });
+  }
+
+  void _loadEcuries() {
+    setState(() {
+      ecurieList = [
+        Ecurie(idEcurie: 0, name: "", ownerId: 0, adresse: ""),
+        Ecurie(idEcurie: 1, name: "Ecurie Triomphe", ownerId: 2, adresse: ""),
+        Ecurie(idEcurie: 2, name: "Deven", ownerId: 1, adresse: "rue du pavillon"),
+        Ecurie(idEcurie: 3, name: "Ecurie Entressen", ownerId: 3, adresse: "boulevard de la nuée"),
+        Ecurie(idEcurie: 4, name: "Etoile", ownerId: 4, adresse: ""),
+      ];
+    });
+  }
+
+  void _onClientChanged(Client? newClient) {
+    setState(() {
+      selectedClient = newClient;
+    });
+  }
+
+  void _onEcurieChanged(Ecurie? newEcurie) {
+    setState(() {
+      selectedEcurie = newEcurie;
+    });
+  }
+
+  void _toggleClientCard() {
+    setState(() {
+      showClientCard = !showClientCard;
+    });
+  }
+
+  void _toggleEcurieCard() {
+    setState(() {
+      showEcurieCard = !showEcurieCard;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Coordonnées fictives (par défaut).
     final Location defaultLocation = Location(
-      latitude: 45.7579211, 
-      longitude: 4.7527296, // Paris, France.
+      latitude: 45.7579211,
+      longitude: 4.7527296, 
     );
 
     return Scaffold(
       appBar: MyWidgetAppBar(
         title: 'Gestion cheval',
-        logoPath: 'assets/images/image-logo.jpg', // Chemin du logo
+        logoPath: 'assets/images/image-logo.jpg', 
         onNotificationTap: () {
-          // Action lors du clic sur l'icône de notification
           print('Notifications');
         },
         backgroundColor: AppColors.appBarBackgroundColor,
@@ -44,24 +148,84 @@ class ManagementHorsePage extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                // Appel du widget combo Client
+                ClientsComboCardWidget(
+                  clientList: clientList,
+                  selectedClient: selectedClient,
+                  onClientChanged: _onClientChanged,
+                  onAddClientPressed: _toggleClientCard,
+                ),
 
-                const SizedBox(height: 2),
-                HorseCardWidget(horse: horse),
+              if (showClientCard)
+                ClientCardWidget(
+                  client: Client(
+                    idClient: 4,  
+                    nom: nom,    
+                    prenom: prenom,
+                    tel: tel,  
+                    email: email, 
+                    isSociete: isSociete, 
+                  ),
+                  onClientUpdated: (updatedClient) {
+                    setState(() {
+                      nom = updatedClient.nom;
+                      prenom = updatedClient.prenom;
+                      tel = updatedClient.tel;
+                      email = updatedClient.email ?? "";
+                      isSociete = updatedClient.isSociete ?? false;
+                    });
+                  },
+                  openWithCreateClientPage: false, 
+                ),
+              const SizedBox(height: 12),
+
+
+                // Appel du widget combo Ecurie
+                EcuriesComboCardWidget(
+                  ecurieList: ecurieList,
+                  selectedEcurie: selectedEcurie,
+                  onEcurieChanged: _onEcurieChanged,
+                  onAddEcuriePressed: _toggleEcurieCard,
+                ),
+
+                if (showEcurieCard)
+                EcurieCardWidget(
+                  idEcurie: idEcurie,
+                  initialName: nameEcurie,
+                  ownerId: ownerId,
+                  adresse: adresseEcurie,
+                  onNameChanged: (value) => setState(() => nameEcurie = value),
+                  onOwnerIdChanged:(value) => setState(() => ownerId = value),
+                  onAdresseChanged: (value) => setState(() => adresseEcurie = value),
+                  onSave: _toggleEcurieCard,
+                ),
+
+                const SizedBox(height: 12),
+
+                HorseCardWidget(horse: widget.horse, openWithCreateHorsePage: false),
+
+                const SizedBox(height: 12),
 
                 // Card avec l'adresse
                 HorseAddressCardWidget(
-                  address: horse.adresse ?? 'Adresse non renseignée',
+                  address: widget.horse.adresse ?? 'Adresse non renseignée',
                   location: defaultLocation,
                   onAddressChanged: (newAddress) {
                     print("Nouvelle adresse : $newAddress");
                   },
+                  openWithCreateHorsePage: false,
                 ),
 
-                const SizedBox(height: 2),
+                const SizedBox(height: 12),
+
                 ListbottumHorsecardwidget(),
 
-                const SizedBox(height: 2),
-                ClientNotesCardWidget(initialNotes: horse.notes ?? ""),
+                const SizedBox(height: 12),
+
+                NotesCardWidget(
+                  initialNotes: widget.horse.notes ?? "",
+                  openWithCreateHorsePage: false,
+                ),
               ],
             ),
           ),

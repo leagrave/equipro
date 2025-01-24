@@ -3,6 +3,11 @@ import 'package:equipro/style/appColor.dart';
 import 'package:go_router/go_router.dart'; 
 
 class ButtonHorseListWidget extends StatelessWidget {
+  final int idClient;
+
+  const ButtonHorseListWidget({Key? key, required this.idClient}) : super(key: key);
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -12,7 +17,7 @@ class ButtonHorseListWidget extends StatelessWidget {
           backgroundColor: AppColors.gradientStartColor, 
         ),
         onPressed: () {
-          context.go('/listHorse', extra: 1);
+          context.go('/listHorse', extra: {'idClient': idClient});
         },
 
         child: const Column(

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:equipro/src/models/client.dart';
 import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/list/clientListWidget.dart';
-import 'package:equipro/src/pages/client/createClient.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,9 +18,9 @@ class _ListClientPageState extends State<ListClientPage> {
     nom: "Dupont",
     prenom: "Jean",
     tel: "0123456789",
-    mobile: "0612345678",
+    tel2: "0612345678",
     email: "jean.dupont@example.com",
-    societe: "Dupont SARL", // Exemple de société
+    societe: "Dupont SARL",
     civilite: "Monsieur",
     isSociete: true,
     derniereVisite: DateTime(2024, 12, 1),
@@ -37,9 +36,9 @@ class _ListClientPageState extends State<ListClientPage> {
     nom: "Martin",
     prenom: "Pierre",
     tel: "0123456489",
-    mobile: "0123456489",
+    tel2: "0123456489",
     email: "pierre.martin@example.com",
-    societe: "", // Exemple de société
+    societe: "", 
     civilite: "Monsieur",
     isSociete: false,
     derniereVisite: DateTime(2024, 12, 1),
@@ -55,9 +54,9 @@ class _ListClientPageState extends State<ListClientPage> {
     nom: "Sophie",
     prenom: "Lacroix",
     tel: "0123456489",
-    mobile: "0123456489",
+    tel2: "0123456489",
     email: "pierre.martin@example.com",
-    societe: "", // Exemple de société
+    societe: "",
     civilite: "Monsieur",
     isSociete: false,
     derniereVisite: DateTime(2024, 12, 1),
@@ -73,9 +72,9 @@ class _ListClientPageState extends State<ListClientPage> {
     nom: "Eve",
     prenom: "Gomez",
     tel: "0123456489",
-    mobile: "0123456489",
+    tel2: "0123456489",
     email: "pierre.martin@example.com",
-    societe: "", // Exemple de société
+    societe: "", 
     civilite: "Monsieur",
     isSociete: false,
     derniereVisite: DateTime(2024, 12, 1),
@@ -214,8 +213,6 @@ void navigateToCreateClientPage() async {
   }
 }
 
-
-
   
 
   @override
@@ -230,7 +227,7 @@ void navigateToCreateClientPage() async {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0), // Padding autour du contenu
+          padding: const EdgeInsets.all(16.0), 
           child: Column(
             children: [
               // Barre de Recherche
@@ -249,7 +246,7 @@ void navigateToCreateClientPage() async {
                 child: TextField(
                   onChanged: filterClients,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search, color: Color(0xFF28313E)), // Bleu-gris profond
+                    prefixIcon: const Icon(Icons.search, color: Color(0xFF28313E)), 
                     hintText: "Rechercher par nom, prénom, cheval, tel ou ville",
                     hintStyle: TextStyle(color: Colors.grey[600]),
                     border: InputBorder.none,
@@ -279,7 +276,7 @@ void navigateToCreateClientPage() async {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: navigateToCreateClientPage,
-        backgroundColor: AppColors.appBarBackgroundColor, // Gris ardoise
+        backgroundColor: AppColors.appBarBackgroundColor,
         child: const Icon(Icons.add, color: AppColors.buttonBackgroundColor),
       ),
     );

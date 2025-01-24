@@ -9,15 +9,17 @@ class Location {
 }
 
 class HorseAddressCardWidget extends StatefulWidget {
-  final String address; // Une seule adresse
+  final String address; 
   final Location location;
   final Function(String)? onAddressChanged;
+  final bool openWithCreateHorsePage;
 
   const HorseAddressCardWidget({
     Key? key,
     required this.address,
     required this.location,
     this.onAddressChanged,
+    required this.openWithCreateHorsePage,
   }) : super(key: key);
 
   @override
@@ -28,13 +30,20 @@ class HorseAddressCardWidget extends StatefulWidget {
 class _HorseAddressCardWidgetState extends State<HorseAddressCardWidget> {
   bool _isEditing = false;
   late TextEditingController _addressController;
-  late String _originalAddress; // La variable _originalAddress doit être initialisée ici
+  late String _originalAddress; 
+  bool openWithCreateHorsePage = false;
 
   @override
   void initState() {
     super.initState();
     _addressController = TextEditingController(text: widget.address);
-    _originalAddress = widget.address; // Initialiser la variable avec la valeur passée dans le widget
+    _originalAddress = widget.address; 
+
+    if (widget.openWithCreateHorsePage == true) {
+      setState(() {
+         _isEditing = !_isEditing;
+      });
+    }
   }
 
   @override
@@ -47,7 +56,7 @@ class _HorseAddressCardWidgetState extends State<HorseAddressCardWidget> {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.white.withOpacity(0.8), // Fond transparent
+        color: Colors.white.withOpacity(0.8),
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -70,7 +79,7 @@ class _HorseAddressCardWidgetState extends State<HorseAddressCardWidget> {
                       ),
                       controller: _addressController,
                       onChanged: widget.onAddressChanged,
-                      readOnly: !_isEditing, // Mode lecture seule si pas en édition
+                      readOnly: !_isEditing, 
                     ),
                   ),
                   IconButton(
@@ -80,12 +89,15 @@ class _HorseAddressCardWidgetState extends State<HorseAddressCardWidget> {
                           'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(_addressController.text)}';
                       launchUrl(Uri.parse(googleMapsUrl));
                     },
-                    color: const Color.fromARGB(255, 219, 27, 27), // Couleur de l'icône
+                    color: const Color.fromARGB(255, 219, 27, 27), 
                   ),
                 ],
               ),
               const SizedBox(height: 16),
+
+
               // Boutons "Annuler" et "Enregistrer"
+              if (!widget.openWithCreateHorsePage)
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -93,7 +105,7 @@ class _HorseAddressCardWidgetState extends State<HorseAddressCardWidget> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          _addressController.text = _originalAddress; // Annuler les modifications
+                          _addressController.text = _originalAddress; 
                           _isEditing = false;
                         });
                       },

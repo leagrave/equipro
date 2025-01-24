@@ -1,12 +1,11 @@
 import 'package:equipro/src/models/invoice.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:equipro/src/widgets/card/invoiceCardWidget.dart';  // Widget pour afficher les factures
+import 'package:equipro/src/widgets/card/facture/invoiceCardWidget.dart';  
 
 class ManagementInvoicePage extends StatelessWidget {
-  final Invoice invoice;  // La facture seule est maintenant transmise
+  final Invoice invoice;  
 
   const ManagementInvoicePage({Key? key, required this.invoice}) : super(key: key);
 
@@ -34,7 +33,6 @@ class ManagementInvoicePage extends StatelessWidget {
           child: SingleChildScrollView(  
             child: Column(
               children: [
-                // Affichage des informations de la facture
                 const SizedBox(height: 20),
                 InvoiceCardWidget( 
                   invoice: invoice,

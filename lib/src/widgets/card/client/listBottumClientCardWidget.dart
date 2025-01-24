@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:equipro/style/appColor.dart'; // Assurez-vous que ce chemin est correct
 import 'package:equipro/src/widgets/bottum/bottumFactureListWidget.dart';
 import 'package:equipro/src/widgets/bottum/bottumHoseListWidget.dart';
 
 class ListbottumClientcardwidget extends StatelessWidget {
   final DateTime lastAppointmentDate;
   final DateTime? nextAppointmentDate;
+  final int idClient; 
 
   const ListbottumClientcardwidget({
     Key? key,
     required this.lastAppointmentDate,
+    required this.idClient,
     this.nextAppointmentDate,
   }) : super(key: key);
 
@@ -17,10 +18,10 @@ class ListbottumClientcardwidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.white.withOpacity(0.8), // Fond transparent
+        color: Colors.white.withOpacity(0.8), 
         elevation: 4,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12), // Coins arrondis
+          borderRadius: BorderRadius.circular(12), 
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -60,7 +61,7 @@ class ListbottumClientcardwidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ButtonHorseListWidget(), 
+                  ButtonHorseListWidget(idClient: idClient), 
                   ButtonFactureListWidget(), 
                 ],
               ),

@@ -112,16 +112,6 @@ class _ListHorsePageState extends State<ListHorsePage> {
     }
   }
 
-  // void filterHorses(String query) {
-  //   setState(() {
-  //     searchQuery = query;
-  //     filteredHorses = horses.where((horse) {
-  //       return horse.name.toLowerCase().contains(query.toLowerCase()) &&
-  //           (widget.idClient == null || horse.idClient == widget.idClient);
-  //     }).toList();
-  //   });
-  // }
-
     void filterHorses(String query) {
     setState(() {
       searchQuery = query;
@@ -135,27 +125,21 @@ class _ListHorsePageState extends State<ListHorsePage> {
     });
   }
 
-
   void navigateToManagementHorsePage(Horse horse) async {
     context.go('/managementHorse',extra: horse);
-    // await Navigator.pushNamed(
-    //   context,
-    //   '/managementHorse',
-    //   arguments: horse,
-    // );
   }
 
-void navigateToCreateHorsePage() async {
-  final newHorse = await context.push('/createHorse');
-  if (newHorse != null && newHorse is Horse) {
-    setState(() {
-      horses.add(newHorse);
-      filteredHorses = widget.idClient != null
-          ? horses.where((horse) => horse.idClient == widget.idClient).toList()
-          : horses;
-    });
+  void navigateToCreateHorsePage() async {
+    final newHorse = await context.push('/createHorse',extra: {'idClient': widget.idClient},);
+    if (newHorse != null && newHorse is Horse) {
+      setState(() {
+        horses.add(newHorse);
+        filteredHorses = widget.idClient != null
+            ? horses.where((horse) => horse.idClient == widget.idClient).toList()
+            : horses;
+      });
+    }
   }
-}
 
 
 

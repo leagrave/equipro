@@ -3,9 +3,9 @@ class Client {
   final String nom;
   final String prenom;
   final String tel;
-  final String mobile;
-  final String email;
-  final String ville;
+  final String? tel2;
+  final String? email;
+  final String? ville;
   final String? societe; 
   final String? civilite;
   final bool? isSociete;
@@ -22,9 +22,9 @@ class Client {
     required this.nom,
     required this.prenom,
     required this.tel,
-    required this.mobile,
-    required this.email,
-    required this.ville,
+    this.tel2,
+    this.email,
+    this.ville,
     this.societe, 
     this.civilite,
     this.isSociete,

@@ -27,7 +27,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? IconButton(
               icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
               onPressed: () {
-                  //Navigator.pop(context); 
+                  Navigator.pop(context); 
               },
             )
           : null, 
@@ -54,21 +54,21 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
-        // Icône de paramètres à gauche du profil
+
         IconButton(
           icon: const Icon(Icons.settings, color: Colors.white),
           onPressed: () {
             context.go('/settings'); 
           },
         ),
-        // Icône de profil
+
         IconButton(
           icon: const Icon(Icons.account_circle, color: Colors.white),
           onPressed: () {
             context.go('/profile'); 
           },
         ),
-        // Icône de notification
+
         IconButton(
           icon: const Icon(Icons.notifications, color: Constants.white),
           onPressed: () {

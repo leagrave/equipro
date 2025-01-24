@@ -25,14 +25,14 @@ class HorseListWidget extends StatefulWidget {
 class _HorseListWidgetState extends State<HorseListWidget> {
   bool _isExpanded = false;
 
-  // Liste des clients directement définie ici
+
   List<Client> clients = [
     Client(
       idClient: 1,
       nom: "Dupont",
       prenom: "Jean",
       tel: "0123456789",
-      mobile: "0612345678",
+      tel2: "0612345678",
       email: "jean.dupont@example.com",
       societe: "Dupont SARL", 
       civilite: "Monsieur",
@@ -50,7 +50,7 @@ class _HorseListWidgetState extends State<HorseListWidget> {
       nom: "Martin",
       prenom: "Pierre",
       tel: "0123456489",
-      mobile: "0123456489",
+      tel2: "0123456489",
       email: "pierre.martin@example.com",
       societe: "", 
       civilite: "Monsieur",
@@ -68,9 +68,9 @@ class _HorseListWidgetState extends State<HorseListWidget> {
     nom: "Sophie",
     prenom: "Lacroix",
     tel: "0123456489",
-    mobile: "0123456489",
+    tel2: "0123456489",
     email: "pierre.martin@example.com",
-    societe: "", // Exemple de société
+    societe: "",
     civilite: "Monsieur",
     isSociete: false,
     derniereVisite: DateTime(2024, 12, 1),
@@ -86,9 +86,9 @@ class _HorseListWidgetState extends State<HorseListWidget> {
     nom: "Eve",
     prenom: "Gomez",
     tel: "0123456489",
-    mobile: "0123456489",
+    tel2: "0123456489",
     email: "pierre.martin@example.com",
-    societe: "", // Exemple de société
+    societe: "",
     civilite: "Monsieur",
     isSociete: false,
     derniereVisite: DateTime(2024, 12, 1),
@@ -154,7 +154,7 @@ class _HorseListWidgetState extends State<HorseListWidget> {
                       nom: 'Inconnu', 
                       prenom: '', 
                       tel: '', 
-                      mobile: '', 
+                      tel2: '', 
                       email: '', 
                       societe: '', 
                       civilite: '', 
@@ -189,7 +189,7 @@ class _HorseListWidgetState extends State<HorseListWidget> {
                           ),
                         ],
                       ),
-                      // Afficher le nom et prénom du propriétaire sur une nouvelle ligne si isFromListHorsePage est true
+
                       if (widget.isFromListHorsePage)
                         Text(
                           "${owner.prenom} ${owner.nom}",
@@ -205,12 +205,12 @@ class _HorseListWidgetState extends State<HorseListWidget> {
                       color: horse.lastAppointmentDate == null ? Colors.grey : Colors.black,
                     ),
                   ),
-                  // Afficher l'icône de flèche uniquement si isFromListHorsePage est true
+  
                   trailing: widget.isFromListHorsePage
-                      ? Icon(Icons.arrow_forward_ios, color: Colors.black) // Flèche de navigation
+                      ? Icon(Icons.arrow_forward_ios, color: Colors.black) 
                       : null,
                   onTap: () {
-                    widget.onHorseTap(horse); // Gestion du tap, appel de la fonction de navigation
+                    widget.onHorseTap(horse); 
                   },
                 ),
               );

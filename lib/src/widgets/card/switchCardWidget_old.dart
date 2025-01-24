@@ -17,7 +17,7 @@ class _SwitchCardWidgetState extends State<SwitchCardWidget> {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.white.withOpacity(0.8), // Fond transparent
+        color: Colors.white.withOpacity(0.8),
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -30,7 +30,7 @@ class _SwitchCardWidgetState extends State<SwitchCardWidget> {
             children: [              
               const Text(
                   'Clients', 
-                  style: TextStyle(fontSize: 16, color: Colors.white), // Texte en blanc
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
                 Switch(
                   value: _isClientList,
@@ -38,15 +38,15 @@ class _SwitchCardWidgetState extends State<SwitchCardWidget> {
                     setState(() {
                       _isClientList = value;
                     });
-                    widget.onSwitchChanged(value); // Appel du callback pour envoyer la nouvelle valeur au parent
+                    widget.onSwitchChanged(value); 
                   },
-                  activeColor: AppColors.buttonBackgroundColor, // Couleur active
-                  inactiveThumbColor: Colors.grey, // Couleur inactive
-                  inactiveTrackColor: Colors.grey[300], // Couleur du track inactif
+                  activeColor: AppColors.buttonBackgroundColor, 
+                  inactiveThumbColor: Colors.grey, 
+                  inactiveTrackColor: Colors.grey[300], 
                 ),
                 const Text(
                   'Chevaux', 
-                  style: TextStyle(fontSize: 16, color: Colors.white), // Texte en blanc
+                  style: TextStyle(fontSize: 16, color: Colors.white), 
                 ),
             ],
           ),

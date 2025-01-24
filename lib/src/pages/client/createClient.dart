@@ -1,10 +1,11 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/client.dart';
 import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:equipro/src/widgets/card/clientCardWidget.dart';  
+import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';  
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
-import 'package:equipro/src/widgets/card/clientAdresseCardWidget.dart';
+import 'package:equipro/src/widgets/card/client/clientAdresseCardWidget.dart';
 
 class CreateClientPage extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
   String nom = '';
   String prenom = '';
   String tel = '';
-  String mobile = '';
+  String tel2 = '';
   String email = '';
   String adressePerso = '';
   String adresseEcuries = '';
@@ -35,16 +36,16 @@ class _CreateClientPageState extends State<CreateClientPage> {
     return Scaffold(
       appBar: MyWidgetAppBar(
         title: 'Créer un client',
-        logoPath: 'assets/images/image-logo.jpg',
+        logoPath: Constants.logo,
         onNotificationTap: () {
           print('Notifications');
         },
-        backgroundColor: AppColors.appBarBackgroundColor,
+        backgroundColor: Constants.appBarBackgroundColor,
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.gradientStartColor, AppColors.gradientEndColor],
+            colors:[Constants.appBarBackgroundColor, Constants.turquoise],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -55,29 +56,37 @@ class _CreateClientPageState extends State<CreateClientPage> {
             child: Column(
               children: [
                 ClientCardWidget(
-                  idClient: 4,
-                  initialName: nom,
-                  initialSurname: prenom,
-                  tel: tel,
-                  email: email,
-                  isSociete: isSociete,
-                  onNameChanged: (value) => setState(() => nom = value),
-                  onSurnameChanged: (value) => setState(() => prenom = value),
-                  onTelChanged: (value) => setState(() => tel = value),
-                  onEmailChanged: (value) => setState(() => email = value),
-                  onIsSocieteChanged: (value) => setState(() => isSociete = value),
-                ),
-                SizedBox(height: 16),
-                ClientNotesCardWidget(
-                  initialNotes: clientNotes,
-                  onNotesChanged: (value) => setState(() => clientNotes = value),
+                  client: Client(
+                    idClient: 4,  
+                    nom: nom,    
+                    prenom: prenom,
+                    tel: tel,  
+                    email: email, 
+                    isSociete: isSociete, 
+                  ),
+                  onClientUpdated: (updatedClient) {
+                    setState(() {
+                      nom = updatedClient.nom;
+                      prenom = updatedClient.prenom;
+                      tel = updatedClient.tel;
+                      email = updatedClient.email ?? "";
+                      isSociete = updatedClient.isSociete ?? false;
+                    });
+                  },
+                  openWithCreateClientPage: true, 
                 ),
                 SizedBox(height: 16),
                 AddressCardWidget(
                   addresses: clientAddresses,
-                  location: Location(latitude: 0.0, longitude: 0.0), // Passer une localisation vide pour l'instant
-                  onAdresseChanged: (value) => setState(() => clientAddresses = value.split(',')), // Simple split en utilisant la virgule pour séparer les adresses
+                  location: Location(latitude: 0.0, longitude: 0.0),
+                  onAdresseChanged: (value) => setState(() => clientAddresses = value.split(',')), 
                 ),
+                SizedBox(height: 16),
+                NotesCardWidget(
+                  initialNotes: clientNotes,
+                  onNotesChanged: (value) => setState(() => clientNotes = value),
+                  openWithCreateHorsePage: false,
+                )
               ],
             ),
           ),
@@ -92,7 +101,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
               nom: nom,
               prenom: prenom,
               tel: tel,
-              mobile: mobile,
+              tel2: tel2,
               email: email,
               adresse: adressePerso,
               adresseFacturation: adresseEcuries,
@@ -100,11 +109,11 @@ class _CreateClientPageState extends State<CreateClientPage> {
               region: region,
               derniereVisite: derniereVisite,
             );
-            Navigator.pop(context, newClient); // Retourner le nouveau client
+            Navigator.pop(context, newClient); 
           }
         },
-        child: Icon(Icons.save),
-        backgroundColor: AppColors.appBarBackgroundColor,
+        child: const Icon(Icons.save, color: AppColors.buttonBackgroundColor),
+        backgroundColor: Constants.appBarBackgroundColor,
       ),
 
     );

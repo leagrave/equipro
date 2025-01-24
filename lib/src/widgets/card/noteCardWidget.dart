@@ -1,28 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:equipro/style/appColor.dart';
 
-class ClientNotesCardWidget extends StatefulWidget {
+class NotesCardWidget extends StatefulWidget {
   final String initialNotes;
   final Function(String)? onNotesChanged;
+  final bool openWithCreateHorsePage;
 
-  const ClientNotesCardWidget({
+  const NotesCardWidget({
     Key? key,
     required this.initialNotes,
+    required this.openWithCreateHorsePage,
     this.onNotesChanged,
   }) : super(key: key);
 
   @override
-  _ClientNotesCardWidgetState createState() => _ClientNotesCardWidgetState();
+  _NotesCardWidgetState createState() => _NotesCardWidgetState();
 }
 
-class _ClientNotesCardWidgetState extends State<ClientNotesCardWidget> {
+class _NotesCardWidgetState extends State<NotesCardWidget> {
   bool _isEditing = false;
   late TextEditingController _notesController;
+  late String _originalNotes;
 
   @override
   void initState() {
     super.initState();
     _notesController = TextEditingController(text: widget.initialNotes);
+    _originalNotes = widget.initialNotes;
+
+    if (widget.openWithCreateHorsePage == true) {
+      setState(() {
+        _isEditing = true;
+      });
+    }
   }
 
   @override
@@ -35,7 +44,7 @@ class _ClientNotesCardWidgetState extends State<ClientNotesCardWidget> {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.white.withOpacity(0.8), // Fond transparent
+        color: Colors.white.withOpacity(0.8),
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -46,7 +55,6 @@ class _ClientNotesCardWidgetState extends State<ClientNotesCardWidget> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Champ de texte multi-lignes pour les commentaires
               TextField(
                 controller: _notesController,
                 decoration: InputDecoration(
@@ -56,33 +64,45 @@ class _ClientNotesCardWidgetState extends State<ClientNotesCardWidget> {
                   ),
                 ),
                 onChanged: widget.onNotesChanged,
-                maxLines: 5, // Permet d'avoir plusieurs lignes de texte
+                maxLines: 5,
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
-                maxLength: 500, // Limite le nombre de caractères si nécessaire
-                readOnly: !_isEditing, // Mode lecture seule si pas en mode édition
+                maxLength: 500,
+                readOnly: !_isEditing,
               ),
               const SizedBox(height: 16),
-              // Bouton pour activer/désactiver l'édition
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        if (_isEditing) {
-                          // Si on sauvegarde les modifications, on appelle le callback
-                          if (widget.onNotesChanged != null) {
-                            widget.onNotesChanged!(_notesController.text);
+
+              if (!widget.openWithCreateHorsePage)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (_isEditing) ...[
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _notesController.text = _originalNotes;
+                            _isEditing = false;
+                          });
+                        },
+                        child: const Text('Annuler'),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (_isEditing) {
+                            if (widget.onNotesChanged != null) {
+                              widget.onNotesChanged!(_notesController.text);
+                            }
                           }
-                        }
-                        _isEditing = !_isEditing;
-                      });
-                    },
-                    child: Text(_isEditing ? 'Enregistrer' : 'Modifier'),
-                  ),
-                ],
-              ),
+                          _isEditing = !_isEditing;
+                        });
+                      },
+                      child: Text(_isEditing ? 'Enregistrer' : 'Modifier'),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),

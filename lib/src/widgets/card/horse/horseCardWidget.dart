@@ -5,10 +5,12 @@ import 'package:intl/intl.dart';
 class HorseCardWidget extends StatefulWidget {
   final Horse horse;
   final Function(Horse)? onHorseUpdated;
+  final bool openWithCreateHorsePage;
 
   const HorseCardWidget({
     Key? key,
     required this.horse,
+    required this.openWithCreateHorsePage,
     this.onHorseUpdated,
   }) : super(key: key);
 
@@ -20,14 +22,28 @@ class _HorseCardWidgetState extends State<HorseCardWidget> {
   late Horse _horse;
   bool _isEditing = false;
   final _formKey = GlobalKey<FormState>();
+  bool openWithCreateHorsePage = false;
 
   @override
   void initState() {
     super.initState();
     _horse = widget.horse;
+
+    if (widget.openWithCreateHorsePage == true) {
+      setState(() {
+         _isEditing = !_isEditing;
+      });
+    }
   }
 
-  void _updateHorse({String? name, String? race, int? age, String? color, String? feedingType, String? activityType}) {
+  void _updateHorse({
+    String? name,
+    String? race,
+    int? age,
+    String? color,
+    String? feedingType,
+    String? activityType,
+  }) {
     setState(() {
       _horse = Horse(
         id: _horse.id,
@@ -71,7 +87,6 @@ class _HorseCardWidgetState extends State<HorseCardWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Partie gauche pour la date
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
@@ -80,17 +95,12 @@ class _HorseCardWidgetState extends State<HorseCardWidget> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      controller: TextEditingController(text: formatDate(_horse.lastAppointmentDate)),
+                      controller: TextEditingController(
+                          text: formatDate(_horse.lastAppointmentDate)),
                       readOnly: !_isEditing,
-                      onChanged: (value) {
-                        final parsedDate = DateFormat('dd/MM/yyyy').parseStrict(value);
-                        _updateHorse(name: value);
-                      },
                     ),
                   ),
-                  const SizedBox(width: 8), // Espace entre les deux champs
-
-                  // Partie droite pour un champ supplémentaire (par exemple, description)
+                  const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
@@ -99,12 +109,9 @@ class _HorseCardWidgetState extends State<HorseCardWidget> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      controller: TextEditingController(text: formatDate(_horse.lastAppointmentDate)),
+                      controller: TextEditingController(
+                          text: formatDate(_horse.lastAppointmentDate)),
                       readOnly: !_isEditing,
-                      onChanged: (value) {
-                        final parsedDate = DateFormat('dd/MM/yyyy').parseStrict(value);
-                        _updateHorse(name: value);
-                      },
                     ),
                   ),
                 ],
@@ -181,7 +188,8 @@ class _HorseCardWidgetState extends State<HorseCardWidget> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                controller: TextEditingController(text: _horse.feedingType),
+                controller:
+                    TextEditingController(text: _horse.feedingType),
                 readOnly: !_isEditing,
                 onChanged: (value) => _updateHorse(feedingType: value),
               ),
@@ -195,37 +203,49 @@ class _HorseCardWidgetState extends State<HorseCardWidget> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                controller: TextEditingController(text: _horse.activityType),
+                controller:
+                    TextEditingController(text: _horse.activityType),
                 readOnly: !_isEditing,
                 onChanged: (value) => _updateHorse(activityType: value),
               ),
               const SizedBox(height: 8),
 
-              // Boutons pour modifier et enregistrer
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _isEditing = !_isEditing;
-                      });
-                    },
-                    child: Text(_isEditing ? 'Annuler' : 'Modifier'),
-                  ),
-                  if (_isEditing)
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
+              // Afficher les boutons si onHorseUpdated est null
+              if (!widget.openWithCreateHorsePage)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (_isEditing) ...[
+                      ElevatedButton(
+                        onPressed: () {
                           setState(() {
+                            _horse = widget.horse; 
                             _isEditing = false;
                           });
-                        }
+                        },
+                        child: const Text('Annuler'),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (_isEditing) {
+                            // Valide le formulaire avant d'enregistrer
+                            if (_formKey.currentState?.validate() ?? false) {
+                              if (widget.onHorseUpdated != null) {
+                                widget.onHorseUpdated!(_horse); 
+                              }
+                            }
+                          }
+                          _isEditing = !_isEditing; 
+                        });
                       },
-                      child: Text('Enregistrer'),
+                      child: Text(_isEditing ? 'Enregistrer' : 'Modifier'),
                     ),
-                ],
-              ),
+                  ],
+                ),
+
             ],
           ),
         ),

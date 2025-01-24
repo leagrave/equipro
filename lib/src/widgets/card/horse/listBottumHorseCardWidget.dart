@@ -15,10 +15,10 @@ class ListbottumHorsecardwidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.white.withOpacity(0.8), // Fond transparent
+        color: Colors.white.withOpacity(0.8), 
         elevation: 4,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12), // Coins arrondis
+          borderRadius: BorderRadius.circular(12), 
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -26,13 +26,11 @@ class ListbottumHorsecardwidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
           
-
-              // Les boutons côte à côte
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ButtonClientListWidget(), // Premier bouton
-                  ButtonFactureListWidget(), // Deuxième bouton
+                  ButtonClientListWidget(),
+                  ButtonFactureListWidget(), 
                 ],
               ),
             ],

@@ -27,7 +27,7 @@ class AddressCardWidget extends StatefulWidget {
 
 class _AddressCardWidgetState extends State<AddressCardWidget> {
   late List<TextEditingController> _addressControllers;
-  late List<bool> _isEditing; // Liste pour gérer l'état de chaque champ d'adresse
+  late List<bool> _isEditing; 
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
 
     return Center(
       child: Card(
-        color: Colors.white.withOpacity(0.8), // Fond transparent
+        color: Colors.white.withOpacity(0.8), 
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -81,14 +81,14 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
                                   ? 'Adresse'
                                   : i == 1
                                       ? 'Adresse de facturation'
-                                      : 'Autres adresses', // Modifier le labelText en fonction de l'indice
+                                      : 'Autres adresses', 
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                             controller: _addressControllers[i],
                             onChanged: widget.onAdresseChanged,
-                            readOnly: !_isEditing[i], // Lecture seule si pas en mode édition
+                            readOnly: !_isEditing[i], 
                           ),
                         ),
                         IconButton(
@@ -98,7 +98,7 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
                                 'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(_addressControllers[i].text)}';
                             launchUrl(Uri.parse(googleMapsUrl));
                           },
-                          color: const Color.fromARGB(255, 219, 27, 27), // Couleur de l'icône
+                          color: const Color.fromARGB(255, 219, 27, 27), 
                         ),
                       ],
                     ),

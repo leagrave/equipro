@@ -12,15 +12,40 @@ import 'package:equipro/src/pages/settings.dart';
 import 'package:equipro/src/pages/client/listClient.dart';
 import 'package:equipro/src/pages/client/createClient.dart';
 import 'package:equipro/src/pages/client/managementClient.dart';
-import 'package:equipro/src/pages/horse/listHorse.dart'; 
-import 'package:equipro/src/pages/horse/managementHorse.dart'; 
+import 'package:equipro/src/pages/horse/listHorse.dart';
+import 'package:equipro/src/pages/horse/managementHorse.dart';
 import 'package:equipro/src/widgets/bar/navBarWidget.dart';
 import 'package:equipro/src/models/client.dart';
 import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/models/invoice.dart';
+import 'package:flutter/material.dart';
 
 final GoRouter go = GoRouter(
   initialLocation: '/login',
+  errorBuilder: (context, state) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Page introuvable',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'La route "${state.uri.toString()}" est invalide.',
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => context.go('/'),
+              child: const Text('Retourner à l\'accueil'),
+            ),
+          ],
+        ),
+      ),
+    );
+  },
   routes: <RouteBase>[
     GoRoute(
       path: '/login',
@@ -39,7 +64,7 @@ final GoRouter go = GoRouter(
       builder: (context, state) {
         return SettingsPage();
       },
-    ),    
+    ),
     GoRoute(
       path: '/',
       builder: (context, state) {
@@ -47,84 +72,86 @@ final GoRouter go = GoRouter(
       },
       routes: [
         GoRoute(
-          path: '/home',
+          path: 'home',
           builder: (context, state) {
             return MyHomePage();
           },
         ),
         GoRoute(
-          path: '/agenda',
+          path: 'agenda',
           builder: (context, state) {
             return MyAgendaPage();
           },
         ),
         GoRoute(
-          path: '/meet',
+          path: 'meet',
           builder: (context, state) {
             return MeetPage();
           },
         ),
         GoRoute(
-          path: '/listClient',
+          path: 'listClient',
           builder: (context, state) {
             return ListClientPage();
           },
         ),
         GoRoute(
-          path: '/createClient',
+          path: 'createClient',
           builder: (context, state) {
             return CreateClientPage();
           },
         ),
         GoRoute(
-          path: '/createHorse',
+          path: 'createHorse',
           builder: (context, state) {
-            return CreateHorsePage();
+            final arguments = state.extra as Map<String, dynamic>?;
+            final int? idClient = arguments?['idClient'];
+            return CreateHorsePage(idClient: idClient);
           },
         ),
         GoRoute(
-          path: '/managementClient',
+          path: 'managementClient',
           builder: (context, state) {
             final client = state.extra as Client?;
             return ManagementClientPage(client: client!);
           },
         ),
         GoRoute(
-          path: '/listHorse',
+          path: 'listHorse',
           builder: (context, state) {
             final arguments = state.extra as Map<String, dynamic>?;
-            final int? idClient = arguments?['idClient'];
+            int? idClient = arguments?['idClient'];
             return ListHorsePage(idClient: idClient);
           },
         ),
         GoRoute(
-          path: '/managementHorse',
+          path: 'managementHorse',
           builder: (context, state) {
             final horse = state.extra as Horse?;
             return ManagementHorsePage(horse: horse!);
           },
         ),
         GoRoute(
-          path: '/invoice',
+          path: 'invoice',
           builder: (context, state) {
             return InvoicePage();
           },
         ),
         GoRoute(
-          path: '/listInvoice',
+          path: 'listInvoice',
           builder: (context, state) {
             return ListClientPage();
           },
         ),
         GoRoute(
-          path: '/managementInvoice',
+          path: 'managementInvoice',
           builder: (context, state) {
             final invoice = state.extra as Invoice?;
             return ManagementInvoicePage(invoice: invoice!);
           },
         ),
         GoRoute(
-          path: '/createInvoice',
+          path: 'createInvoice',
           builder: (context, state) {
             return CreateInvoicePage();
           },
