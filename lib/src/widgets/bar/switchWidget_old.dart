@@ -1,9 +1,6 @@
 import 'package:equipro/style/appColor.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/src/pages/client/listClient.dart';
-import 'package:equipro/src/pages/horse/listHorse.dart';
 
-// Widget qui prend une fonction callback pour renvoyer la valeur de _isClientList au parent
 class SwitchableListWidget extends StatefulWidget {
   final ValueChanged<bool> onSwitchChanged;  // Callback pour renvoyer la valeur
 
@@ -44,9 +41,9 @@ class _SwitchableListWidgetState extends State<SwitchableListWidget> {
                       });
                       widget.onSwitchChanged(value); 
                     },
-                    activeColor: AppColors.buttonBackgroundColor, // Couleur active
-                    inactiveThumbColor: Colors.grey, // Couleur inactive
-                    inactiveTrackColor: Colors.grey[300], // Couleur du track inactif
+                    activeColor: AppColors.buttonBackgroundColor, 
+                    inactiveThumbColor: Colors.grey, 
+                    inactiveTrackColor: Colors.grey[300], 
                   ),
                 ),
                 const Text(

@@ -207,7 +207,9 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
                       isSociete = updatedClient.isSociete ?? false;
                     });
                   },
+                  openWithCreateHorsePage: true,
                   openWithCreateClientPage: false, 
+                  onSave: _onSaveClientCard,
                 ),
                 const SizedBox(height: 12),
 
@@ -239,7 +241,7 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
                 HorseCardWidget(
                   horse: Horse(
                     id: 0,
-                    idClient: widget.idClient ?? selectedClient?.idClient ?? 0,  // Utilise idClient si non null, sinon le client sélectionné
+                    idClient: widget.idClient ?? selectedClient?.idClient ?? 0,  
                     name: name,
                     ownerId: widget.idClient ?? selectedClient?.idClient ?? 0,
                     race: race,
@@ -280,6 +282,7 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
                   initialNotes: notes ?? "",
                   onNotesChanged: (value) => setState(() => notes = value),
                   openWithCreateHorsePage: true,
+                  openWithCreateClientPage: false,
                 ),
               ],
             ),

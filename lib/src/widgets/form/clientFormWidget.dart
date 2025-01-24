@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:equipro/src/models/client.dart';
-import 'package:equipro/style/appColor.dart';
 
 class ClientFormWidget extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -122,10 +120,10 @@ class _ClientFormWidgetState extends State<ClientFormWidget> {
             children: [
               Text(
                 "Dernière visite : ${derniereVisite.toLocal()}".split(' ')[0],
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
               IconButton(
-                icon: Icon(Icons.calendar_today, color: Colors.white),
+                icon: const Icon(Icons.calendar_today, color: Colors.white),
                 onPressed: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
@@ -137,7 +135,7 @@ class _ClientFormWidgetState extends State<ClientFormWidget> {
                     setState(() {
                       derniereVisite = picked;
                     });
-                  widget.onSavedDate(derniereVisite); // Notify parent
+                  widget.onSavedDate(derniereVisite); 
                 },
               ),
             ],

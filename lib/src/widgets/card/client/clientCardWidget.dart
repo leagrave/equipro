@@ -5,12 +5,16 @@ class ClientCardWidget extends StatefulWidget {
   final Client client;
   final Function(Client)? onClientUpdated;
   final bool openWithCreateClientPage;
+  final bool openWithCreateHorsePage;
+  final Function()? onSave;
 
   const ClientCardWidget({
     Key? key,
     required this.client,
     required this.openWithCreateClientPage,
+    required this.openWithCreateHorsePage,
     this.onClientUpdated,
+    this.onSave,
   }) : super(key: key);
 
   @override
@@ -19,9 +23,10 @@ class ClientCardWidget extends StatefulWidget {
 
 class _ClientCardWidgetState extends State<ClientCardWidget> {
   late Client _client;
+  late Client _originalClient; // Garde une copie de l'état initial
   bool _isEditing = false;
 
-  // TextEditingControllers pour les champs qui ne sont pas booléens
+  // TextEditingControllers pour les champs non booléens
   late TextEditingController _nomController;
   late TextEditingController _prenomController;
   late TextEditingController _telController;
@@ -35,6 +40,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
   void initState() {
     super.initState();
     _client = widget.client;
+    _originalClient = widget.client;
 
     // Initialisation des contrôleurs avec les valeurs du client
     _nomController = TextEditingController(text: _client.nom);
@@ -46,16 +52,14 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
     // Initialiser la variable temporaire avec la valeur de isSociete
     _tempIsSociete = _client.isSociete;
 
-    if (widget.openWithCreateClientPage == true) {
-      setState(() {
-        _isEditing = !_isEditing;
-      });
+    if (widget.openWithCreateClientPage || widget.openWithCreateHorsePage) {
+      _isEditing = true;
     }
+
   }
 
   @override
   void dispose() {
-    // Libération des ressources des contrôleurs
     _nomController.dispose();
     _prenomController.dispose();
     _telController.dispose();
@@ -64,23 +68,35 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
     super.dispose();
   }
 
+  void _handleSaveOrCancel({required bool isSave}) {
+    setState(() {
+      if (isSave) {
+        // Appelle onSave et onClientUpdated si nécessaire
+        widget.onSave?.call();
+        if (widget.onClientUpdated != null) {
+          widget.onClientUpdated!(_client);
+        }
+      } else {
+        // Restaure l'état initial du client
+        _client = _originalClient;
+        _nomController.text = _client.nom;
+        _prenomController.text = _client.prenom;
+        _telController.text = _client.tel;
+        _emailController.text = _client.email ?? "";
+        _villeController.text = _client.ville ?? "";
+        _tempIsSociete = _client.isSociete;
+      }
+      _isEditing = false;
+    });
+  }
+
   void _updateClient({
     String? nom,
     String? prenom,
     String? tel,
-    String? tel2,
     String? email,
     String? ville,
-    String? societe,
-    String? civilite,
-    DateTime? derniereVisite,
-    DateTime? prochaineIntervention,
-    String? adresse,
-    String? adresseFacturation,
-    String? region,
-    String? notes,
-    List<String>? adresses,
-    bool? isSociete, 
+    bool? isSociete,
   }) {
     setState(() {
       _client = Client(
@@ -88,25 +104,20 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
         nom: nom ?? _client.nom,
         prenom: prenom ?? _client.prenom,
         tel: tel ?? _client.tel,
-        tel2: tel2 ?? _client.tel2,
         email: email ?? _client.email,
         ville: ville ?? _client.ville,
-        societe: societe ?? _client.societe, 
-        civilite: civilite ?? _client.civilite,
-        isSociete: _tempIsSociete ?? _client.isSociete,  
-        derniereVisite: derniereVisite ?? _client.derniereVisite,
-        prochaineIntervention: prochaineIntervention ?? _client.prochaineIntervention,
-        adresse: adresse ?? _client.adresse,
-        adresseFacturation: adresseFacturation ?? _client.adresseFacturation,
-        region: region ?? _client.region,
-        notes: notes ?? _client.notes,
-        adresses: adresses ?? _client.adresses
+        isSociete: isSociete ?? _tempIsSociete ?? false,
+        societe: _client.societe,
+        civilite: _client.civilite,
+        derniereVisite: _client.derniereVisite,
+        prochaineIntervention: _client.prochaineIntervention,
+        adresse: _client.adresse,
+        adresseFacturation: _client.adresseFacturation,
+        region: _client.region,
+        notes: _client.notes,
+        adresses: _client.adresses,
       );
     });
-
-    if (widget.onClientUpdated != null) {
-      widget.onClientUpdated!(_client);
-    }
   }
 
   @override
@@ -197,57 +208,45 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
               Row(
                 children: [
                   Checkbox(
-                    value: _tempIsSociete,  
+                    value: _tempIsSociete,
                     onChanged: _isEditing
                         ? (bool? value) {
                             setState(() {
-                              _tempIsSociete = value ?? false; 
+                              _tempIsSociete = value ?? false;
                             });
                           }
-                        : null, 
+                        : null,
                   ),
                   const Text('Société'),
                 ],
               ),
               const SizedBox(height: 8),
 
-              // Afficher les boutons
-              if (!widget.openWithCreateClientPage)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (_isEditing) ...[
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            // Réinitialise l'état de _client et les contrôleurs
-                            _client = widget.client;
-                            _nomController.text = _client.nom ?? '';
-                            _prenomController.text = _client.prenom ?? '';
-                            _telController.text = _client.tel ?? '';
-                            _emailController.text = _client.email ?? '';
-                            _villeController.text = _client.ville ?? '';
-                            _tempIsSociete = _client.isSociete;  // Réinitialiser la variable temporaire
-                            _isEditing = false;
-                          });
-                        },
-                        child: const Text('Annuler'),
-                      ),
-                      const SizedBox(width: 8),
-                    ],
+              if(!widget.openWithCreateClientPage)
+              // Boutons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (_isEditing)
                     ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _isEditing = !_isEditing;
-                          if (_isEditing) {
-                            _updateClient(nom: _client.nom);
-                          }
-                        });
-                      },
-                      child: Text(_isEditing ? 'Enregistrer' : 'Modifier'),
+                      onPressed: () => _handleSaveOrCancel(isSave: true),
+                      child: const Text('Annuler'),
                     ),
-                  ],
-                ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_isEditing) {
+                        _handleSaveOrCancel(isSave: true);
+                      } else {
+                        setState(() {
+                          _isEditing = true;
+                        });
+                      }
+                    },
+                    child: Text(_isEditing ? 'Enregistrer' : 'Modifier'),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

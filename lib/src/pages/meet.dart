@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:equipro/src/utils/constants.dart';
-import 'package:go_router/go_router.dart';
 
 class MeetPage extends StatelessWidget {
   const MeetPage({Key? key}) : super(key: key);

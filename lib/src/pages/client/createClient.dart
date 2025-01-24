@@ -74,6 +74,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
                     });
                   },
                   openWithCreateClientPage: true, 
+                  openWithCreateHorsePage: false,
                 ),
                 SizedBox(height: 16),
                 AddressCardWidget(
@@ -87,6 +88,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
                   initialNotes: clientNotes,
                   onNotesChanged: (value) => setState(() => clientNotes = value),
                   openWithCreateHorsePage: false,
+                  openWithCreateClientPage: true,
                 )
               ],
             ),

@@ -4,11 +4,13 @@ class NotesCardWidget extends StatefulWidget {
   final String initialNotes;
   final Function(String)? onNotesChanged;
   final bool openWithCreateHorsePage;
+  final bool openWithCreateClientPage;
 
   const NotesCardWidget({
     Key? key,
     required this.initialNotes,
     required this.openWithCreateHorsePage,
+    required this.openWithCreateClientPage,
     this.onNotesChanged,
   }) : super(key: key);
 
@@ -27,11 +29,12 @@ class _NotesCardWidgetState extends State<NotesCardWidget> {
     _notesController = TextEditingController(text: widget.initialNotes);
     _originalNotes = widget.initialNotes;
 
-    if (widget.openWithCreateHorsePage == true) {
+    if (widget.openWithCreateHorsePage == true || widget.openWithCreateClientPage) {
       setState(() {
-        _isEditing = true;
+        _isEditing = !_isEditing;
       });
     }
+
   }
 
   @override
@@ -72,7 +75,7 @@ class _NotesCardWidgetState extends State<NotesCardWidget> {
               ),
               const SizedBox(height: 16),
 
-              if (!widget.openWithCreateHorsePage)
+              if (!widget.openWithCreateHorsePage && !widget.openWithCreateClientPage)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

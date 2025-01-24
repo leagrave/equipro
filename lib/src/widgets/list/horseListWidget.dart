@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:equipro/src/models/horse.dart';
 import 'package:intl/intl.dart'; 
 import 'package:equipro/src/models/client.dart'; 
-import 'package:go_router/go_router.dart'; 
-
 
 class HorseListWidget extends StatefulWidget {
   final List<Horse> horses;
@@ -140,8 +138,8 @@ class _HorseListWidgetState extends State<HorseListWidget> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: widget.isFromListHorsePage 
-                  ? AlwaysScrollableScrollPhysics() // Permet le défilement si isFromListHorsePage est vrai
-                  : NeverScrollableScrollPhysics(), // Empêche le défilement si isFromListHorsePage est faux
+                  ? AlwaysScrollableScrollPhysics()
+                  : NeverScrollableScrollPhysics(),
                 itemCount: widget.horses.length,
                 itemBuilder: (context, index) {
                   final horse = widget.horses[index];
@@ -207,7 +205,7 @@ class _HorseListWidgetState extends State<HorseListWidget> {
                   ),
   
                   trailing: widget.isFromListHorsePage
-                      ? Icon(Icons.arrow_forward_ios, color: Colors.black) 
+                      ? const Icon(Icons.arrow_forward_ios, color: Colors.black) 
                       : null,
                   onTap: () {
                     widget.onHorseTap(horse); 

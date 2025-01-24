@@ -176,6 +176,7 @@ class _ManagementHorsePageState extends State<ManagementHorsePage> {
                     });
                   },
                   openWithCreateClientPage: false, 
+                  openWithCreateHorsePage: false,
                 ),
               const SizedBox(height: 12),
 
@@ -225,6 +226,7 @@ class _ManagementHorsePageState extends State<ManagementHorsePage> {
                 NotesCardWidget(
                   initialNotes: widget.horse.notes ?? "",
                   openWithCreateHorsePage: false,
+                  openWithCreateClientPage: false,
                 ),
               ],
             ),

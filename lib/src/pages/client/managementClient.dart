@@ -65,6 +65,7 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
                     });
                   },
                   openWithCreateClientPage: false,
+                  openWithCreateHorsePage: false,
                 ),
                 const SizedBox(height: 2),
                 AddressCardWidget(
@@ -82,6 +83,7 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
                 NotesCardWidget(
                   initialNotes: client.notes ?? "",
                   openWithCreateHorsePage: false,
+                  openWithCreateClientPage: false,
                 ),
               ],
             ),

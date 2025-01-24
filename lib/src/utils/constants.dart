@@ -21,6 +21,7 @@ class Constants {
   static const Color lightest = Color(0xFFF7F9FC);
   static const Color lightest2 = Color(0xFFF7F9FC);
   static const Color post = Color(0xFFDEE3D5);
+  static const Color grey = Color.fromARGB(255, 158, 158, 158);
 
   // ---- ACCENT COLORS
   static const Color secondaryOrange = Color(0xFFFFB000);

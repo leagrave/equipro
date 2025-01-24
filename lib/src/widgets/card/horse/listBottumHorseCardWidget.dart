@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:equipro/style/appColor.dart'; // Assurez-vous que ce chemin est correct
 import 'package:equipro/src/widgets/bottum/bottumFactureListWidget.dart';
 import 'package:equipro/src/widgets/bottum/bottumClientListWidget.dart';
 

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:equipro/src/utils/constants.dart';
-import 'package:equipro/src/models/invoice.dart'; // Importer le modèle Invoice
-import 'package:intl/intl.dart'; // Pour le formatage des dates
-import 'package:go_router/go_router.dart';
+import 'package:equipro/src/models/invoice.dart'; 
+import 'package:intl/intl.dart'; 
 
 class InvoiceListWidget extends StatelessWidget {
   final List<Invoice> invoices;
@@ -26,14 +25,14 @@ class InvoiceListWidget extends StatelessWidget {
             Center(
               child: Text(
                 "Aucune facture trouvée",
-                style: TextStyle(color: Colors.grey, fontSize: 18),
+                style: TextStyle(color: Constants.grey, fontSize: 18),
               ),
             )
           else
             // Liste des factures
             ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(), 
+              physics: const NeverScrollableScrollPhysics(), 
               itemCount: invoices.length,
               itemBuilder: (context, index) {
                 final invoice = invoices[index];
@@ -68,7 +67,7 @@ class InvoiceListWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.black),
+                    trailing: const Icon(Icons.arrow_forward_ios, color: Colors.black),
                     onTap: () {
                       onInvoiceTap(invoice); 
                     },
