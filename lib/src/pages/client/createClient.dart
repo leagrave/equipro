@@ -80,6 +80,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
                   addresses: clientAddresses,
                   location: Location(latitude: 0.0, longitude: 0.0),
                   onAdresseChanged: (value) => setState(() => clientAddresses = value.split(',')), 
+                  openWithCreateClientPage: true,
                 ),
                 SizedBox(height: 16),
                 NotesCardWidget(

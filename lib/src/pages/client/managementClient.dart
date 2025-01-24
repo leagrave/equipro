@@ -70,6 +70,7 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
                 AddressCardWidget(
                   addresses: client.adresses,
                   location: defaultLocation,
+                  openWithCreateClientPage: false,
                 ),
                 const SizedBox(height: 2),
                 ListbottumClientcardwidget(

@@ -13,11 +13,13 @@ class AddressCardWidget extends StatefulWidget {
   final List<String>? addresses;
   final Location location;
   final Function(String)? onAdresseChanged;
+  final bool openWithCreateClientPage;
 
   const AddressCardWidget({
     Key? key,
     required this.addresses,
     required this.location,
+    required this.openWithCreateClientPage,
     this.onAdresseChanged,
   }) : super(key: key);
 
@@ -27,7 +29,7 @@ class AddressCardWidget extends StatefulWidget {
 
 class _AddressCardWidgetState extends State<AddressCardWidget> {
   late List<TextEditingController> _addressControllers;
-  late List<bool> _isEditing; 
+  late List<bool> _isEditing;
 
   @override
   void initState() {
@@ -40,6 +42,15 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
 
     // Initialiser l'état de l'édition pour chaque adresse (false par défaut)
     _isEditing = List.generate(widget.addresses?.length ?? 0, (index) => false);
+
+    if (widget.openWithCreateClientPage) {
+      setState(() {
+        // Initialisation de l'édition pour afficher les champs vide
+        _isEditing = List.generate(_addressControllers.length + 2, (index) => true);
+        _addressControllers.add(TextEditingController());  
+        _addressControllers.add(TextEditingController());  
+      });
+    }
   }
 
   @override
@@ -57,7 +68,7 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
 
     return Center(
       child: Card(
-        color: Colors.white.withOpacity(0.8), 
+        color: Colors.white.withOpacity(0.8),
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -68,7 +79,7 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Affichage des adresses avec labelText conditionnels
-              for (int i = 0; i < addresses.length; i++) 
+              for (int i = 0; i < _addressControllers.length; i++) 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -81,7 +92,9 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
                                   ? 'Adresse'
                                   : i == 1
                                       ? 'Adresse de facturation'
-                                      : 'Autres adresses', 
+                                      : i == 2
+                                          ? 'Autres adresses' 
+                                          : 'Autre adresse', 
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -98,17 +111,17 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
                                 'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(_addressControllers[i].text)}';
                             launchUrl(Uri.parse(googleMapsUrl));
                           },
-                          color: const Color.fromARGB(255, 219, 27, 27), 
+                          color: const Color.fromARGB(255, 219, 27, 27),
                         ),
                       ],
                     ),
                     SizedBox(height: 8),
                   ],
                 ),
-              
+
+              if(!widget.openWithCreateClientPage)
               // Boutons "Modifier", "Annuler" et "Enregistrer" en dehors de la boucle
               if (_isEditing.contains(true)) ...[
-                // Si l'un des champs est en mode édition, afficher "Annuler" et "Enregistrer"
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -119,7 +132,7 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
                           for (int i = 0; i < addresses.length; i++) {
                             _addressControllers[i].text = addresses[i];
                           }
-                          _isEditing = List.generate(addresses.length, (index) => false); // Désactiver l'édition
+                          _isEditing = List.generate(addresses.length, (index) => false); 
                         });
                       },
                       child: const Text('Annuler'),
@@ -134,7 +147,7 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
                               widget.onAdresseChanged!(_addressControllers[i].text);
                             }
                           }
-                          _isEditing = List.generate(addresses.length, (index) => false); // Désactiver l'édition
+                          _isEditing = List.generate(addresses.length, (index) => false); 
                         });
                       },
                       child: const Text('Enregistrer'),
@@ -149,7 +162,7 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          _isEditing = List.generate(addresses.length, (index) => true); // Activer l'édition pour tous les champs
+                          _isEditing = List.generate(addresses.length, (index) => true); 
                         });
                       },
                       child: const Text('Modifier'),
