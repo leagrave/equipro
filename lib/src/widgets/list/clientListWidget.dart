@@ -1,9 +1,9 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:equipro/src/models/client.dart';
 import 'package:equipro/src/models/horse.dart';
-import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/list/horseListWidget.dart';
 
 class ClientListWidget extends StatelessWidget {
@@ -59,13 +59,13 @@ class ClientListWidget extends StatelessWidget {
                     ListTile(
                       contentPadding: const EdgeInsets.all(8),
                       leading: CircleAvatar(
-                        backgroundColor: AppColors.gradientStartColor, // Bleu-gris profond
-                        child: const Icon(Icons.person, color: Colors.white),
+                        backgroundColor: Constants.gradientStartColor, 
+                        child: const Icon(Icons.person, color: Constants.white),
                       ),
                       title: Text(
                         "${client.nom} ${client.prenom}",
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
+                            fontWeight: FontWeight.bold, color: Constants.white),
                       ),
                       subtitle: Text(
                         client.ville ?? 'Ville non spécifiée',
@@ -76,24 +76,25 @@ class ClientListWidget extends StatelessWidget {
                         children: [
                           // Bouton d'appel
                           IconButton(
-                            icon: const Icon(Icons.call, color: Colors.green),
+                            icon: const Icon(Icons.call, color: Constants.secondaryGreen),
                             onPressed: () => _makePhoneCall(client.tel),
                           ),
                           // Bouton de message
                           IconButton(
-                            icon: const Icon(Icons.message, color: Colors.blue),
+                            icon: const Icon(Icons.message, color: Constants.secondaryBleu),
                             onPressed: () {
-                              // Logique pour envoyer un message au client
-                              print('Message à ${client.nom} ${client.prenom}');
+                              // Envoyer un message au client
+                              //print('Message à ${client.nom} ${client.prenom}');
+                              context.go('/chat');
                             },
                           ),
                           // Flèche pour la navigation
-                          const Icon(Icons.arrow_forward_ios, color: Colors.white),
+                          const Icon(Icons.arrow_forward_ios, color: Constants.white),
                         ],
                       ),
                       onTap: () => onClientTap(client),
                     ),
-                    // Liste des chevaux associés avec padding
+                    // Liste des chevaux associés 
                     if (clientHorses.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(left: 44.0, right: 18.0, top: 0.0, bottom: 4.0), 
@@ -111,7 +112,7 @@ class ClientListWidget extends StatelessWidget {
         : Center(
             child: Text(
               "Aucun client trouvé",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Constants.white),
             ),
           );
   }

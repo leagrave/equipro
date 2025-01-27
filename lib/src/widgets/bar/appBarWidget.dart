@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:equipro/src/utils/constants.dart';
-import 'package:go_router/go_router.dart'; 
+import 'package:go_router/go_router.dart';
 
 class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String logoPath;
   final Function onNotificationTap;
   final Color backgroundColor;
-  final bool isBackButtonVisible; 
+  final bool isBackButtonVisible;
+  final bool showActions; 
 
   const MyWidgetAppBar({
     Key? key,
@@ -15,7 +16,8 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.logoPath,
     required this.onNotificationTap,
     required this.backgroundColor,
-    this.isBackButtonVisible = true, 
+    this.isBackButtonVisible = true,
+    this.showActions = true, 
   }) : super(key: key);
 
   @override
@@ -25,17 +27,21 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       leading: isBackButtonVisible
           ? IconButton(
-              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+              icon: const Icon(Icons.arrow_back_ios, color: Constants.white),
               onPressed: () {
-                  Navigator.pop(context); 
+                if (GoRouter.of(context).canPop()) {
+                  context.pop();
+                } else {
+                  context.go('/');
+                }
               },
             )
-          : null, 
+          : null,
       title: Row(
         children: [
           GestureDetector(
             onTap: () {
-              context.go('/');
+              context.go('/settings');
             },
             child: CircleAvatar(
               radius: 20,
@@ -53,29 +59,22 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      actions: [
-
-        IconButton(
-          icon: const Icon(Icons.settings, color: Colors.white),
-          onPressed: () {
-            context.go('/settings'); 
-          },
-        ),
-
-        IconButton(
-          icon: const Icon(Icons.account_circle, color: Colors.white),
-          onPressed: () {
-            context.go('/profile'); 
-          },
-        ),
-
-        IconButton(
-          icon: const Icon(Icons.notifications, color: Constants.white),
-          onPressed: () {
-            onNotificationTap(); 
-          },
-        ),
-      ],
+      actions: showActions
+          ? [
+              IconButton(
+                icon: const Icon(Icons.notifications, color: Constants.secondaryYellow),
+                onPressed: () {
+                  onNotificationTap();
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.chat, color: Constants.secondaryBleu),
+                onPressed: () {
+                  context.go('/chat');
+                },
+              ),
+            ]
+          : null, 
     );
   }
 

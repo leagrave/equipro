@@ -8,7 +8,7 @@ class Constants {
   static const Color primaryBluePetrol = Color(0xFF00293d); // Secondary elements
   static const Color primaryBlueMarine = Color(0xFF00253a); // Subtle accents
   static const Color white = Color(0xFFFFFFFF); // Text and contrast
-  static const Color appBarBackgroundColor = Color(0xFF29323F); // Bleu-gris foncé
+
 
   // ---- GREYS (UNTOUCHED)
   static const Color black = Color(0xFF000000);
@@ -24,15 +24,22 @@ class Constants {
   static const Color grey = Color.fromARGB(255, 158, 158, 158);
 
   // ---- ACCENT COLORS
+  static const Color secondaryYellow = Color.fromARGB(255, 255, 230, 0);
   static const Color secondaryOrange = Color(0xFFFFB000);
   static const Color secondaryRed = Color.fromARGB(255, 234, 36, 36);
   static const Color secondaryGreen = Color(0xFF4CAF50);
+  static const Color secondaryBleu = Color.fromARGB(255, 76, 103, 219);
 
   // ---- TURQUOISE/BLUE COLORS
   static const Color turquoiseLight = Color(0xFF00B8D9); // Main turquoise color
   static const Color turquoiseBright = Color(0xFF00C6CF); // Lighter and vibrant turquoise
   static const Color turquoiseDark = Color(0xFF0097A7); // Darker turquoise
   static const Color turquoise =   Color(0xFF1BD5DB); //turquoise
+
+  static const Color appBarBackgroundColor = Color(0xFF29323F); // Bleu-gris foncé
+  static const Color gradientStartColor = Color(0xFF28313E); // Bleu-gris profond
+  static const Color gradientEndColor = Color(0xFF1BD5DB); // Bleu clair
+  static const Color buttonTextColor = Color(0xFF28313E); // Bleu-gris profond
 
 
   // FONT FAMILIES
@@ -44,6 +51,8 @@ class Constants {
 
   // IMAGES
   static const String logo = "assets/images/image-logo.jpg";
+  static const String avatar = "assets/images/image-logo.jpg";
+
 
   // EXAMPLE USAGE
   // Example 1: Button Style

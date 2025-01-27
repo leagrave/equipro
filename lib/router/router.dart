@@ -1,7 +1,9 @@
+import 'package:equipro/src/pages/chat.dart';
 import 'package:equipro/src/pages/facture/createFacture.dart';
 import 'package:equipro/src/pages/facture/managementInvoice.dart';
 import 'package:equipro/src/pages/horse/createHorse.dart';
 import 'package:equipro/src/pages/invoice.dart';
+import 'package:equipro/src/pages/user.dart';
 import 'package:go_router/go_router.dart';
 import 'package:equipro/src/pages/home.dart';
 import 'package:equipro/src/pages/login.dart';
@@ -154,6 +156,18 @@ final GoRouter go = GoRouter(
           path: 'createInvoice',
           builder: (context, state) {
             return CreateInvoicePage();
+          },
+        ),
+        GoRoute(
+          path: 'chat',
+          builder: (context, state) {
+            return ChatPage();
+          },
+        ),
+        GoRoute(
+          path: 'user',
+          builder: (context, state) {
+            return EditProfilePage();
           },
         ),
       ],
