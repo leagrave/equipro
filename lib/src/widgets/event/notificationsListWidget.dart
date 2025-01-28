@@ -2,8 +2,7 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-// Widget pour afficher les prochains rendez-vous
-class MyWidgetAppointments extends StatelessWidget {
+class MyWidgetNotifications extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -18,7 +17,7 @@ class MyWidgetAppointments extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Prochains Rendez-vous',
+              'Dernières Notifications',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -26,17 +25,17 @@ class MyWidgetAppointments extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            // Liste des rendez-vous à venir
+            // Liste des notifications récentes
             Column(
               children: List.generate(3, (index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
                     children: [
-                      const Icon(Icons.access_time, color: Colors.white),
+                      const Icon(Icons.notifications, color: Colors.white),
                       const SizedBox(width: 10),
                       Text(
-                        'Rendez-vous $index',
+                        'Notification $index',
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 16,
@@ -49,12 +48,14 @@ class MyWidgetAppointments extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            Center(  
+
+            Center( 
               child: ElevatedButton(
                 onPressed: () {
-                  context.push('/', extra: {'initialPageIndex': 2});
+                  context.push('/notifications');
                 },
                 style: ElevatedButton.styleFrom(
+                  alignment: Alignment.center,
                   backgroundColor: Constants.white,
                   foregroundColor: Constants.appBarBackgroundColor,
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
@@ -62,7 +63,7 @@ class MyWidgetAppointments extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('Voir tous les rendez-vous'),
+                child: const Text('Voir toutes les notifications'),
               ),
             ),
           ],

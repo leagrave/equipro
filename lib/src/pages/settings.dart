@@ -1,6 +1,5 @@
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientProfilCardWidget.dart';
-import 'package:equipro/src/widgets/card/settingsCardWidget.dart';
 import 'package:equipro/src/widgets/settings/settingsWidget.Dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/utils/constants.dart';
@@ -15,14 +14,11 @@ class SettingsPage extends StatelessWidget {
       appBar: MyWidgetAppBar(
         title: 'Settings',
         logoPath: Constants.logo, 
-        onNotificationTap: () {
-          print('Notifications');
-        },
         backgroundColor: Constants.appBarBackgroundColor, 
         isBackButtonVisible: true,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Constants.appBarBackgroundColor, Constants.turquoise], 
             begin: Alignment.topLeft,
@@ -65,7 +61,7 @@ class SettingsPage extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Constants.secondaryRed, 
                   foregroundColor: Constants.white, 
-                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

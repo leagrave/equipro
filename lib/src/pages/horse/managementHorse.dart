@@ -130,13 +130,10 @@ class _ManagementHorsePageState extends State<ManagementHorsePage> {
       appBar: MyWidgetAppBar(
         title: 'Gestion cheval',
         logoPath: 'assets/images/image-logo.jpg', 
-        onNotificationTap: () {
-          print('Notifications');
-        },
         backgroundColor: AppColors.appBarBackgroundColor,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [AppColors.gradientStartColor, AppColors.gradientEndColor],
             begin: Alignment.topLeft,

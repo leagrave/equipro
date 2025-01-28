@@ -1,4 +1,5 @@
 import 'package:equipro/src/utils/constants.dart';
+import 'package:equipro/src/widgets/event/notificationsListWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/widgets/event/evenementsListWidget.dart';
 import 'package:equipro/style/appColor.dart';
@@ -9,36 +10,20 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Constants.appBarBackgroundColor, Constants.turquoise], 
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
-        child: Column(
-          children: [
-
-            MyWidgetAppointments(),
-
-            Expanded(
-              child: Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.buttonBackgroundColor, 
-                    foregroundColor: AppColors.buttonTextColor, 
-                    padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text('Aller à une section'),
-                ),
-              ),
-            ),
-          ],
+        child: SingleChildScrollView( 
+          child: Column(
+            children: [
+              MyWidgetAppointments(),
+              MyWidgetNotifications(),
+            ],
+          ),
         ),
       ),
     );

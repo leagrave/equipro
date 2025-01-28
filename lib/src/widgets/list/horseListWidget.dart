@@ -126,7 +126,7 @@ class _HorseListWidgetState extends State<HorseListWidget> {
         children: [
           // Si la liste des chevaux est vide, afficher "Aucun cheval trouvé"
           if (widget.horses.isEmpty)
-            Center(
+            const Center(
               child: Text(
                 "Aucun cheval trouvé",
                 style: TextStyle(color: Colors.grey, fontSize: 18),
@@ -138,8 +138,8 @@ class _HorseListWidgetState extends State<HorseListWidget> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: widget.isFromListHorsePage 
-                  ? AlwaysScrollableScrollPhysics()
-                  : NeverScrollableScrollPhysics(),
+                  ? const AlwaysScrollableScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
                 itemCount: widget.horses.length,
                 itemBuilder: (context, index) {
                   final horse = widget.horses[index];
@@ -234,22 +234,6 @@ class _HorseListWidgetState extends State<HorseListWidget> {
                     ),
                   ),
                 ),
-
-                // TextButton(
-                //   onPressed: () {
-                //     setState(() {
-                //       _isExpanded = !_isExpanded;
-                //     });
-                //     if (clientId != null) {
-                //       context.go('/listHorse', extra: {'idClient': clientId});
-                //     }
-                //   },
-                //   style: TextButton.styleFrom(
-                //     foregroundColor: Constants.white,
-                //   ),
-                //   child: Text(_isExpanded ? "Voir liste" : ""),
-                // ),
-
               ],
             ),
         ],

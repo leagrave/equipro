@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String logoPath;
-  final Function onNotificationTap;
   final Color backgroundColor;
   final bool isBackButtonVisible;
   final bool showActions; 
@@ -14,7 +13,6 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
     Key? key,
     required this.title,
     required this.logoPath,
-    required this.onNotificationTap,
     required this.backgroundColor,
     this.isBackButtonVisible = true,
     this.showActions = true, 
@@ -55,7 +53,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
             title,
             style: const TextStyle(
               color: Constants.white,
-              fontSize: 24,
+              fontSize: 19,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -66,13 +64,13 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 icon: const Icon(Icons.notifications, color: Constants.secondaryYellow),
                 onPressed: () {
-                  onNotificationTap();
+                  context.push('/notifications');
                 },
               ),
               IconButton(
                 icon: const Icon(Icons.chat, color: Constants.secondaryBleu),
                 onPressed: () {
-                  context.push('/chat');
+                  context.push('/messages');
                 },
               ),
             ]

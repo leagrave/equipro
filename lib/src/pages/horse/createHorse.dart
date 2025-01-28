@@ -161,13 +161,10 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
       appBar: MyWidgetAppBar(
         title: 'Créer un cheval',
         logoPath: Constants.logo,
-        onNotificationTap: () {
-          print('Notifications');
-        },
         backgroundColor: Constants.appBarBackgroundColor,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Constants.appBarBackgroundColor, Constants.turquoise],
             begin: Alignment.topLeft,

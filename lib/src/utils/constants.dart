@@ -26,6 +26,7 @@ class Constants {
   // ---- ACCENT COLORS
   static const Color secondaryYellow = Color.fromARGB(255, 255, 230, 0);
   static const Color secondaryOrange = Color(0xFFFFB000);
+  static const Color secondaryOrange2 = Color.fromARGB(255, 255, 136, 0);
   static const Color secondaryRed = Color.fromARGB(255, 234, 36, 36);
   static const Color secondaryGreen = Color(0xFF4CAF50);
   static const Color secondaryBleu = Color.fromARGB(255, 76, 103, 219);
@@ -51,7 +52,7 @@ class Constants {
 
   // IMAGES
   static const String logo = "assets/images/image-logo.jpg";
-  static const String avatar = "assets/images/image-logo.jpg";
+  static const String avatar = "assets/images/default_avatar.jpg";
 
 
   // EXAMPLE USAGE

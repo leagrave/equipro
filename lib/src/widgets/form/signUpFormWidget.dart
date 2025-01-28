@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class SignUpFormWidget extends StatelessWidget {
   @override
@@ -104,7 +103,7 @@ class SignUpFormWidget extends StatelessWidget {
           ),
           
           // Conseils sur la sécurité du mot de passe
-          Text(
+          const Text(
             "8 caractères, une majuscule, un minuscule, un chiffre, et un caractère spécial",
             style: TextStyle(
               color: Colors.grey, 

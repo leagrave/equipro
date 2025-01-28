@@ -22,7 +22,7 @@ class InvoiceListWidget extends StatelessWidget {
       child: Column(
         children: [
           if (invoices.isEmpty)
-            Center(
+            const Center(
               child: Text(
                 "Aucune facture trouvée",
                 style: TextStyle(color: Constants.grey, fontSize: 18),

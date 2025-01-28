@@ -1,5 +1,5 @@
 import 'package:equipro/src/pages/invoice.dart';
-import 'package:equipro/src/pages/meet.dart';
+import 'package:equipro/src/pages/event/meet.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/pages/home.dart';
@@ -42,9 +42,6 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
       appBar: MyWidgetAppBar(
         title: 'EquiPro',
         logoPath: Constants.logo,
-        onNotificationTap: () {
-          print('Notifications');
-        },
         backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: false,
       ),

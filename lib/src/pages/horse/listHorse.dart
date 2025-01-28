@@ -149,13 +149,10 @@ class _ListHorsePageState extends State<ListHorsePage> {
       appBar: MyWidgetAppBar(
         title: 'Mes Chevaux',
         logoPath: Constants.logo,
-        onNotificationTap: () {
-          print('Notifications');
-        },
         backgroundColor: Constants.appBarBackgroundColor,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Constants.appBarBackgroundColor, Constants.turquoise],
             begin: Alignment.topLeft,

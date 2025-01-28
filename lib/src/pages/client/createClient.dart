@@ -37,13 +37,10 @@ class _CreateClientPageState extends State<CreateClientPage> {
       appBar: MyWidgetAppBar(
         title: 'Créer un client',
         logoPath: Constants.logo,
-        onNotificationTap: () {
-          print('Notifications');
-        },
         backgroundColor: Constants.appBarBackgroundColor,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors:[Constants.appBarBackgroundColor, Constants.turquoise],
             begin: Alignment.topLeft,

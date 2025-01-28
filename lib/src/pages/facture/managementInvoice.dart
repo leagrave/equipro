@@ -15,13 +15,10 @@ class ManagementInvoicePage extends StatelessWidget {
       appBar: MyWidgetAppBar(
         title: 'Gestion Facture',
         logoPath: Constants.logo,
-        onNotificationTap: () {
-          print('Notifications');
-        },
         backgroundColor: Constants.appBarBackgroundColor,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Constants.appBarBackgroundColor, Constants.turquoise],
             begin: Alignment.topLeft,

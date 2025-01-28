@@ -39,13 +39,10 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
       appBar: MyWidgetAppBar(
         title: 'Gestion client',
         logoPath: Constants.logo,
-        onNotificationTap: () {
-          print('Notifications');
-        },
         backgroundColor: Constants.appBarBackgroundColor,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Constants.appBarBackgroundColor, Constants.turquoise],
             begin: Alignment.topLeft,

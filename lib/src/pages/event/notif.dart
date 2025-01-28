@@ -1,23 +1,28 @@
 import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
+import 'package:equipro/src/widgets/event/histoNotifListWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/src/widgets/form/signUpFormWidget.dart';
 
-class EditProfilePage extends StatelessWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
+class NotifsPage extends StatefulWidget {
+  const NotifsPage({Key? key}) : super(key: key);
+
+  @override
+  _NotifsPageState createState() => _NotifsPageState();
+}
+
+class _NotifsPageState extends State<NotifsPage> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyWidgetAppBar(
-        title: 'Profile',
-        logoPath: Constants.logo,
+        title: "Notifications",
+        logoPath: Constants.avatar,
         backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: true,
+        showActions: false,
       ),
-      body: Container(
-        width: double.infinity, 
-        height: double.infinity, 
+      body: Container(  
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Constants.appBarBackgroundColor, Constants.turquoise],
@@ -25,14 +30,13 @@ class EditProfilePage extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
         ),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SignUpFormWidget(), 
-            ],
-          ),
+        child: Stack(
+          children: [
+            // Chat
+            Positioned.fill(
+              child: HistoriqueNotificationListWidget(),
+            ),
+          ],
         ),
       ),
     );

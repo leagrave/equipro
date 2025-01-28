@@ -28,13 +28,10 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
       appBar: MyWidgetAppBar(
         title: 'Créer une facture',
         logoPath: 'assets/images/image-logo.jpg',
-        onNotificationTap: () {
-          print('Notifications');
-        },
         backgroundColor: AppColors.appBarBackgroundColor,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [AppColors.gradientStartColor, AppColors.gradientEndColor],
             begin: Alignment.topLeft,
@@ -50,7 +47,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'ID Facture',
                       border: OutlineInputBorder(),
                     ),
@@ -60,7 +57,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                   ),
                   SizedBox(height: 16),
                   TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'ID Client',
                       border: OutlineInputBorder(),
                     ),
@@ -70,7 +67,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                   ),
                   SizedBox(height: 16),
                   TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'ID Cheval',
                       border: OutlineInputBorder(),
                     ),
@@ -80,7 +77,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                   ),
                   SizedBox(height: 16),
                   TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Adresse de facturation',
                       border: OutlineInputBorder(),
                     ),
@@ -89,13 +86,13 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                   ),
                   SizedBox(height: 16),
                   SwitchListTile(
-                    title: Text('Est une société'),
+                    title: const Text('Est une société'),
                     value: isSociete,
                     onChanged: (value) => setState(() => isSociete = value),
                   ),
                   SizedBox(height: 16),
                   TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Montant (€)',
                       border: OutlineInputBorder(),
                     ),
@@ -105,7 +102,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                   ),
                   SizedBox(height: 16),
                   TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Date d\'échéance (JJ/MM/AAAA)',
                       border: OutlineInputBorder(),
                     ),
@@ -116,7 +113,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                           dateEcheance = DateTime.parse(value.split('/').reversed.join('-'));
                         }
                       } catch (_) {
-                        dateEcheance = null; // Éviter les erreurs si le format est incorrect
+                        dateEcheance = null; 
                       }
                     },
                   ),
@@ -129,7 +126,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                   SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     value: etat,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'État',
                       border: OutlineInputBorder(),
                     ),
@@ -163,10 +160,10 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
               adresseFacturation: adresseFacturation,
               dateEcheance: dateEcheance,
             );
-            Navigator.pop(context, newInvoice); // Retourner la nouvelle facture
+            Navigator.pop(context, newInvoice); 
           }
         },
-        child: Icon(Icons.save),
+        child: const Icon(Icons.save),
         backgroundColor: AppColors.appBarBackgroundColor,
       ),
     );

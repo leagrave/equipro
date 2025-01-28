@@ -86,27 +86,19 @@ class _ChatPageState extends State<ChatPage> {
       appBar: MyWidgetAppBar(
         title: _otherUser.firstName ?? 'Utilisateur',
         logoPath: Constants.avatar,
-        onNotificationTap: () {},
         backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: true,
         showActions: false,
       ),
-      body: Stack(
-            children: [
-              // Chat
-              Expanded(
-                child: Chat(
-                  messages: _messages,
-                  onSendPressed: _handleSendPressed,
-                  user: _currentUser,
-                  theme: const DefaultChatTheme(
-                    inputBackgroundColor: Constants.gradientStartColor,
-                    primaryColor: Constants.turquoiseDark,
-                    sendButtonIcon: Icon(Icons.send, color: Constants.gradientEndColor),
-                  ),
-                ),
-              ),
-            ],      
+      body: Chat(
+        messages: _messages,
+        onSendPressed: _handleSendPressed,
+        user: _currentUser,
+        theme: const DefaultChatTheme(
+          inputBackgroundColor: Constants.gradientStartColor,
+          primaryColor: Constants.turquoiseDark,
+          sendButtonIcon: Icon(Icons.send, color: Constants.gradientEndColor),
+        ),
       ),
     );
   }

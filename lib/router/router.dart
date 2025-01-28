@@ -1,4 +1,6 @@
-import 'package:equipro/src/pages/chat.dart';
+import 'package:equipro/src/pages/event/chat.dart';
+import 'package:equipro/src/pages/event/message.dart';
+import 'package:equipro/src/pages/event/notif.dart';
 import 'package:equipro/src/pages/facture/createFacture.dart';
 import 'package:equipro/src/pages/facture/managementInvoice.dart';
 import 'package:equipro/src/pages/horse/createHorse.dart';
@@ -9,7 +11,7 @@ import 'package:equipro/src/pages/home.dart';
 import 'package:equipro/src/pages/login.dart';
 import 'package:equipro/src/pages/signup.dart';
 import 'package:equipro/src/pages/agenda.dart';
-import 'package:equipro/src/pages/meet.dart';
+import 'package:equipro/src/pages/event/meet.dart';
 import 'package:equipro/src/pages/settings.dart';
 import 'package:equipro/src/pages/client/listClient.dart';
 import 'package:equipro/src/pages/client/createClient.dart';
@@ -175,6 +177,18 @@ final GoRouter go = GoRouter(
           path: 'user',
           builder: (context, state) {
             return EditProfilePage();
+          },
+        ),
+        GoRoute(
+          path: 'notifications',
+          builder: (context, state) {
+            return NotifsPage();
+          },
+        ),
+        GoRoute(
+          path: 'messages',
+          builder: (context, state) {
+            return MessagesPage();
           },
         ),
       ],
