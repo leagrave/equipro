@@ -41,10 +41,10 @@ class SettingsPage extends StatelessWidget {
                 isProfessional: false,
                 isVerified: true,
                 onEditProfile: () {
-                  context.go('/user');
+                  context.push('/user');
                 },
                 onUserTap: () {
-                  context.go('/user');
+                  context.push('/user');
                 },
               ),
 

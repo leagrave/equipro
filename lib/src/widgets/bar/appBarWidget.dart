@@ -25,23 +25,25 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: backgroundColor,
       elevation: 0,
+      iconTheme: const IconThemeData(color: Constants.white), 
       leading: isBackButtonVisible
           ? IconButton(
               icon: const Icon(Icons.arrow_back_ios, color: Constants.white),
               onPressed: () {
-                if (GoRouter.of(context).canPop()) {
-                  context.pop();
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
                 } else {
                   context.go('/');
                 }
               },
+
             )
           : null,
       title: Row(
         children: [
           GestureDetector(
             onTap: () {
-              context.go('/settings');
+              context.push('/settings');
             },
             child: CircleAvatar(
               radius: 20,
@@ -70,7 +72,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 icon: const Icon(Icons.chat, color: Constants.secondaryBleu),
                 onPressed: () {
-                  context.go('/chat');
+                  context.push('/chat');
                 },
               ),
             ]

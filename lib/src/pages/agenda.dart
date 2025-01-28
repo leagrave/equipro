@@ -3,7 +3,9 @@ import 'package:equipro/src/pages/client/listClient.dart';
 import 'package:equipro/src/utils/constants.dart';
 
 class MyAgendaPage extends StatelessWidget {
-  const MyAgendaPage({Key? key}) : super(key: key);
+  final int? idClient;
+
+  const MyAgendaPage({Key? key, this.idClient}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class MyAgendaPage extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
         ),
-        child: ListClientPage(), 
+        child: ListClientPage(idClient: idClient), 
       ),
     );
   }

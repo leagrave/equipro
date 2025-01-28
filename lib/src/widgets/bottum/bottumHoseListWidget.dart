@@ -17,7 +17,7 @@ class ButtonHorseListWidget extends StatelessWidget {
           backgroundColor: AppColors.gradientStartColor, 
         ),
         onPressed: () {
-          context.go('/listHorse', extra: {'idClient': idClient});
+          context.push('/listHorse', extra: {'idClient': idClient});
         },
 
         child: const Column(

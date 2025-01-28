@@ -12,7 +12,7 @@ class ButtonFactureListWidget extends StatelessWidget {
           backgroundColor: AppColors.gradientStartColor, 
         ),
         onPressed: () {
-          context.go('/facture');
+          context.push('/facture');
         },
         child: const Column(
           mainAxisSize: MainAxisSize.min, 

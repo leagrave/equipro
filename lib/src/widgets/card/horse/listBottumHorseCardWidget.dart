@@ -3,11 +3,11 @@ import 'package:equipro/src/widgets/bottum/bottumFactureListWidget.dart';
 import 'package:equipro/src/widgets/bottum/bottumClientListWidget.dart';
 
 class ListbottumHorsecardwidget extends StatelessWidget {
-
+ final int idClient;
 
   const ListbottumHorsecardwidget({
     Key? key,
-
+    required this.idClient,
   }) : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class ListbottumHorsecardwidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ButtonClientListWidget(),
+                  ButtonClientListWidget(idClient: idClient),
                   ButtonFactureListWidget(), 
                 ],
               ),

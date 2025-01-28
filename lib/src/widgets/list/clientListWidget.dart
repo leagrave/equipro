@@ -30,7 +30,7 @@ class ClientListWidget extends StatelessWidget {
 
   // Fonction pour naviguer vers la page de gestion des chevaux
   void navigateToManagementHorsePage(BuildContext context, Horse horse) async {
-    context.go('/managementHorse', extra: horse);
+    context.push('/managementHorse', extra: horse);
     // await Navigator.pushNamed(
     //   context,
     //   '/managementHorse',
@@ -85,7 +85,7 @@ class ClientListWidget extends StatelessWidget {
                             onPressed: () {
                               // Envoyer un message au client
                               //print('Message à ${client.nom} ${client.prenom}');
-                              context.go('/chat');
+                              context.push('/chat');
                             },
                           ),
                           // Flèche pour la navigation

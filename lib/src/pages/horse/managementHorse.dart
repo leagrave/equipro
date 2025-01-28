@@ -219,7 +219,7 @@ class _ManagementHorsePageState extends State<ManagementHorsePage> {
 
                 const SizedBox(height: 12),
 
-                ListbottumHorsecardwidget(),
+                ListbottumHorsecardwidget(idClient:widget.horse.idClient),
 
                 const SizedBox(height: 12),
 

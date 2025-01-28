@@ -7,6 +7,10 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:go_router/go_router.dart';
 
 class ListClientPage extends StatefulWidget {
+  final int? idClient;
+
+  const ListClientPage({Key? key, this.idClient}) : super(key: key);
+
   @override
   _ListClientPageState createState() => _ListClientPageState();
 }
@@ -175,7 +179,11 @@ List<Horse> horses = [
   @override
   void initState() {
     super.initState();
-    filteredClients = clients;
+    if (widget.idClient != null) {
+      filteredClients = clients.where((client) => client.idClient == widget.idClient).toList();
+    } else {
+      filteredClients = clients;
+    }
   }
 
 void filterClients(String query) {
@@ -197,7 +205,7 @@ void filterClients(String query) {
 
 
 void navigateToManagementClientPage(Client client) async {
-  context.go('/managementClient', extra: client);
+  context.push('/managementClient', extra: client);
 }
 
 void navigateToCreateClientPage() async {

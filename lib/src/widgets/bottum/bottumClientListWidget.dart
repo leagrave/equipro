@@ -3,6 +3,10 @@ import 'package:equipro/style/appColor.dart';
 import 'package:go_router/go_router.dart';
 
 class ButtonClientListWidget extends StatelessWidget {
+  final int idClient;
+
+  const ButtonClientListWidget({Key? key, required this.idClient}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -11,10 +15,14 @@ class ButtonClientListWidget extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.gradientStartColor, 
         ),
+        // onPressed: () {
+        //   // afficher la fiche du proprio ou la liste des proprio dans l'agenda
+        //   context.push('/listClient', extra: {'idClient': idClient});
+        // },
         onPressed: () {
-          // afficher la fiche du proprio ou la liste des proprio dans l'agenda
-          context.go('/');  
+          context.push('/', extra: {'initialPageIndex': 1, 'idClient': idClient}); // Index 1 pour MyAgendaPage
         },
+
 
         child: const Column(
           mainAxisSize: MainAxisSize.min, 

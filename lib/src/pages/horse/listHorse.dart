@@ -126,7 +126,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
   }
 
   void navigateToManagementHorsePage(Horse horse) async {
-    context.go('/managementHorse',extra: horse);
+    context.push('/managementHorse',extra: horse);
   }
 
   void navigateToCreateHorsePage() async {

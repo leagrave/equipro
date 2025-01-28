@@ -70,7 +70,10 @@ final GoRouter go = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) {
-        return MyWidgetBottomNavBar();
+        final arguments = state.extra as Map<String, dynamic>?; 
+        final initialPageIndex = arguments?['initialPageIndex'] ?? 0;
+        final idClient = arguments?['idClient'] as int?; 
+        return MyWidgetBottomNavBar(initialPageIndex: initialPageIndex, idClient: idClient);
       },
       routes: [
         GoRoute(
@@ -82,7 +85,9 @@ final GoRouter go = GoRouter(
         GoRoute(
           path: 'agenda',
           builder: (context, state) {
-            return MyAgendaPage();
+            final arguments = state.extra as Map<String, dynamic>?;
+            int? idClient = arguments?['idClient'];
+            return MyAgendaPage(idClient: idClient);
           },
         ),
         GoRoute(
@@ -94,7 +99,9 @@ final GoRouter go = GoRouter(
         GoRoute(
           path: 'listClient',
           builder: (context, state) {
-            return ListClientPage();
+            final arguments = state.extra as Map<String, dynamic>?; 
+            int? idClient = arguments?['idClient'];
+            return ListClientPage(idClient: idClient);
           },
         ),
         GoRoute(
@@ -106,7 +113,7 @@ final GoRouter go = GoRouter(
         GoRoute(
           path: 'createHorse',
           builder: (context, state) {
-            final arguments = state.extra as Map<String, dynamic>?;
+            final arguments = state.extra as Map<String, dynamic>?; 
             final int? idClient = arguments?['idClient'];
             return CreateHorsePage(idClient: idClient);
           },
@@ -174,3 +181,4 @@ final GoRouter go = GoRouter(
     ),
   ],
 );
+

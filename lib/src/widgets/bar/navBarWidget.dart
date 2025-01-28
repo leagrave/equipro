@@ -6,44 +6,53 @@ import 'package:equipro/src/pages/home.dart';
 import 'package:equipro/src/pages/agenda.dart';
 import 'package:equipro/src/utils/constants.dart';
 
-
 class MyWidgetBottomNavBar extends StatefulWidget {
-  const MyWidgetBottomNavBar({Key? key}) : super(key: key);
+  final int initialPageIndex;
+  final int? idClient; 
+
+  const MyWidgetBottomNavBar({
+    Key? key,
+    this.initialPageIndex = 0,
+    this.idClient,
+  }) : super(key: key);
 
   @override
   State<MyWidgetBottomNavBar> createState() => _MyWidgetBottomNavBarState();
 }
 
 class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
-  int currentPageIndex = 0; 
+  late int currentPageIndex;
 
-  final List<Widget> _pages = [
-     MyHomePage(),       // Page d'accueil
-     MyAgendaPage(), // Page de répertoire
-     MeetPage(), // Page des rendez-vous
-     InvoicePage(), // Page des factures
-  ];
+  @override
+  void initState() {
+    super.initState();
+    currentPageIndex = widget.initialPageIndex; 
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      MyHomePage(), // Page d'accueil
+      MyAgendaPage(idClient: widget.idClient), // Page agenda avec param
+      MeetPage(), // Page des rendez-vous
+      InvoicePage(), // Page des factures
+    ];
+
     return Scaffold(
       appBar: MyWidgetAppBar(
         title: 'EquiPro',
-        logoPath: Constants.logo, 
+        logoPath: Constants.logo,
         onNotificationTap: () {
           print('Notifications');
         },
-        backgroundColor: Constants.appBarBackgroundColor, 
+        backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: false,
       ),
-
       body: _pages[currentPageIndex],
-      
-      // Barre de navigation en bas
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
-            currentPageIndex = index; 
+            currentPageIndex = index;
           });
         },
         backgroundColor: Colors.white,
@@ -74,4 +83,3 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
     );
   }
 }
-

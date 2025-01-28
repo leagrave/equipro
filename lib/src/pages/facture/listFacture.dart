@@ -72,7 +72,7 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
   }
 
   void navigateToInvoiceDetailsPage(Invoice invoice) async {
-    context.go('/managementInvoice', extra: invoice);
+    context.push('/managementInvoice', extra: invoice);
   }
 
   @override
@@ -131,7 +131,7 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.go("/createInvoice");
+          context.push("/createInvoice");
         },
         backgroundColor: Constants.appBarBackgroundColor, 
         child: const Icon(Icons.add, color: Constants.white),
