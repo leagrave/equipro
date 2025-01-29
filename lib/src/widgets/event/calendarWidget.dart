@@ -21,13 +21,14 @@ class CalendarWidget extends StatelessWidget {
         Expanded(
           child: SfCalendar(
             view: calendarView,
-            allowedViews: [
+            allowedViews: const [
               CalendarView.day,
               CalendarView.week,
               CalendarView.month,
               CalendarView.timelineDay,
+              CalendarView.schedule,
             ],
-            viewHeaderStyle: ViewHeaderStyle(backgroundColor: Constants.white),
+            viewHeaderStyle: const ViewHeaderStyle(backgroundColor: Constants.white),
             backgroundColor: Constants.white,
             initialDisplayDate: DateTime.now(),
             dataSource: EventDataSource(events), 
@@ -35,6 +36,8 @@ class CalendarWidget extends StatelessWidget {
             showNavigationArrow: true,
             cellEndPadding: 5,
             showCurrentTimeIndicator: true,
+            showDatePickerButton: true,
+            allowViewNavigation: true,
             showWeekNumber: true,
             firstDayOfWeek: 1, // La semaine commence le lundi
             timeSlotViewSettings: const TimeSlotViewSettings(
@@ -45,43 +48,42 @@ class CalendarWidget extends StatelessWidget {
             ),
             onTap: (CalendarTapDetails details) {
               if (details.appointments != null && details.appointments!.isNotEmpty) {
-                final Event event = details.appointments!.first; // Utiliser Event
+                final Event event = details.appointments!.first; 
 
                 // Formatage des heures en français
-                String heureDebut = DateFormat.Hm('fr_FR').format(event.heureDebut); // Utiliser heureDebut
-                String heureFin = DateFormat.Hm('fr_FR').format(event.heureFin); // Utiliser heureFin
+                String heureDebut = DateFormat.Hm('fr_FR').format(event.heureDebut); 
+                String heureFin = DateFormat.Hm('fr_FR').format(event.heureFin); 
 
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text(event.eventName), // Utiliser eventName
+                    title: Text(event.eventName), 
                     content: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start, 
                         children: [
                           Text("De $heureDebut à $heureFin"),
-                          Text("Client: ${event.idClient}"), // Utiliser idClient ou d'autres détails si nécessaire
-                          Text("Adresse: ${event.adresseEcurie}"), // Utiliser adresseEcurie
+                          Text("Client: ${event.idClient}"), 
+                          Text("Adresse: ${event.adresseEcurie}"), 
                         ],
                       ),
                     ),
                     actions: [
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context); // Ferme l'alerte
-                          // Navigue vers la page de détails
+                          Navigator.pop(context); 
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => EventPage(event: event), // Utiliser EventPage avec Event
+                              builder: (context) => EventPage(event: event), 
                             ),
                           );
                         },
-                        child: Text("Détails"),
+                        child: const Text("Détails"),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(context),
-                        child: Text("Fermer"),
+                        child: const Text("Fermer"),
                       ),
                     ],
                   ),

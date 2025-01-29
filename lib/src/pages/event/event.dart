@@ -32,7 +32,7 @@ class EventPage extends StatelessWidget {
           ),
         ),
         child: EventCardWidget(
-          event: event,  // Utilisation de 'event' et non 'meeting'
+          event: event,  
           openWithCreateEventPage: false,  
           onEventUpdated: (updatedEvent) {
             // Handle the event update logic here

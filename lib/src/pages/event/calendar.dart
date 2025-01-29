@@ -5,7 +5,6 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:equipro/src/widgets/event/calendarWidget.dart';
 import 'package:equipro/src/models/event.dart';
 
-
 class CalendarPage extends StatefulWidget {
   @override
   _CalendarPageState createState() => _CalendarPageState();
@@ -25,36 +24,55 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: const InputDecoration(
-              labelText: 'Rechercher un événement',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.search),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Constants.appBarBackgroundColor, Constants.turquoise],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Column(
+         children: [
+          // Barre de Recherche
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      blurRadius: 8,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.search, color: Color(0xFF28313E)), 
+                    hintText: "Rechercher",
+                    hintStyle: TextStyle(color: Colors.grey[600]),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+          // Widget calendrier avec la vue dynamique
+          Expanded(
+            child: CalendarWidget(
+              calendarView: _calendarView,
+              events: _filteredEvents, 
+              onViewChanged: (newView) {
+                setState(() {
+                  _calendarView = newView;
+                });
+              },
             ),
-            onChanged: (query) {
-              setState(() {
-                _filteredEvents = _searchEvents(query);
-              });
-            },
           ),
-        ),
-        // Widget calendrier avec la vue dynamique
-        Expanded(
-          child: CalendarWidget(
-            calendarView: _calendarView,
-            events: _filteredEvents, // Adapter à la liste des événements
-            onViewChanged: (newView) {
-              setState(() {
-                _calendarView = newView;
-              });
-            },
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
