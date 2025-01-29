@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:equipro/router/router.dart';
-
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones(); // ← Charge les fuseaux horaires
   runApp(const MyApp());
 }
 
@@ -13,6 +16,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'EquiPro',
+      locale: Locale('fr', 'FR'), // 🔹 Définit la locale en français
+      supportedLocales: [
+        Locale('fr', 'FR'),
+      ],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

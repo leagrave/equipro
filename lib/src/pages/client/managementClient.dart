@@ -36,7 +36,7 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
     final Location defaultLocation = Location(latitude: 45.7579211, longitude: 4.7527296);
 
     return Scaffold(
-      appBar: MyWidgetAppBar(
+      appBar: const MyWidgetAppBar(
         title: 'Gestion client',
         logoPath: Constants.logo,
         backgroundColor: Constants.appBarBackgroundColor,

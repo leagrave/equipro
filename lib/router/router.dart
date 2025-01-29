@@ -1,4 +1,5 @@
 import 'package:equipro/src/pages/event/chat.dart';
+import 'package:equipro/src/pages/event/event.dart';
 import 'package:equipro/src/pages/event/message.dart';
 import 'package:equipro/src/pages/event/notif.dart';
 import 'package:equipro/src/pages/facture/createFacture.dart';
@@ -11,7 +12,7 @@ import 'package:equipro/src/pages/home.dart';
 import 'package:equipro/src/pages/login.dart';
 import 'package:equipro/src/pages/signup.dart';
 import 'package:equipro/src/pages/agenda.dart';
-import 'package:equipro/src/pages/event/meet.dart';
+import 'package:equipro/src/pages/event/calendar.dart';
 import 'package:equipro/src/pages/settings.dart';
 import 'package:equipro/src/pages/client/listClient.dart';
 import 'package:equipro/src/pages/client/createClient.dart';
@@ -22,6 +23,7 @@ import 'package:equipro/src/widgets/bar/navBarWidget.dart';
 import 'package:equipro/src/models/client.dart';
 import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/models/invoice.dart';
+import 'package:equipro/src/models/event.dart';
 import 'package:flutter/material.dart';
 
 final GoRouter go = GoRouter(
@@ -93,9 +95,9 @@ final GoRouter go = GoRouter(
           },
         ),
         GoRoute(
-          path: 'meet',
+          path: 'calendar',
           builder: (context, state) {
-            return MeetPage();
+            return CalendarPage();
           },
         ),
         GoRoute(
@@ -189,6 +191,13 @@ final GoRouter go = GoRouter(
           path: 'messages',
           builder: (context, state) {
             return MessagesPage();
+          },
+        ),
+        GoRoute(
+          path: 'event',
+          builder: (context, state) {
+            final event = state.extra as Event?;
+            return EventPage(event: event!);
           },
         ),
       ],

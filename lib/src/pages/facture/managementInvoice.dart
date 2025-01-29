@@ -12,7 +12,7 @@ class ManagementInvoicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyWidgetAppBar(
+      appBar: const MyWidgetAppBar(
         title: 'Gestion Facture',
         logoPath: Constants.logo,
         backgroundColor: Constants.appBarBackgroundColor,

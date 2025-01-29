@@ -2,7 +2,6 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/event/notificationsListWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/widgets/event/evenementsListWidget.dart';
-import 'package:equipro/style/appColor.dart';
 
 /// Widget pour la barre de navigation
 class MyHomePage extends StatelessWidget {

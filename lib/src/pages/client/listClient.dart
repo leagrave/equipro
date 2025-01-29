@@ -227,7 +227,7 @@ void navigateToCreateClientPage() async {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Constants.appBarBackgroundColor, Constants.turquoise],
             begin: Alignment.topLeft,

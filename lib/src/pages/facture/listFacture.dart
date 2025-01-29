@@ -2,7 +2,6 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/invoice.dart';
 import 'package:equipro/src/widgets/list/invoiceListWidget.dart'; 
-import 'package:equipro/style/appColor.dart';
 import 'package:go_router/go_router.dart';
 
 class ListInvoicePage extends StatefulWidget {
@@ -79,7 +78,7 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors:[Constants.appBarBackgroundColor, Constants.turquoise],
             begin: Alignment.topLeft,

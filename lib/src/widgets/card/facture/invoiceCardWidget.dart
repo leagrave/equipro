@@ -172,7 +172,7 @@ class _InvoiceCardWidgetState extends State<InvoiceCardWidget> {
                           });
                         }
                       },
-                      child: Text('Enregistrer'),
+                      child: const Text('Enregistrer'),
                     ),
                 ],
               ),
