@@ -15,12 +15,13 @@ class _NotifsPageState extends State<NotifsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyWidgetAppBar(
+      appBar: const MyWidgetAppBar(
         title: "Notifications",
         logoPath: Constants.avatar,
         backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: true,
-        showActions: false,
+        showNotifications: false,
+        showChat: false,
       ),
       body: Container(  
         decoration: const BoxDecoration(

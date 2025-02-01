@@ -53,14 +53,14 @@ class ClientListWidget extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                color: const Color(0xFF323C46), // Gris bleuâtre
+                color: const Color(0xFF323C46),
                 child: Column(
                   children: [
                     ListTile(
                       contentPadding: const EdgeInsets.all(8),
-                      leading: CircleAvatar(
+                      leading: const CircleAvatar(
                         backgroundColor: Constants.gradientStartColor, 
-                        child: const Icon(Icons.person, color: Constants.white),
+                        child: Icon(Icons.person, color: Constants.white),
                       ),
                       title: Text(
                         "${client.nom} ${client.prenom}",
@@ -84,8 +84,7 @@ class ClientListWidget extends StatelessWidget {
                             icon: const Icon(Icons.message, color: Constants.secondaryBleu),
                             onPressed: () {
                               // Envoyer un message au client
-                              //print('Message à ${client.nom} ${client.prenom}');
-                              context.push('/chat');
+                              context.push('/chat', extra: {'idClient': client.idClient} );
                             },
                           ),
                           // Flèche pour la navigation
@@ -109,7 +108,7 @@ class ClientListWidget extends StatelessWidget {
               );
             },
           )
-        : Center(
+        : const Center(
             child: Text(
               "Aucun client trouvé",
               style: TextStyle(color: Constants.white),

@@ -2,10 +2,12 @@ import 'package:equipro/src/pages/event/chat.dart';
 import 'package:equipro/src/pages/event/event.dart';
 import 'package:equipro/src/pages/event/message.dart';
 import 'package:equipro/src/pages/event/notif.dart';
+import 'package:equipro/src/pages/event/searchEvent.dart';
 import 'package:equipro/src/pages/facture/createFacture.dart';
 import 'package:equipro/src/pages/facture/managementInvoice.dart';
 import 'package:equipro/src/pages/horse/createHorse.dart';
 import 'package:equipro/src/pages/invoice.dart';
+import 'package:equipro/src/pages/client/searchClient.dart';
 import 'package:equipro/src/pages/user.dart';
 import 'package:go_router/go_router.dart';
 import 'package:equipro/src/pages/home.dart';
@@ -115,6 +117,12 @@ final GoRouter go = GoRouter(
           },
         ),
         GoRoute(
+          path: 'searchClient',
+          builder: (context, state) {
+            return SearchClientPage();
+          },
+        ),
+        GoRoute(
           path: 'createHorse',
           builder: (context, state) {
             final arguments = state.extra as Map<String, dynamic>?; 
@@ -172,7 +180,9 @@ final GoRouter go = GoRouter(
         GoRoute(
           path: 'chat',
           builder: (context, state) {
-            return ChatPage();
+            final arguments = state.extra as Map<String, dynamic>?;
+            int idClient = arguments?['idClient'];
+            return ChatPage(idClient: idClient);
           },
         ),
         GoRoute(
@@ -198,6 +208,12 @@ final GoRouter go = GoRouter(
           builder: (context, state) {
             final event = state.extra as Event?;
             return EventPage(event: event!);
+          },
+        ),
+        GoRoute(
+          path: 'searchEvent',
+          builder: (context, state) {
+            return SearchEventPage();
           },
         ),
       ],

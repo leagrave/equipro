@@ -7,7 +7,10 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String logoPath;
   final Color backgroundColor;
   final bool isBackButtonVisible;
-  final bool showActions; 
+  final bool showNotifications;
+  final bool showChat;
+  final bool showSearch;
+  final bool showSearchEvent;
 
   const MyWidgetAppBar({
     Key? key,
@@ -15,7 +18,10 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.logoPath,
     required this.backgroundColor,
     this.isBackButtonVisible = true,
-    this.showActions = true, 
+    this.showNotifications = true,
+    this.showChat = true,
+    this.showSearch = false,
+    this.showSearchEvent = false,
   }) : super(key: key);
 
   @override
@@ -34,7 +40,6 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
                   context.go('/');
                 }
               },
-
             )
           : null,
       title: Row(
@@ -59,22 +64,36 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      actions: showActions
-          ? [
-              IconButton(
-                icon: const Icon(Icons.notifications, color: Constants.secondaryYellow),
-                onPressed: () {
-                  context.push('/notifications');
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.chat, color: Constants.secondaryBleu),
-                onPressed: () {
-                  context.push('/messages');
-                },
-              ),
-            ]
-          : null, 
+      actions: [
+        if (showNotifications)
+          IconButton(
+            icon: const Icon(Icons.notifications, color: Constants.secondaryYellow),
+            onPressed: () {
+              context.push('/notifications');
+            },
+          ),
+        if (showChat)
+          IconButton(
+            icon: const Icon(Icons.chat, color: Constants.secondaryBleu),
+            onPressed: () {
+              context.push('/messages');
+            },
+          ),
+        if (showSearch)
+          IconButton(
+            icon: const Icon(Icons.search, color: Constants.white),
+            onPressed: () {
+              context.push('/searchClient');
+            },
+          ),
+        if (showSearchEvent)
+          IconButton(
+            icon: const Icon(Icons.search, color: Constants.white),
+            onPressed: () {
+              context.push('/searchEvent');
+            },
+          ),
+      ],
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 class MessageListWidget extends StatelessWidget {
   final List<Map<String, dynamic>> messages = [
     {
+      'idClient': 1,
       'avatar': null,
       'nom': 'John',
       'prenom': 'Doe',
@@ -12,6 +13,7 @@ class MessageListWidget extends StatelessWidget {
       'dateReception': '27 Jan 2025',
     },
     {
+      'idClient': 2,
       'avatar': null,
       'nom': 'Jane',
       'prenom': 'Smith',
@@ -20,6 +22,7 @@ class MessageListWidget extends StatelessWidget {
       'dateReception': '26 Jan 2025',
     },
     {
+      'idClient': 3,
       'avatar': null,
       'nom': 'Alex',
       'prenom': 'Turner',
@@ -28,6 +31,7 @@ class MessageListWidget extends StatelessWidget {
       'dateReception': '25 Jan 2025',
     },
     {
+      'idClient': 4,
       'avatar': null,
       'nom': 'Emily',
       'prenom': 'Clark',
@@ -43,6 +47,7 @@ class MessageListWidget extends StatelessWidget {
       itemCount: messages.length,
       itemBuilder: (context, index) {
         final message = messages[index];
+        final idClient = message['idClient'];
         final avatar = message['avatar'];
         final nom = message['nom'];
         final prenom = message['prenom'];
@@ -52,7 +57,7 @@ class MessageListWidget extends StatelessWidget {
 
         return GestureDetector(
            onTap: () {
-              context.push('/chat');
+              context.push('/chat', extra: {'idClient': idClient} );
             },
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

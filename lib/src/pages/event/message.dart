@@ -15,12 +15,14 @@ class _MessagesPageState extends State<MessagesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyWidgetAppBar(
+      appBar: const MyWidgetAppBar(
         title: "Messagerie",
         logoPath: Constants.avatar,
         backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: true,
-        showActions: false,
+        showNotifications: false,
+        showChat: false,
+        showSearch: true,
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -30,11 +32,12 @@ class _MessagesPageState extends State<MessagesPage> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: MessageListWidget(), // Supprime `Expanded` et utilise directement le widget
+        child: MessageListWidget(), 
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.push("/chat");
+          //on va diriger vers la selection d'un contact client + la possiblilite de creer un groupe
+          //context.push("/chat");
         },
         backgroundColor: Constants.appBarBackgroundColor,
         child: const Icon(Icons.add, color: Constants.white),

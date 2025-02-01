@@ -16,11 +16,11 @@ class MyHomePage extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
         ),
-        child: SingleChildScrollView( 
+        child: SizedBox.expand( 
           child: Column(
             children: [
-              MyWidgetAppointments(),
-              MyWidgetNotifications(),
+              Expanded(child: MyWidgetAppointments()), 
+              Expanded(child: MyWidgetNotifications()), 
             ],
           ),
         ),

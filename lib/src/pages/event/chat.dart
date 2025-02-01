@@ -3,11 +3,12 @@ import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'dart:math';
 import 'package:uuid/uuid.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key}) : super(key: key);
+  final int idClient; 
+
+  const ChatPage({Key? key, required this.idClient}) : super(key: key);
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -16,28 +17,57 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final List<types.Message> _messages = [];
   final types.User _currentUser = const types.User(id: '1'); 
-  final types.User _otherUser = const types.User(
-    id: '2',
-    firstName: 'Bot',
-    imageUrl: 'https://via.placeholder.com/150', 
-  );
+  late types.User _otherUser;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadMessages(); // Charger des messages initiaux
+    _loadClientData(); 
   }
 
-  void _loadMessages() {
-    final textMessage = types.TextMessage(
-      author: _otherUser,
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-      id: const Uuid().v4(),
-      text: 'Bienvenue dans le chat ! Comment puis-je vous aider ?',
-    );
-    setState(() {
-      _messages.add(textMessage);
-    });
+  /// Charger les infos du client
+  void _loadClientData() async {
+    // TODO : Remplacer par un appel à la base de données
+    final clientData = _getClientInfo(widget.idClient);
+
+    if (clientData != null) {
+      setState(() {
+        _otherUser = types.User(
+          id: widget.idClient.toString(),
+          firstName: clientData['prenom'],
+          lastName: clientData['nom'],
+          imageUrl: 'https://via.placeholder.com/150',
+        );
+        _messages.addAll(_loadMessages(widget.idClient));
+        _isLoading = false;
+      });
+    }
+  }
+
+  /// Simule la récupération des informations client
+  Map<String, String>? _getClientInfo(int idClient) {
+    // Simulation d'une base de données
+    final clients = {
+      1: {'nom': 'Dupont', 'prenom': 'Jean'},
+      2: {'nom': 'Martin', 'prenom': 'Sophie'},
+      3: {'nom': 'Durand', 'prenom': 'Paul'},
+      4: {'nom': 'test', 'prenom': 'test'},
+    };
+
+    return clients[idClient];
+  }
+
+  /// Simule le chargement des messages du client
+  List<types.Message> _loadMessages(int idClient) {
+    return [
+      types.TextMessage(
+        author: types.User(id: idClient.toString()),
+        createdAt: DateTime.now().subtract(const Duration(minutes: 5)).millisecondsSinceEpoch,
+        id: const Uuid().v4(),
+        text: 'Bonjour, j’ai une question sur ma prochaine consultation.',
+      ),
+    ];
   }
 
   void _handleSendPressed(types.PartialText message) {
@@ -51,55 +81,31 @@ class _ChatPageState extends State<ChatPage> {
     setState(() {
       _messages.insert(0, textMessage);
     });
-
-    _simulateBotResponse(message.text); // Simuler une réponse automatique
-  }
-
-  void _simulateBotResponse(String userMessage) {
-    Future.delayed(const Duration(seconds: 1), () {
-      final botResponse = types.TextMessage(
-        author: _otherUser,
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        id: const Uuid().v4(),
-        text: _generateBotReply(userMessage),
-      );
-      setState(() {
-        _messages.insert(0, botResponse);
-      });
-    });
-  }
-
-  String _generateBotReply(String userMessage) {
-    const responses = [
-      "Je suis là pour vous aider !",
-      "Pouvez-vous préciser votre question ?",
-      "Merci pour votre message.",
-      "Je travaille actuellement sur une réponse pour vous.",
-      "Je ne suis qu'un bot, mais je ferai de mon mieux pour vous aider !"
-    ];
-    return responses[Random().nextInt(responses.length)];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyWidgetAppBar(
-        title: _otherUser.firstName ?? 'Utilisateur',
+        title: _isLoading ? 'Chargement...' : '${_otherUser.firstName} ${_otherUser.lastName}',
         logoPath: Constants.avatar,
         backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: true,
-        showActions: false,
+        showNotifications: false,
+        showChat: false,
       ),
-      body: Chat(
-        messages: _messages,
-        onSendPressed: _handleSendPressed,
-        user: _currentUser,
-        theme: const DefaultChatTheme(
-          inputBackgroundColor: Constants.gradientStartColor,
-          primaryColor: Constants.turquoiseDark,
-          sendButtonIcon: Icon(Icons.send, color: Constants.gradientEndColor),
-        ),
-      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Chat(
+              messages: _messages,
+              onSendPressed: _handleSendPressed,
+              user: _currentUser,
+              theme: const DefaultChatTheme(
+                inputBackgroundColor: Constants.gradientStartColor,
+                primaryColor: Constants.turquoiseDark,
+                sendButtonIcon: Icon(Icons.send, color: Constants.gradientEndColor),
+              ),
+            ),
     );
   }
 }
