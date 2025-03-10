@@ -7,15 +7,17 @@ stages:
   - build
   - deploy
 
+cache:
+  paths:
+    - .pub-cache/
+
 before_script:
-  - flutter doctor
   - flutter pub get
 
-# analyze:
-#   stage: analyze
-#   script:
-#     - flutter pub get
-#     - flutter analyze
+analyze:
+  stage: analyze
+  script:
+    - flutter analyze
 
 test:
   stage: test
