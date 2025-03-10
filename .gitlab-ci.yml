@@ -1,4 +1,5 @@
-image: cirrusci/flutter:3.5.3
+image: cirrusci/flutter:latest
+
 
 
 stages:
