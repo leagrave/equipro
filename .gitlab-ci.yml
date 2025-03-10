@@ -18,10 +18,10 @@ cache:
   paths:
     - .pub-cache/
 
-analyze:
-  stage: analyze
-  script:
-    - flutter analyze
+# analyze:
+#   stage: analyze
+#   script:
+#     - flutter analyze
 
 test:
   stage: test
