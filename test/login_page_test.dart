@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:equipro/router/router.dart'; 
-import 'package:equipro/src/pages/login.dart'; 
-import 'package:equipro/src/pages/signUp.dart'; 
-import 'package:equipro/src/pages/settings.dart'; 
+
 
 void main() {
   testWidgets('Test de la page de connexion avec GoRouter', (WidgetTester tester) async {
