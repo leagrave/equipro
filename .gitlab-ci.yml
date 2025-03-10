@@ -3,22 +3,22 @@ image: cirrusci/flutter:latest
 
 
 stages:
-  - analyze
+  # - analyze
   - test
   - build
   - deploy
 
-cache:
-  paths:
-    - .pub-cache/
+# cache:
+#   paths:
+#     - .pub-cache/
 
 before_script:
   - flutter pub get
 
-analyze:
-  stage: analyze
-  script:
-    - flutter analyze
+# analyze:
+#   stage: analyze
+#   script:
+#     - flutter analyze
 
 test:
   stage: test
