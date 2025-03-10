@@ -6,9 +6,6 @@ stages:
   - build
   - deploy
 
-# cache:
-#   paths:
-#     - .pub-cache/
 
 before_script:
   - flutter --version  
@@ -16,6 +13,10 @@ before_script:
   - export PATH="/flutter/bin:$PATH"
   - flutter doctor
   - flutter pub get
+
+cache:
+  paths:
+    - .pub-cache/
 
 # analyze:
 #   stage: analyze
