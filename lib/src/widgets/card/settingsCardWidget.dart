@@ -20,7 +20,7 @@ class _SettingsCardWidgetState extends State<SettingsCardWidget> {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.white.withOpacity(0.8),
+        color: Colors.white.withOpacity(0.1),
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -44,7 +44,7 @@ class _SettingsCardWidgetState extends State<SettingsCardWidget> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Constants.secondaryRed, 
                   foregroundColor: Constants.white, 
-                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -53,7 +53,7 @@ class _SettingsCardWidgetState extends State<SettingsCardWidget> {
               ),
 
               const SizedBox(height: 5),
-              Text("test")
+              const Text("test")
             ],
           ),
         ),

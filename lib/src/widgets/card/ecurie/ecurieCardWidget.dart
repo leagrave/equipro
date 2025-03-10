@@ -1,3 +1,4 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 
@@ -143,18 +144,18 @@ class _EcurieCardWidgetState extends State<EcurieCardWidget> {
                   children: [
                     TextButton(
                       onPressed: _cancelEdit,
-                      child: const Text('Annuler'),
+                      child: const Text('Annuler',style: TextStyle(color: Constants.appBarBackgroundColor),),
                     ),
                     TextButton(
                       onPressed: _saveChanges,
-                      child: const Text('Sauvegarder'),
+                      child: const Text('Sauvegarder',style: TextStyle(color: Constants.appBarBackgroundColor),),
                     ),
                   ],
                 ),
               ] else ...[
                 TextButton(
                   onPressed: _toggleEdit,
-                  child: const Text('Modifier'),
+                  child: const Text('Modifier',style: TextStyle(color: Constants.appBarBackgroundColor),),
                 ),
               ],
             ],

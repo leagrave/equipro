@@ -1,3 +1,4 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -135,7 +136,7 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
                           _isEditing = List.generate(addresses.length, (index) => false); 
                         });
                       },
-                      child: const Text('Annuler'),
+                      child: const Text('Annuler',style: const TextStyle(color: Constants.appBarBackgroundColor),),
                     ),
                     const SizedBox(width: 8),
                     ElevatedButton(
@@ -150,7 +151,7 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
                           _isEditing = List.generate(addresses.length, (index) => false); 
                         });
                       },
-                      child: const Text('Enregistrer'),
+                      child: const Text('Enregistrer', style: const TextStyle(color: Constants.appBarBackgroundColor),),
                     ),
                   ],
                 ),
@@ -165,7 +166,7 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
                           _isEditing = List.generate(addresses.length, (index) => true); 
                         });
                       },
-                      child: const Text('Modifier'),
+                      child: const Text('Modifier', style: TextStyle(color: Constants.appBarBackgroundColor),),
                     ),
                   ],
                 ),

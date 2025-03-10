@@ -12,9 +12,9 @@ class MyLoginPage extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Constants.appBarBackgroundColor, Constants.turquoise], //[Color(0xFF28313E),Color(0xFF1BD5DB)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                colors: [Constants.turquoiseDark, Constants.appBarBackgroundColor], //[Color(0xFF28313E),Color(0xFF1BD5DB)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
           ),
@@ -88,7 +88,7 @@ class MyLoginPage extends StatelessWidget {
                     // Bouton de connexion
                     ElevatedButton(
                       onPressed: () {
-                        context.go('/'); 
+                        context.go('/', extra: {'initialPageIndex': 2}); 
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,

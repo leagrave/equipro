@@ -1,6 +1,6 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/calendar/calendarWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/src/utils/constants.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:equipro/src/models/event.dart';
 
@@ -24,17 +24,17 @@ class _CalendarPageState extends State<CalendarPage> {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color.fromARGB(255, 235, 235, 235), Color.fromARGB(255, 235, 235, 235)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
         ),
       ),
       child: Column(
         children: [
           // Widget calendrier avec la vue dynamique
           Expanded(
-            // child: Padding(
-            //   padding: const EdgeInsets.all(16.0),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
               child: CalendarWidget(
                 calendarView: _calendarView,
                 events: _allEvents, 
@@ -45,7 +45,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 },
               ),
             ),
-         // ),
+          ),
         ],
       ),
     );

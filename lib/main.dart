@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  tz.initializeTimeZones(); // ← Charge les fuseaux horaires
+  tz.initializeTimeZones(); // Charge les fuseaux horaires
   runApp(const MyApp());
 }
 
@@ -16,11 +16,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'EquiPro',
-      locale: Locale('fr', 'FR'), // 🔹 Définit la locale en français
+      locale: const Locale('fr', 'FR'), 
       supportedLocales: [
-        Locale('fr', 'FR'),
+       const Locale('fr', 'FR'),
       ],
-      localizationsDelegates: [
+      localizationsDelegates: const [ 
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

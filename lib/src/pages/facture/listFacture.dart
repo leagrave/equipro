@@ -80,9 +80,9 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors:[Constants.appBarBackgroundColor, Constants.turquoise],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors:[Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Padding(
@@ -132,7 +132,7 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
         onPressed: () {
           context.push("/createInvoice");
         },
-        backgroundColor: Constants.appBarBackgroundColor, 
+        backgroundColor: Constants.turquoiseDark, 
         child: const Icon(Icons.add, color: Constants.white),
       ),
     );

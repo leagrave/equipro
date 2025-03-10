@@ -46,7 +46,7 @@ class MyWidgetNotifications extends StatelessWidget {
                 );
               }),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
 
 
             Center( 
@@ -58,7 +58,7 @@ class MyWidgetNotifications extends StatelessWidget {
                   alignment: Alignment.center,
                   backgroundColor: Constants.white,
                   foregroundColor: Constants.appBarBackgroundColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

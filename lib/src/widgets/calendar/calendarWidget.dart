@@ -19,13 +19,14 @@ class CalendarWidget extends StatelessWidget {
       children: [
         // Calendrier avec la vue dynamique
         Expanded(
-          // child: Container(
-          //   decoration: BoxDecoration(
-          //     color: Colors.white, 
-          //     borderRadius: BorderRadius.circular(16), 
-          //   ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white, 
+              borderRadius: BorderRadius.circular(16), 
+            ),
             child: SfCalendar(
               view: calendarView,
+              
               allowedViews: const [
                 CalendarView.day,
                 CalendarView.week,
@@ -33,6 +34,8 @@ class CalendarWidget extends StatelessWidget {
                 CalendarView.timelineDay,
                 CalendarView.schedule,
               ],
+              //selectionDecoration: dec,
+              monthViewSettings : MonthViewSettings(showAgenda : true),
               viewHeaderStyle: const ViewHeaderStyle(backgroundColor: Constants.white),
               backgroundColor: const Color.fromARGB(0, 214, 31, 31),  
               initialDisplayDate: DateTime.now(),
@@ -97,7 +100,7 @@ class CalendarWidget extends StatelessWidget {
               },
             ),
           ),
-       // ),
+        ),
       ],
     );
   }

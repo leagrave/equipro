@@ -146,7 +146,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyWidgetAppBar(
+      appBar: const MyWidgetAppBar(
         title: 'Mes Chevaux',
         logoPath: Constants.logo,
         backgroundColor: Constants.appBarBackgroundColor,
@@ -154,9 +154,9 @@ class _ListHorsePageState extends State<ListHorsePage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.turquoise],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Padding(
@@ -210,7 +210,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: navigateToCreateHorsePage,
-        backgroundColor: AppColors.appBarBackgroundColor,
+        backgroundColor: Constants.turquoiseDark,
         child: const Icon(Icons.add, color: AppColors.buttonBackgroundColor),
       ),
     );

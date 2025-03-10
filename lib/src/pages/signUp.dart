@@ -15,9 +15,9 @@ class MySignupPage extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Constants.appBarBackgroundColor, Constants.turquoise],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                colors: [Constants.turquoiseDark, Constants.appBarBackgroundColor],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
           ),

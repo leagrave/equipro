@@ -20,9 +20,9 @@ class ManagementInvoicePage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.turquoise],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Padding(

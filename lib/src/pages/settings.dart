@@ -11,7 +11,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyWidgetAppBar(
+      appBar: const MyWidgetAppBar(
         title: 'Settings',
         logoPath: Constants.logo, 
         backgroundColor: Constants.appBarBackgroundColor, 
@@ -20,9 +20,9 @@ class SettingsPage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.turquoise], 
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor], 
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Center( 

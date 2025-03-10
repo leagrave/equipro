@@ -230,8 +230,16 @@ class _HorseListWidgetState extends State<HorseListWidget> {
                       style: TextButton.styleFrom(
                         foregroundColor: Constants.white, 
                       ),
-                      child: Text(_isExpanded ? "Réduire" : "Voir les chevaux"),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(_isExpanded ? "" : "Chevaux"),
+                          const SizedBox(width: 8),
+                          Icon(_isExpanded ? Icons.expand_less : Icons.expand_more, color: Colors.white),
+                        ],
+                      ),
                     ),
+
                   ),
                 ),
               ],

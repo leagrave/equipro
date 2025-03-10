@@ -53,6 +53,7 @@ class Constants {
   // IMAGES
   static const String logo = "assets/images/image-logo.jpg";
   static const String avatar = "assets/images/default_avatar.jpg";
+  static const String call = "assets/icones/call.svg";
 
 
   // EXAMPLE USAGE

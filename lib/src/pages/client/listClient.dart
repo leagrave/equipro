@@ -229,9 +229,9 @@ void navigateToCreateClientPage() async {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.turquoise],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Padding(
@@ -284,7 +284,7 @@ void navigateToCreateClientPage() async {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: navigateToCreateClientPage,
-        backgroundColor: AppColors.appBarBackgroundColor,
+        backgroundColor: Constants.turquoiseDark,
         child: const Icon(Icons.add, color: AppColors.buttonBackgroundColor),
       ),
     );

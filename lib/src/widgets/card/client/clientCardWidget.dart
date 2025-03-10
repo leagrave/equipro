@@ -1,3 +1,4 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/client.dart';
 
@@ -124,7 +125,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.white.withOpacity(0.8),
+        color: Colors.white,
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -230,7 +231,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
                   if (_isEditing)
                     ElevatedButton(
                       onPressed: () => _handleSaveOrCancel(isSave: true),
-                      child: const Text('Annuler'),
+                      child: const Text('Annuler', style: TextStyle(color: Constants.appBarBackgroundColor),),
                     ),
                   const SizedBox(width: 8),
                   ElevatedButton(
@@ -243,7 +244,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
                         });
                       }
                     },
-                    child: Text(_isEditing ? 'Enregistrer' : 'Modifier'),
+                    child: Text(_isEditing ? 'Enregistrer' : 'Modifier',style: TextStyle(color: Constants.appBarBackgroundColor),),
                   ),
                 ],
               ),

@@ -1,3 +1,4 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientsComboCardWidget.dart';
 import 'package:equipro/src/widgets/card/ecurie/ecurieCardWidget.dart';
@@ -127,17 +128,17 @@ class _ManagementHorsePageState extends State<ManagementHorsePage> {
     );
 
     return Scaffold(
-      appBar: MyWidgetAppBar(
+      appBar: const MyWidgetAppBar(
         title: 'Gestion cheval',
-        logoPath: 'assets/images/image-logo.jpg', 
-        backgroundColor: AppColors.appBarBackgroundColor,
+        logoPath: Constants.logo, 
+        backgroundColor: Constants.appBarBackgroundColor,
       ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.gradientStartColor, AppColors.gradientEndColor],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Padding(

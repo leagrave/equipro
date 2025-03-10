@@ -158,7 +158,7 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyWidgetAppBar(
+      appBar: const MyWidgetAppBar(
         title: 'Créer un cheval',
         logoPath: Constants.logo,
         backgroundColor: Constants.appBarBackgroundColor,
@@ -166,9 +166,9 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.turquoise],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Padding(
@@ -309,7 +309,7 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
           }
         },
         child: const Icon(Icons.save, color: AppColors.buttonBackgroundColor),
-        backgroundColor: Constants.appBarBackgroundColor,
+        backgroundColor: Constants.turquoiseDark,
       ),
     );
   }

@@ -9,11 +9,11 @@ class GradientBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xFF28313E),Color(0xFF1BD5DB)], // couleurs de fond
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
         ),
       ),
       child: child,

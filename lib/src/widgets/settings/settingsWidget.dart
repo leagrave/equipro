@@ -13,8 +13,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String selectedLanguage = 'Français';
   bool isOnline = true;
   double storageSpaceLeft = 50.0; // en Go
-  TimeOfDay workStartTime = TimeOfDay(hour: 9, minute: 0);
-  TimeOfDay workEndTime = TimeOfDay(hour: 18, minute: 0);
+  TimeOfDay workStartTime = const TimeOfDay(hour: 9, minute: 0);
+  TimeOfDay workEndTime = const TimeOfDay(hour: 18, minute: 0);
 
   void toggleNotifications(bool value) {
     setState(() {
@@ -53,7 +53,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       padding: const EdgeInsets.all(16.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Constants.white, // Vous pouvez personnaliser cette couleur
+          color: Constants.white.withOpacity(0.1), 
           borderRadius: BorderRadius.circular(15),
         ),
         padding: const EdgeInsets.all(16),
@@ -62,16 +62,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             // Notifications
             SwitchListTile(
-              title: const Text('Activer les notifications'),
+              title: const Text('Activer les notifications', style: TextStyle(color: Colors.white)),
               value: notificationsEnabled,
               onChanged: toggleNotifications,
+              activeColor: Constants.appBarBackgroundColor,
             ),
 
             // Heure de travail
             ListTile(
-              title: const Text('Heures de travail'),
+              title: const Text('Heures de travail', style: TextStyle(color: Colors.white)),
               subtitle: Text(
                 'De ${workStartTime.format(context)} à ${workEndTime.format(context)}',
+                style: const TextStyle(color: Colors.white),
               ),
               onTap: () async {
                 final TimeOfDay? newStartTime = await showTimePicker(
@@ -90,40 +92,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             // Autorisation de localisation
             SwitchListTile(
-              title: const Text('Autoriser l\'accès à la position'),
+              title: const Text('Autoriser l\'accès à la position', style: TextStyle(color: Colors.white)),
               value: locationPermissionGranted,
               onChanged: toggleLocationPermission,
+              activeColor: Constants.appBarBackgroundColor,
             ),
 
             // Autorisation de photo
             SwitchListTile(
-              title: const Text('Autoriser l\'accès aux photos'),
+              title: const Text('Autoriser l\'accès aux photos', style: TextStyle(color: Colors.white)),
               value: photoPermissionGranted,
               onChanged: togglePhotoPermission,
+              activeColor: Constants.appBarBackgroundColor,
             ),
 
             // Langue
             ListTile(
-              title: const Text('Changer la langue'),
-              subtitle: Text(selectedLanguage),
+              title: const Text('Changer la langue', style: TextStyle(color: Colors.white)),
+              subtitle: Text(selectedLanguage, style: const TextStyle(color: Colors.white)),
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text('Choisir une langue'),
+                      title: const Text('Choisir une langue', style: TextStyle(color: Colors.white)),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           ListTile(
-                            title: const Text('Français'),
+                            title: const Text('Français', style: TextStyle(color: Colors.white)),
                             onTap: () {
                               changeLanguage('Français');
                               Navigator.pop(context);
                             },
                           ),
                           ListTile(
-                            title: const Text('Anglais'),
+                            title: const Text('Anglais', style: TextStyle(color: Colors.white)),
                             onTap: () {
                               changeLanguage('Anglais');
                               Navigator.pop(context);
@@ -139,13 +143,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             // Espace de stockage disponible
             ListTile(
-              title: const Text('Espace de stockage restant'),
-              subtitle: Text('${storageSpaceLeft} Go'),
+              title: const Text('Espace de stockage restant', style: TextStyle(color: Colors.white)),
+              subtitle: Text('${storageSpaceLeft} Go', style: const TextStyle(color: Colors.white)),
             ),
 
             // Statut de l'application (en ligne ou hors ligne)
             SwitchListTile(
-              title: const Text('Statut en ligne'),
+              title: const Text('Statut en ligne', style: TextStyle(color: Colors.white)),
+              activeColor: Constants.appBarBackgroundColor,
               value: isOnline,
               onChanged: (bool value) {
                 setState(() {

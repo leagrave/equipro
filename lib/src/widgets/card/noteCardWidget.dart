@@ -1,3 +1,4 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class NotesCardWidget extends StatefulWidget {
@@ -34,7 +35,6 @@ class _NotesCardWidgetState extends State<NotesCardWidget> {
         _isEditing = !_isEditing;
       });
     }
-
   }
 
   @override
@@ -87,7 +87,10 @@ class _NotesCardWidgetState extends State<NotesCardWidget> {
                             _isEditing = false;
                           });
                         },
-                        child: const Text('Annuler'),
+                        child: const Text(
+                          'Annuler',
+                          style: TextStyle(color: Constants.appBarBackgroundColor),
+                        ),
                       ),
                       const SizedBox(width: 8),
                     ],
@@ -102,7 +105,10 @@ class _NotesCardWidgetState extends State<NotesCardWidget> {
                           _isEditing = !_isEditing;
                         });
                       },
-                      child: Text(_isEditing ? 'Enregistrer' : 'Modifier'),
+                      child: Text(
+                        _isEditing ? 'Enregistrer' : 'Modifier',
+                         style: const TextStyle(color: Constants.appBarBackgroundColor),
+                      ),
                     ),
                   ],
                 ),

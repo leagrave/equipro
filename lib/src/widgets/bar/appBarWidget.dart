@@ -37,7 +37,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (Navigator.of(context).canPop()) {
                   Navigator.of(context).pop();
                 } else {
-                  context.go('/');
+                  context.go('/', extra: {'initialPageIndex': 2});
                 }
               },
             )
@@ -46,10 +46,11 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           GestureDetector(
             onTap: () {
-              context.push('/settings');
+              //context.push('/settings');
+              context.push('/', extra: {'initialPageIndex': 2}); 
             },
             child: CircleAvatar(
-              radius: 20,
+              radius: 25,
               backgroundImage: AssetImage(logoPath),
             ),
           ),
@@ -58,7 +59,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
             title,
             style: const TextStyle(
               color: Constants.white,
-              fontSize: 16,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -74,9 +75,9 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         if (showChat)
           IconButton(
-            icon: const Icon(Icons.chat, color: Constants.secondaryBleu),
+            icon: const Icon(Icons.settings, color: Constants.white),
             onPressed: () {
-              context.push('/messages');
+              context.push('/settings');
             },
           ),
         if (showSearch)

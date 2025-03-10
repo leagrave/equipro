@@ -34,7 +34,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyWidgetAppBar(
+      appBar: const MyWidgetAppBar(
         title: 'Créer un client',
         logoPath: Constants.logo,
         backgroundColor: Constants.appBarBackgroundColor,
@@ -42,9 +42,9 @@ class _CreateClientPageState extends State<CreateClientPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors:[Constants.appBarBackgroundColor, Constants.turquoise],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors:[Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Padding(
@@ -113,7 +113,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
           }
         },
         child: const Icon(Icons.save, color: AppColors.buttonBackgroundColor),
-        backgroundColor: Constants.appBarBackgroundColor,
+        backgroundColor: Constants.turquoiseDark,
       ),
 
     );

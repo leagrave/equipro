@@ -1,3 +1,4 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:equipro/src/models/invoice.dart';
@@ -161,7 +162,7 @@ class _InvoiceCardWidgetState extends State<InvoiceCardWidget> {
                         _isEditing = !_isEditing;
                       });
                     },
-                    child: Text(_isEditing ? 'Annuler' : 'Modifier'),
+                    child: Text(_isEditing ? 'Annuler' : 'Modifier',style: TextStyle(color: Constants.appBarBackgroundColor),),
                   ),
                   if (_isEditing)
                     ElevatedButton(
@@ -172,7 +173,7 @@ class _InvoiceCardWidgetState extends State<InvoiceCardWidget> {
                           });
                         }
                       },
-                      child: const Text('Enregistrer'),
+                      child: const Text('Enregistrer',style: TextStyle(color: Constants.appBarBackgroundColor),),
                     ),
                 ],
               ),

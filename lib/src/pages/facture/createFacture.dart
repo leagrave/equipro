@@ -1,3 +1,4 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
@@ -25,7 +26,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyWidgetAppBar(
+      appBar: const MyWidgetAppBar(
         title: 'Créer une facture',
         logoPath: 'assets/images/image-logo.jpg',
         backgroundColor: AppColors.appBarBackgroundColor,
@@ -34,8 +35,8 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [AppColors.gradientStartColor, AppColors.gradientEndColor],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Padding(
@@ -164,7 +165,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
           }
         },
         child: const Icon(Icons.save),
-        backgroundColor: AppColors.appBarBackgroundColor,
+        backgroundColor: Constants.turquoiseDark,
       ),
     );
   }

@@ -2,7 +2,6 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-// Widget pour afficher les prochains rendez-vous
 class MyWidgetAppointments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -26,38 +25,68 @@ class MyWidgetAppointments extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            // Liste des rendez-vous à venir
+
+            // Liste des rendez-vous à venir avec icônes à droite
             Column(
               children: List.generate(3, (index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(Icons.access_time, color: Colors.white),
-                      const SizedBox(width: 10),
-                      Text(
-                        'Rendez-vous $index',
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 16,
+                      // Nom du rendez-vous
+                      Expanded(
+                        child: Text(
+                          'Rendez-vous $index',
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16,
+                          ),
                         ),
+                      ),
+
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.phone, color: Constants.secondaryGreen, size: 24),
+                            onPressed: () {
+
+                            },
+                          ),
+                          const SizedBox(width: 5), 
+
+                          IconButton(
+                            icon: const Icon(Icons.message, color: Constants.secondaryBleu, size: 24),
+                            onPressed: () {
+
+                            },
+                          ),
+                          const SizedBox(width: 5), 
+
+                          IconButton(
+                            icon: const Icon(Icons.location_on, color: Color.fromARGB(197, 234, 36, 36), size: 24),
+                            onPressed: () {
+  
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 );
               }),
             ),
-            const SizedBox(height: 20),
+            //const SizedBox(height: 10),
 
-            Center(  
+            Center(
               child: ElevatedButton(
                 onPressed: () {
-                  context.push('/', extra: {'initialPageIndex': 2});
+                  context.push('/', extra: {'initialPageIndex': 3});
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Constants.white,
                   foregroundColor: Constants.appBarBackgroundColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

@@ -46,7 +46,7 @@ final GoRouter go = GoRouter(
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => context.go('/'),
+              onPressed: () => context.go('/', extra: {'initialPageIndex': 2}),
               child: const Text('Retourner à l\'accueil'),
             ),
           ],
