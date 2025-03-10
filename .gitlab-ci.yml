@@ -1,9 +1,7 @@
-image: flutter/flutter:stable
-
-
+image: cirrusci/flutter:latest
 
 stages:
-  # - analyze
+  - analyze
   - test
   - build
   - deploy
@@ -13,6 +11,10 @@ stages:
 #     - .pub-cache/
 
 before_script:
+  - flutter --version  
+  - git clone https://github.com/flutter/flutter.git -b stable /flutter
+  - export PATH="/flutter/bin:$PATH"
+  - flutter doctor
   - flutter pub get
 
 # analyze:
