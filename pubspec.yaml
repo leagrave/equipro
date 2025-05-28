@@ -47,6 +47,9 @@ dependencies:
   syncfusion_flutter_calendar: ^28.1.41
   timezone: ^0.10.0 
   flutter_localization: ^0.3.1
+  firebase_core: ^2.27.0
+  cloud_firestore: ^4.15.0
+  firebase_messaging: ^14.6.7
 
 dev_dependencies:
   flutter_test:

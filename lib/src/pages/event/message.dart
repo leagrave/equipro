@@ -27,7 +27,7 @@ class _MessagesPageState extends State<MessagesPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],//[Constants.appBarBackgroundColor, Constants.turquoise],
+            colors: Constants.gradientBackground,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),

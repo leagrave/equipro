@@ -8,7 +8,6 @@ import 'package:equipro/src/widgets/card/horse/horseAdresseCardWidget.dart';
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/horse.dart';
-import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:equipro/src/widgets/card/horse/horseCardWidget.dart';
 import 'package:equipro/src/models/client.dart'; 
@@ -166,7 +165,7 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            colors: Constants.gradientBackground,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -308,7 +307,7 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
             Navigator.pop(context, newHorse);
           }
         },
-        child: const Icon(Icons.save, color: AppColors.buttonBackgroundColor),
+        child: const Icon(Icons.save, color: Constants.appBarBackgroundColor),
         backgroundColor: Constants.turquoiseDark,
       ),
     );

@@ -1,5 +1,5 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/style/appColor.dart';
 import 'package:go_router/go_router.dart';
 
 class ButtonClientListWidget extends StatelessWidget {
@@ -13,7 +13,7 @@ class ButtonClientListWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.gradientStartColor, 
+          backgroundColor: Constants.gradientStartColor, 
         ),
         // onPressed: () {
         //   // afficher la fiche du proprio ou la liste des proprio dans l'agenda

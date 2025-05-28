@@ -1,6 +1,5 @@
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/widgets/list/horseListWidget.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
@@ -154,7 +153,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            colors: Constants.gradientBackground,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -211,7 +210,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: navigateToCreateHorsePage,
         backgroundColor: Constants.turquoiseDark,
-        child: const Icon(Icons.add, color: AppColors.buttonBackgroundColor),
+        child: const Icon(Icons.add, color: Constants.white),
       ),
     );
   }

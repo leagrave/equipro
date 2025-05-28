@@ -1,7 +1,6 @@
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/client.dart';
-import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';  
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
@@ -42,7 +41,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors:[Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            colors:Constants.gradientBackground,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -112,7 +111,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
             Navigator.pop(context, newClient); 
           }
         },
-        child: const Icon(Icons.save, color: AppColors.buttonBackgroundColor),
+        child: const Icon(Icons.save, color: Constants.white),
         backgroundColor: Constants.turquoiseDark,
       ),
 

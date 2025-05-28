@@ -1,7 +1,6 @@
 import 'package:equipro/src/models/horse.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/client.dart';
-import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/list/clientListWidget.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:go_router/go_router.dart';
@@ -229,7 +228,7 @@ void navigateToCreateClientPage() async {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            colors: Constants.gradientBackground,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -285,7 +284,7 @@ void navigateToCreateClientPage() async {
       floatingActionButton: FloatingActionButton(
         onPressed: navigateToCreateClientPage,
         backgroundColor: Constants.turquoiseDark,
-        child: const Icon(Icons.add, color: AppColors.buttonBackgroundColor),
+        child: const Icon(Icons.add, color: Constants.white),
       ),
     );
   }

@@ -20,7 +20,7 @@ class EditProfilePage extends StatelessWidget {
         height: double.infinity, 
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            colors: Constants.gradientBackground,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),

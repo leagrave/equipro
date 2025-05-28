@@ -12,7 +12,7 @@ class MyLoginPage extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Constants.turquoiseDark, Constants.appBarBackgroundColor], //[Color(0xFF28313E),Color(0xFF1BD5DB)],
+                colors: Constants.gradientLoginBackground,
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),

@@ -1,4 +1,4 @@
-import 'package:equipro/style/appColor.dart';
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class SwitchableListWidget extends StatefulWidget {
@@ -41,7 +41,7 @@ class _SwitchableListWidgetState extends State<SwitchableListWidget> {
                       });
                       widget.onSwitchChanged(value); 
                     },
-                    activeColor: AppColors.buttonBackgroundColor, 
+                    activeColor: Constants.appBarBackgroundColor, 
                     inactiveThumbColor: Colors.grey, 
                     inactiveTrackColor: Colors.grey[300], 
                   ),

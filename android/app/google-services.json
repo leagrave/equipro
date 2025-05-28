@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "706095522218",
+    "project_id": "equipro-messagerie",
+    "storage_bucket": "equipro-messagerie.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706095522218:android:c02b528a04f41cbd284bd3",
+        "android_client_info": {
+          "package_name": "com.example.equipro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwCnfsHw5yRE9Pho0xIG_Iy9RjGC-p7aM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

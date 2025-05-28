@@ -1,5 +1,6 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/style/appColor.dart';
+
 
 class SwitchCardWidget extends StatefulWidget {
   final ValueChanged<bool> onSwitchChanged;
@@ -40,7 +41,7 @@ class _SwitchCardWidgetState extends State<SwitchCardWidget> {
                     });
                     widget.onSwitchChanged(value); 
                   },
-                  activeColor: AppColors.buttonBackgroundColor, 
+                  activeColor: Constants.appBarBackgroundColor, 
                   inactiveThumbColor: Colors.grey, 
                   inactiveTrackColor: Colors.grey[300], 
                 ),

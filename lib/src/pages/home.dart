@@ -10,7 +10,7 @@ class MyHomePage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor], 
+            colors:  Constants.gradientBackground,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -18,8 +18,10 @@ class MyHomePage extends StatelessWidget {
         child: SizedBox.expand( 
           child: Column(
             children: [
+              const SizedBox(height: Constants.paddingMedium),
               HorizontalScrollWidget(),
-              MyWidgetAppointments(), 
+              const SizedBox(height: Constants.paddingMedium),
+              MyWidgetAppointments(),
               //Expanded(child: MyWidgetNotifications()), 
             ],
           ),

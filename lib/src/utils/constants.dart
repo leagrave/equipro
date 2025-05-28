@@ -42,19 +42,28 @@ class Constants {
   static const Color gradientEndColor = Color(0xFF1BD5DB); // Bleu clair
   static const Color buttonTextColor = Color(0xFF28313E); // Bleu-gris profond
 
+  static const List<Color> gradientLoginBackground = [
+  turquoiseDark,
+  appBarBackgroundColor, 
+];
+
+  static const List<Color> gradientBackground = [
+  gradientStartColor, 
+  gradientStartColor,
+];
+
 
   // FONT FAMILIES
   static const String primaryFont = 'Roboto';
   static const String secondaryFont = 'FontWeight';
 
   // MEASURES
-  static const double paddingMedium = 30;
+  static const double paddingMedium = 30.0;
 
   // IMAGES
   static const String logo = "assets/images/image-logo.jpg";
   static const String avatar = "assets/images/default_avatar.jpg";
   static const String call = "assets/icones/call.svg";
-
 
   // EXAMPLE USAGE
   // Example 1: Button Style

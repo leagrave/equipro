@@ -9,7 +9,6 @@ import 'package:equipro/src/models/client.dart';
 import 'package:equipro/src/models/ecurie.dart';
 import 'package:equipro/src/widgets/card/horse/horseAdresseCardWidget.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:equipro/style/appColor.dart';
 import 'package:equipro/src/widgets/card/horse/horseCardWidget.dart';
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
 import 'package:equipro/src/widgets/card/horse/listBottumHorseCardWidget.dart';
@@ -136,7 +135,7 @@ class _ManagementHorsePageState extends State<ManagementHorsePage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Constants.appBarBackgroundColor, Constants.appBarBackgroundColor],
+            colors: Constants.gradientBackground,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
