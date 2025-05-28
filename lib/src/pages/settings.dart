@@ -4,17 +4,32 @@ import 'package:equipro/src/widgets/settings/settingsWidget.Dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    await prefs.remove('user');
+
+    if (!mounted) return;
+    context.go('/login');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyWidgetAppBar(
         title: 'Settings',
-        logoPath: Constants.logo, 
-        backgroundColor: Constants.appBarBackgroundColor, 
+        logoPath: Constants.logo,
+        backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: true,
       ),
       body: Container(
@@ -25,11 +40,10 @@ class SettingsPage extends StatelessWidget {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: Center( 
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-   
               UserCard(
                 profileImageUrl: Constants.avatar,
                 firstName: 'Jean',
@@ -44,23 +58,17 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
 
-
-              // Expanded(
-              //   child: SettingsCardWidget(),
-              // ),
-
               Expanded(
                 child: SettingsScreen(),
               ),
 
-              // Bouton de déconnexion
               ElevatedButton(
-                onPressed: () {
-                  context.go('/login'); 
+                onPressed: () async {
+                  await logout();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.secondaryRed, 
-                  foregroundColor: Constants.white, 
+                  backgroundColor: Constants.secondaryRed,
+                  foregroundColor: Constants.white,
                   padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -70,7 +78,6 @@ class SettingsPage extends StatelessWidget {
               ),
 
               const SizedBox(height: 12),
-
             ],
           ),
         ),
