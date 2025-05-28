@@ -54,9 +54,13 @@ final GoRouter go = GoRouter(
         final arguments = state.extra as Map<String, dynamic>?;
         final initialPageIndex = arguments?['initialPageIndex'] ?? 0;
         final idClient = arguments?['idClient'] as int?;
+        final token = arguments?['token'] as String?;
+        final professional = arguments?['professional'] as bool? ?? false;
         return MyWidgetBottomNavBar(
           initialPageIndex: initialPageIndex,
           idClient: idClient,
+          token: token,
+          professional: professional,
         );
       },
       routes: [
@@ -444,4 +448,3 @@ final GoRouter go = GoRouter(
 //     ),
 //   ],
 // );
-

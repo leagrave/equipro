@@ -1,4 +1,5 @@
 import 'package:equipro/src/pages/event/message.dart';
+import 'package:equipro/src/pages/homeClient.dart';
 import 'package:equipro/src/pages/invoice.dart';
 import 'package:equipro/src/pages/event/calendar.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
@@ -10,11 +11,15 @@ import 'package:equipro/src/utils/constants.dart';
 class MyWidgetBottomNavBar extends StatefulWidget {
   final int initialPageIndex;
   final int? idClient;
+  final String? token;
+  final bool professional;
 
   const MyWidgetBottomNavBar({
     Key? key,
     this.initialPageIndex = 0,
     this.idClient,
+    this.token = "",
+    this.professional = false,
   }) : super(key: key);
 
   @override
@@ -32,10 +37,12 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget homePage = widget.professional ? MyHomePage() : MyHomeClientPage();
+
     final List<Widget> _pages = [
       MessagesPage(),
       MyAgendaPage(idClient: widget.idClient),
-      MyHomePage(),
+      homePage,
       CalendarPage(),
       InvoicePage(),
     ];

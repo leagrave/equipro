@@ -11,17 +11,29 @@ class SplashPage extends StatelessWidget {
     final token = prefs.getString('token');
     final userString = prefs.getString('user');
 
-    await Future.delayed(const Duration(milliseconds: 500)); // pour l’effet visuel
+    await Future.delayed(const Duration(milliseconds: 500)); // effet visuel
 
     if (token != null && userString != null) {
       final user = jsonDecode(userString);
       final idUser = user['idUser'];
+      final isProfessional = user['professional'] == true;
 
       if (context.mounted) {
-        context.go('/', extra: {
-          'token': token,
-          'idClient': idUser,
-        });
+        if (isProfessional) {
+          context.go('/', extra: {
+            'token': token,
+            'idClient': idUser,
+            'initialPageIndex': 2,
+            'professional': isProfessional,
+          });
+        } else {
+          context.go('/homeClient', extra: {
+            'token': token,
+            'idClient': idUser,
+            'initialPageIndex': 2,
+            'professional': isProfessional,
+          });
+        }
       }
     } else {
       if (context.mounted) {
