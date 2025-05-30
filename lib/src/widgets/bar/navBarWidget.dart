@@ -7,19 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:equipro/src/pages/home.dart';
 import 'package:equipro/src/pages/agenda.dart';
 import 'package:equipro/src/utils/constants.dart';
-
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 class MyWidgetBottomNavBar extends StatefulWidget {
   final int initialPageIndex;
-  final int? idClient;
-  final String? token;
-  final bool professional;
+
 
   const MyWidgetBottomNavBar({
     Key? key,
     this.initialPageIndex = 0,
-    this.idClient,
-    this.token = "",
-    this.professional = false,
+
   }) : super(key: key);
 
   @override
@@ -28,28 +25,54 @@ class MyWidgetBottomNavBar extends StatefulWidget {
 
 class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
   late int currentPageIndex;
+  String? currentIdClient;
+  String? currentToken;
+  bool professional = false;
 
   @override
   void initState() {
     super.initState();
     currentPageIndex = widget.initialPageIndex;
+    _loadUserData();
+  }
+
+    Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final token = prefs.getString('token');
+    final userJson = prefs.getString('user');
+
+    if (userJson != null) {
+      final user = jsonDecode(userJson);
+      setState(() {
+        currentIdClient = user['id']?.toString();
+        professional = user['professional'] ?? false;
+        currentToken = token;
+      });
+    } else {
+      setState(() {
+        currentIdClient = null;
+        currentToken = null;
+        professional = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Widget homePage = widget.professional ? MyHomePage() : MyHomeClientPage();
+    final Widget homePage = professional ? MyHomePage() : MyHomeClientPage();
 
     final List<Widget> _pages = [
       MessagesPage(),
-      MyAgendaPage(idClient: widget.idClient),
+      MyAgendaPage(idClient: currentIdClient),
       homePage,
       CalendarPage(),
       InvoicePage(),
     ];
 
     return Scaffold(
-      appBar: const MyWidgetAppBar(
-        title: 'EquiPro',
+      appBar:  MyWidgetAppBar(
+        title: 'EquiPro - ${currentIdClient ?? "Invité"}' ,
         logoPath: Constants.logo,
         backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: false,

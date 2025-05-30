@@ -47,7 +47,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
         final data = jsonDecode(response.body);
         final token = data['token'];
         final user = data['user'];
-        final iSprofessional = user['professional'] == true;
 
         // Stocker token + user si besoin (SharedPreferences)
         final prefs = await SharedPreferences.getInstance();
@@ -57,10 +56,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
         // Navigue vers la page principale avec les infos
         context.go('/', extra: {
-          'token': token,
-          'user': user,
           'initialPageIndex': 2,
-          'professional': iSprofessional,
         });
       } else {
         // Gère l’erreur renvoyée par l’API

@@ -3,7 +3,7 @@ import 'package:equipro/src/pages/client/listClient.dart';
 import 'package:equipro/src/utils/constants.dart';
 
 class MyAgendaPage extends StatelessWidget {
-  final int? idClient;
+  final String? idClient;
 
   const MyAgendaPage({Key? key, this.idClient}) : super(key: key);
 

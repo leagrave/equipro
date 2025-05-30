@@ -6,7 +6,7 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:go_router/go_router.dart';
 
 class ListClientPage extends StatefulWidget {
-  final int? idClient;
+  final String? idClient;
 
   const ListClientPage({Key? key, this.idClient}) : super(key: key);
 

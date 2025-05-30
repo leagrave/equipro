@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:equipro/src/widgets/card/client/clientMessageListWidget.dart';
 import 'package:flutter/material.dart';
-
+import 'package:go_router/go_router.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MessagesPage extends StatefulWidget {
   const MessagesPage({Key? key}) : super(key: key);
@@ -12,8 +14,35 @@ class MessagesPage extends StatefulWidget {
 }
 
 class _MessagesPageState extends State<MessagesPage> {
+  String? currentUserId;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userJson = prefs.getString('user');
+    if (userJson != null) {
+      final user = jsonDecode(userJson);
+      setState(() {
+        currentUserId = user['id']?.toString();
+        print(currentUserId);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (currentUserId == null) {
+      // Afficher un loader pendant la récupération
+      return const Scaffold(
+        body:  Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       // appBar: const MyWidgetAppBar(
       //   title: "Messagerie",
@@ -32,12 +61,75 @@ class _MessagesPageState extends State<MessagesPage> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: MessageListWidget(), 
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('conversations')
+              .where('members', arrayContains: currentUserId)
+              .orderBy('lastUpdated', descending: true)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(child: Text('Erreur : ${snapshot.error}'));
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            final conversations = snapshot.data!.docs;
+
+            if (conversations.isEmpty) {
+              return const Center(child: Text("Aucune conversation trouvée"));
+            }
+
+            return ListView.builder(
+              itemCount: conversations.length,
+              itemBuilder: (context, index) {
+                final conv = conversations[index];
+                final data = conv.data() as Map<String, dynamic>;
+
+                final isGroup = data['isGroup'] ?? false;
+                final groupName = data['groupName'] ?? '';
+                final lastMessage = data['lastMessage'] ?? '';
+                final lastUpdated = data['lastUpdated'] != null
+                    ? (data['lastUpdated'] as Timestamp).toDate()
+                    : null;
+                final groupPhotoURL = data['groupPhotoURL'] ?? '';
+
+                String title = isGroup ? groupName : "Conversation privée";
+
+                // Pour une conversation privée, tu peux afficher le nom de l'autre membre
+                if (!isGroup) {
+                  List members = data['members'] ?? [];
+                  String otherUserId = members.firstWhere((id) => id != currentUserId, orElse: () => '');
+                  title = otherUserId; // À remplacer par le nom de l'autre utilisateur si tu as ses infos
+                }
+
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage:
+                        groupPhotoURL.isNotEmpty ? NetworkImage(groupPhotoURL) : null,
+                    child: groupPhotoURL.isEmpty ? Icon(isGroup ? Icons.group : Icons.person) : null,
+                  ),
+                  title: Text(title),
+                  subtitle: Text(lastMessage, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  trailing: lastUpdated != null
+                      ? Text(
+                          "${lastUpdated.hour.toString().padLeft(2, '0')}:${lastUpdated.minute.toString().padLeft(2, '0')}",
+                          style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        )
+                      : null,
+                  onTap: () {
+                    context.push('/chat/${conv.id}'); // Ou la route vers ta page chat
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //on va diriger vers la selection d'un contact client + la possiblilite de creer un groupe
-          //context.push("/chat");
+          context.push('/createConv');
         },
         backgroundColor: Constants.turquoiseDark,
         child: const Icon(Icons.add, color: Constants.white),

@@ -1,4 +1,5 @@
 import 'package:equipro/src/pages/event/chat.dart';
+import 'package:equipro/src/pages/event/createConversationPage.dart';
 import 'package:equipro/src/pages/event/event.dart';
 import 'package:equipro/src/pages/event/message.dart';
 import 'package:equipro/src/pages/event/notif.dart';
@@ -53,14 +54,8 @@ final GoRouter go = GoRouter(
       builder: (context, state) {
         final arguments = state.extra as Map<String, dynamic>?;
         final initialPageIndex = arguments?['initialPageIndex'] ?? 0;
-        final idClient = arguments?['idClient'] as int?;
-        final token = arguments?['token'] as String?;
-        final professional = arguments?['professional'] as bool? ?? false;
         return MyWidgetBottomNavBar(
           initialPageIndex: initialPageIndex,
-          idClient: idClient,
-          token: token,
-          professional: professional,
         );
       },
       routes: [
@@ -87,8 +82,10 @@ final GoRouter go = GoRouter(
       builder: (context, state) {
         final arguments = state.extra as Map<String, dynamic>?; 
         final initialPageIndex = arguments?['initialPageIndex'] ?? 0;
-        final idClient = arguments?['idClient'] as int?; 
-        return MyWidgetBottomNavBar(initialPageIndex: initialPageIndex, idClient: idClient);
+        return MyWidgetBottomNavBar(
+          initialPageIndex: initialPageIndex,
+
+        );
       },
       routes: [
         GoRoute(
@@ -101,7 +98,7 @@ final GoRouter go = GoRouter(
           path: 'agenda',
           builder: (context, state) {
             final arguments = state.extra as Map<String, dynamic>?;
-            int? idClient = arguments?['idClient'];
+            String? idClient = arguments?['idClient'];
             return MyAgendaPage(idClient: idClient);
           },
         ),
@@ -115,7 +112,7 @@ final GoRouter go = GoRouter(
           path: 'listClient',
           builder: (context, state) {
             final arguments = state.extra as Map<String, dynamic>?; 
-            int? idClient = arguments?['idClient'];
+            String? idClient = arguments?['idClient'];
             return ListClientPage(idClient: idClient);
           },
         ),
@@ -186,14 +183,14 @@ final GoRouter go = GoRouter(
             return CreateInvoicePage();
           },
         ),
-        GoRoute(
-          path: 'chat',
-          builder: (context, state) {
-            final arguments = state.extra as Map<String, dynamic>?;
-            int idClient = arguments?['idClient'];
-            return ChatPage(idClient: idClient);
-          },
-        ),
+        // GoRoute(
+        //   path: 'chat',
+        //   builder: (context, state) {
+        //     final arguments = state.extra as Map<String, dynamic>?;
+        //     int idClient = arguments?['idClient'];
+        //     return ChatPage(idClient: idClient);
+        //   },
+        // ),
         GoRoute(
           path: 'user',
           builder: (context, state) {
@@ -210,6 +207,12 @@ final GoRouter go = GoRouter(
           path: 'messages',
           builder: (context, state) {
             return MessagesPage();
+          },
+        ),
+        GoRoute(
+          path: '/createConv',
+          builder: (context, state) {
+            return CreateConversationPage();
           },
         ),
         GoRoute(

@@ -21,17 +21,11 @@ class SplashPage extends StatelessWidget {
       if (context.mounted) {
         if (isProfessional) {
           context.go('/', extra: {
-            'token': token,
-            'idClient': idUser,
             'initialPageIndex': 2,
-            'professional': isProfessional,
           });
         } else {
           context.go('/homeClient', extra: {
-            'token': token,
-            'idClient': idUser,
             'initialPageIndex': 2,
-            'professional': isProfessional,
           });
         }
       }
