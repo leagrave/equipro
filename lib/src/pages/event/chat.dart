@@ -1,111 +1,102 @@
-// import 'package:equipro/src/utils/constants.dart';
-// import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-// import 'package:flutter/material.dart';
-// // import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-// // import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-// import 'package:uuid/uuid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:uuid/uuid.dart';
 
-// class ChatPage extends StatefulWidget {
-//   final int idClient; 
+class ChatPage extends StatefulWidget {
+  final String conversationId;
+  final String currentUserId;
 
-//   const ChatPage({Key? key, required this.idClient}) : super(key: key);
+  const ChatPage({
+  Key? key, 
+  required this.conversationId,
+  required this.currentUserId,
+  }) : super(key: key);
 
-//   @override
-//   _ChatPageState createState() => _ChatPageState();
-// }
+  @override
+  _ChatPageState createState() => _ChatPageState();
+}
 
-// class _ChatPageState extends State<ChatPage> {
-//   final List<types.Message> _messages = [];
-//   final types.User _currentUser = const types.User(id: '1'); 
-//   late types.User _otherUser;
-//   bool _isLoading = true;
+class _ChatPageState extends State<ChatPage> {
+  late final types.User _currentUser;
+  List<types.Message> _messages = [];
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _loadClientData(); 
-//   }
+  @override
+  void initState() {
+    super.initState();
+    _currentUser = types.User(id: widget.currentUserId);
+    print(_currentUser.id);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+    _listenToMessages();
+  });
+  }
 
-//   /// Charger les infos du client
-//   void _loadClientData() async {
-//     // TODO : Remplacer par un appel à la base de données
-//     final clientData = _getClientInfo(widget.idClient);
+  void _listenToMessages() {
+    FirebaseFirestore.instance
+        .collection('conversations')
+        .doc(widget.conversationId)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)  // Utiliser "timestamp" ici
+        .snapshots()
+        .listen((snapshot) {
+      final messages = snapshot.docs.map((doc) {
+        final data = doc.data();
 
-//     if (clientData != null) {
-//       setState(() {
-//         _otherUser = types.User(
-//           id: widget.idClient.toString(),
-//           firstName: clientData['prenom'],
-//           lastName: clientData['nom'],
-//           imageUrl: 'https://via.placeholder.com/150',
-//         );
-//         _messages.addAll(_loadMessages(widget.idClient));
-//         _isLoading = false;
-//       });
-//     }
-//   }
+        // Convertir Timestamp Firebase en int millisec depuis epoch
+        final timestamp = (data['timestamp'] as Timestamp?)?.millisecondsSinceEpoch;
 
-//   /// Simule la récupération des informations client
-//   Map<String, String>? _getClientInfo(int idClient) {
-//     // Simulation d'une base de données
-//     final clients = {
-//       1: {'nom': 'Dupont', 'prenom': 'Jean'},
-//       2: {'nom': 'Martin', 'prenom': 'Sophie'},
-//       3: {'nom': 'Durand', 'prenom': 'Paul'},
-//       4: {'nom': 'test', 'prenom': 'test'},
-//     };
+        return types.TextMessage(
+          author: types.User(id: data['senderId']),
+          createdAt: timestamp,
+          id: doc.id,
+          text: data['text'] ?? '',
+          // Ici tu peux aussi gérer le champ type, attachmentURL, etc. selon besoin
+        );
+      }).toList();
 
-//     return clients[idClient];
-//   }
+      setState(() {
+        _messages = messages;
+      });
+    });
+  }
 
-//   /// Simule le chargement des messages du client
-//   List<types.Message> _loadMessages(int idClient) {
-//     return [
-//       types.TextMessage(
-//         author: types.User(id: idClient.toString()),
-//         createdAt: DateTime.now().subtract(const Duration(minutes: 5)).millisecondsSinceEpoch,
-//         id: const Uuid().v4(),
-//         text: 'Bonjour, j’ai une question sur ma prochaine consultation.',
-//       ),
-//     ];
-//   }
 
-//   void _handleSendPressed(types.PartialText message) {
-//     final textMessage = types.TextMessage(
-//       author: _currentUser,
-//       createdAt: DateTime.now().millisecondsSinceEpoch,
-//       id: const Uuid().v4(),
-//       text: message.text,
-//     );
+  void _handleSendPressed(types.PartialText message) {
+    final newMessage = {
+      'senderId': _currentUser.id,
+      'timestamp': Timestamp.now(),  // Timestamp Firestore
+      'text': message.text,
+      'type': 'text',                // tu peux préciser le type pour plus tard
+      'attachmentURL': null,         // par défaut null si pas de média
+      'readBy': [_currentUser.id],   // message déjà lu par l’auteur
+    };
 
-//     setState(() {
-//       _messages.insert(0, textMessage);
-//     });
-//   }
+    FirebaseFirestore.instance
+        .collection('conversations')
+        .doc(widget.conversationId)
+        .collection('messages')
+        .add(newMessage);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: MyWidgetAppBar(
-//         title: _isLoading ? 'Chargement...' : '${_otherUser.firstName} ${_otherUser.lastName}',
-//         logoPath: Constants.avatar,
-//         backgroundColor: Constants.appBarBackgroundColor,
-//         isBackButtonVisible: true,
-//         showNotifications: false,
-//         showChat: false,
-//       ),
-//       body: _isLoading
-//           ? const Center(child: CircularProgressIndicator())
-//           : Chat(
-//               messages: _messages,
-//               onSendPressed: _handleSendPressed,
-//               user: _currentUser,
-//               theme: const DefaultChatTheme(
-//                 inputBackgroundColor: Constants.gradientStartColor,
-//                 primaryColor: Constants.turquoiseDark,
-//                 sendButtonIcon: Icon(Icons.send, color: Constants.gradientEndColor),
-//               ),
-//             ),
-//     );
-//   }
-// }
+    FirebaseFirestore.instance
+        .collection('conversations')
+        .doc(widget.conversationId)
+        .update({
+          'lastMessage': message.text,
+          'lastUpdated': Timestamp.now(),
+        });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Conversation")),
+      body: Chat(
+        messages: _messages,
+        onSendPressed: _handleSendPressed,
+        user: _currentUser,
+      ),
+    );
+  }
+}

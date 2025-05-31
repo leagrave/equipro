@@ -29,7 +29,6 @@ class _MessagesPageState extends State<MessagesPage> {
       final user = jsonDecode(userJson);
       setState(() {
         currentUserId = user['id']?.toString();
-        print(currentUserId);
       });
     }
   }
@@ -118,9 +117,12 @@ class _MessagesPageState extends State<MessagesPage> {
                           style: const TextStyle(fontSize: 12, color: Colors.grey),
                         )
                       : null,
-                  onTap: () {
-                    context.push('/chat/${conv.id}'); // Ou la route vers ta page chat
-                  },
+                      onTap: () {
+                        context.push(
+                          '/chat/${conv.id}',
+                          extra: currentUserId, 
+                        );
+                      },
                 );
               },
             );

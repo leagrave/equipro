@@ -183,14 +183,18 @@ final GoRouter go = GoRouter(
             return CreateInvoicePage();
           },
         ),
-        // GoRoute(
-        //   path: 'chat',
-        //   builder: (context, state) {
-        //     final arguments = state.extra as Map<String, dynamic>?;
-        //     int idClient = arguments?['idClient'];
-        //     return ChatPage(idClient: idClient);
-        //   },
-        // ),
+        GoRoute(
+          path: '/chat/:id',
+          builder: (context, state) {
+            final conversationId = state.pathParameters['id']!; 
+            final currentUserId = state.extra as String;
+            return ChatPage(
+              conversationId: conversationId,
+              currentUserId: currentUserId,
+              );
+          },
+        ),
+
         GoRoute(
           path: 'user',
           builder: (context, state) {
