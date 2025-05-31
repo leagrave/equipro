@@ -161,7 +161,8 @@ final GoRouter go = GoRouter(
         GoRoute(
           path: 'invoice',
           builder: (context, state) {
-            return InvoicePage();
+            final userId = state.extra as String;
+            return InvoicePage(userId: userId);
           },
         ),
         GoRoute(

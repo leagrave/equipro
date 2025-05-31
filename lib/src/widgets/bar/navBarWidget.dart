@@ -67,7 +67,7 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
       MyAgendaPage(idClient: currentIdClient),
       homePage,
       CalendarPage(),
-      InvoicePage(),
+      InvoicePage(userId: currentIdClient),
     ];
 
     return Scaffold(
