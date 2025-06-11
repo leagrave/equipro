@@ -3,7 +3,7 @@ import 'package:equipro/src/widgets/bottum/bottumAddFileWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
+//import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -27,7 +27,7 @@ class _UserFilesPageState extends State<UserFilesPage> {
   }
 
   Future<void> fetchUserFiles() async {
-    final url = Uri.parse('http://localhost:3000/api/files/user/${widget.userId}');
+    final url = Uri.parse('http://192.168.1.8:3000/api/files/user/${widget.userId}');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

@@ -109,7 +109,10 @@ class _MessagesPageState extends State<MessagesPage> {
                         groupPhotoURL.isNotEmpty ? NetworkImage(groupPhotoURL) : null,
                     child: groupPhotoURL.isEmpty ? Icon(isGroup ? Icons.group : Icons.person) : null,
                   ),
-                  title: Text(title),
+                  title: Text(
+                    title,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                   subtitle: Text(lastMessage, maxLines: 1, overflow: TextOverflow.ellipsis),
                   trailing: lastUpdated != null
                       ? Text(

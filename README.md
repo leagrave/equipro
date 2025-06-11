@@ -27,3 +27,26 @@ samples, guidance on mobile development, and a full API reference.
 //     'Content-Type': 'application/json',
 //   },
 // );
+
+
+
+
+## Légende du schéma 
+
+| Couleur | Signification |
+|--------|---------------|
+| <span style="color:#1976d2; font-weight:bold;">&#8212;&#8212;&#8212;</span> | Client (Application mobile Flutter) |
+| <span style="color:#673ab7; font-weight:bold;">&#8212;&#8212;&#8212;</span> | Backend (API Node.js / Express) |
+| <span style="color:#ba68c8; font-weight:bold;">&#8212;&#8212;&#8212;</span> | Bases de données |
+| <span style="color:#66bb6a; font-weight:bold;">&#8212;&#8212;&#8212;</span> | Services Cloud |
+| <span style="color:#ffb74d; font-weight:bold;">&#8212;&#8212;&#8212;</span> | CI/CD & Monitoring |
+| <span style="color:#f06292; font-weight:bold;">&#8212;&#8212;&#8212;</span> | Stores (App Store / Play Store) |
+| <span style="color:#ff8a65; font-weight:bold;">&#8212;&#8212;&#8212;</span> | Monitoring & Consoles |
+
+---
+
+**→** : Flux ou appel unidirectionnel  
+**↔** : Échanges bidirectionnels  
+-- texte --> : Flèche annotée  
+-- HTTPS --> : Échanges sécurisés
+

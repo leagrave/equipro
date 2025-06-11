@@ -51,7 +51,7 @@ class _AddFileWidgetState extends State<AddFileWidget> {
       });
 
       final response = await Dio().post(
-        'http://localhost:3000/api/upload', // Mets ici ton URL d'API
+        'http://192.168.1.8:3000/api/upload', // Mets ici ton URL d'API
         data: formData,
         options: Options(
           headers: {

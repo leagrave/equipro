@@ -77,7 +77,10 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
         DropdownButtonFormField<String>(
           value: _role,
           items: ['Particulier', 'Professionnel'].map((role) {
-            return DropdownMenuItem(value: role, child: Text(role));
+            return DropdownMenuItem(
+              value: role,
+              child: Text(role, style: const TextStyle(color: Colors.white)),
+            );
           }).toList(),
           onChanged: (value) => setState(() => _role = value!),
         ),

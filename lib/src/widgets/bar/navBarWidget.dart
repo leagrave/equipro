@@ -72,7 +72,7 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
 
     return Scaffold(
       appBar:  MyWidgetAppBar(
-        title: 'EquiPro - ${currentIdClient ?? "Invité"}' ,
+        title: 'EquiPro' , //  ${currentIdClient ?? "Invité}
         logoPath: Constants.logo,
         backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: false,

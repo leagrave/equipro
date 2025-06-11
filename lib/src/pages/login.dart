@@ -17,64 +17,131 @@ class _MyLoginPageState extends State<MyLoginPage> {
   bool _isLoading = false;
   String? _errorMessage;
 
+Future<void> _login() async {
+  setState(() {
+    _isLoading = true;
+    _errorMessage = null;
+  });
 
+  final email = _emailController.text.trim();
+  final password = _passwordController.text;
 
-  Future<void> _login() async {
+  if (email.isEmpty || password.isEmpty) {
     setState(() {
-      _isLoading = true;
-      _errorMessage = null;
+      _errorMessage = "Email et mot de passe requis";
+      _isLoading = false;
     });
-
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
-
-    if (email.isEmpty || password.isEmpty) {
-      setState(() {
-        _errorMessage = "Email et mot de passe requis";
-        _isLoading = false;
-      });
-      return;
-    }
-
-    try {
-      final response = await http.post(
-        Uri.parse('http://localhost:3000/api/login'), 
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email, 'password': password}),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final token = data['token'];
-        final user = data['user'];
-
-        // Stocker token + user si besoin (SharedPreferences)
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', token);
-        // Stocke aussi les infos utilisateur en JSON string
-        await prefs.setString('user', jsonEncode(user));
-
-        // Navigue vers la page principale avec les infos
-        context.go('/', extra: {
-          'initialPageIndex': 2,
-        });
-      } else {
-        // Gère l’erreur renvoyée par l’API
-        final errorData = jsonDecode(response.body);
-        setState(() {
-          _errorMessage = errorData['error'] ?? "Erreur lors de la connexion";
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _errorMessage = "Erreur réseau ou serveur";
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    return;
   }
+
+  // Nouvelle condition spéciale
+  if (email == "test@test.com" && password == "test") {
+    // Naviguer directement sans requête http
+          context.go('/', extra: {
+        'initialPageIndex': 2,
+      });  // <-- adapte ici la route souhaitée
+
+    setState(() {
+      _isLoading = false;
+    });
+    return;
+  }
+
+  // Sinon, on fait la requête HTTP POST
+  try {
+    final response = await http.post(
+      Uri.parse('http://192.168.1.8:3000/api/login'), 
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'password': password}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final token = data['token'];
+      final user = data['user'];
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+      await prefs.setString('user', jsonEncode(user));
+
+      context.go('/', extra: {
+        'initialPageIndex': 2,
+      });
+    } else {
+      final errorData = jsonDecode(response.body);
+      setState(() {
+        _errorMessage = errorData['error'] ?? "Erreur lors de la connexion";
+      });
+    }
+  } catch (e) {
+    setState(() {
+      _errorMessage = "Erreur réseau ou serveur";
+    });
+  } finally {
+    setState(() {
+      _isLoading = false;
+    });
+  }
+}
+
+
+
+  // Future<void> _login() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //     _errorMessage = null;
+  //   });
+
+  //   final email = _emailController.text.trim();
+  //   final password = _passwordController.text;
+
+  //   if (email.isEmpty || password.isEmpty) {
+  //     setState(() {
+  //       _errorMessage = "Email et mot de passe requis";
+  //       _isLoading = false;
+  //     });
+  //     return;
+  //   }
+
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse('http://localhost:3000/api/login'), 
+  //       headers: {'Content-Type': 'application/json'},
+  //       body: jsonEncode({'email': email, 'password': password}),
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       final token = data['token'];
+  //       final user = data['user'];
+
+  //       // Stocker token + user si besoin (SharedPreferences)
+  //       final prefs = await SharedPreferences.getInstance();
+  //       await prefs.setString('token', token);
+  //       // Stocke aussi les infos utilisateur en JSON string
+  //       await prefs.setString('user', jsonEncode(user));
+
+  //       // Navigue vers la page principale avec les infos
+  //       context.go('/', extra: {
+  //         'initialPageIndex': 2,
+  //       });
+  //     } else {
+  //       // Gère l’erreur renvoyée par l’API
+  //       final errorData = jsonDecode(response.body);
+  //       setState(() {
+  //         _errorMessage = errorData['error'] ?? "Erreur lors de la connexion";
+  //       });
+  //     }
+  //   } catch (e) {
+  //     setState(() {
+  //       _errorMessage = "Erreur réseau ou serveur";
+  //     });
+  //   } finally {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
