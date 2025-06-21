@@ -64,10 +64,10 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
 
     final List<Widget> _pages = [
       MessagesPage(),
-      MyAgendaPage(idClient: currentIdClient),
+      MyAgendaPage(userId: currentIdClient),
       homePage,
       CalendarPage(),
-      InvoicePage(),
+      InvoicePage(userId: currentIdClient),
     ];
 
     return Scaffold(

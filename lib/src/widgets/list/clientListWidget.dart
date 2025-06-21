@@ -1,24 +1,26 @@
+import 'dart:convert';
+import 'package:equipro/src/models/user.dart';
+import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+import 'package:equipro/src/utils/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:equipro/src/models/client.dart';
-import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/widgets/list/horseListWidget.dart';
 
+
 class ClientListWidget extends StatelessWidget {
-  final List<Client> filteredClients;
-  final Function(Client) onClientTap;
-  final List<Horse> horses;
+  final List<User> filteredUsers;
+  final Function(User) onClientTap;
 
   const ClientListWidget({
     Key? key,
-    required this.filteredClients,
+    required this.filteredUsers,
     required this.onClientTap,
-    required this.horses,
   }) : super(key: key);
 
-  // Fonction pour lancer un appel téléphonique
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
     if (await canLaunchUrl(phoneUri)) {
@@ -28,24 +30,34 @@ class ClientListWidget extends StatelessWidget {
     }
   }
 
-  // Fonction pour naviguer vers la page de gestion des chevaux
-  void navigateToManagementHorsePage(BuildContext context, Horse horse) async {
+  void navigateToManagementHorsePage(BuildContext context, Horse horse) {
     context.push('/managementHorse', extra: horse);
-    // await Navigator.pushNamed(
-    //   context,
-    //   '/managementHorse',
-    //   arguments: horse,
-    // );
   }
+
+  Future<List<Horse>> _fetchClientHorses(String userId) async {
+    try {
+      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/horses/user/$userId"));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        return jsonData.map((data) => Horse.fromJson(data)).toList();
+      } else {
+        throw Exception("Échec du chargement des chevaux : code ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Erreur lors du fetch des chevaux pour userId=$userId : $e");
+      return []; 
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return filteredClients.isNotEmpty
+    return filteredUsers.isNotEmpty
         ? ListView.builder(
-            itemCount: filteredClients.length,
+            itemCount: filteredUsers.length,
             itemBuilder: (context, index) {
-              final client = filteredClients[index];
-              final clientHorses = horses.where((horse) => horse.idClient == client.idClient).toList();
+              final user = filteredUsers[index];
 
               return Card(
                 margin: const EdgeInsets.symmetric(vertical: 8),
@@ -59,50 +71,66 @@ class ClientListWidget extends StatelessWidget {
                     ListTile(
                       contentPadding: const EdgeInsets.all(8),
                       leading: const CircleAvatar(
-                        backgroundColor: Constants.gradientStartColor, 
+                        backgroundColor: Constants.gradientStartColor,
                         child: Icon(Icons.person, color: Constants.white),
                       ),
                       title: Text(
-                        "${client.nom} ${client.prenom}",
+                        "${user.lastName} ${user.firstName}",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, color: Constants.white),
                       ),
                       subtitle: Text(
-                        client.ville ?? 'Ville non spécifiée',
+                        'Ville non spécifiée',//client.ville ?? 'Ville non spécifiée',
                         style: TextStyle(color: Colors.grey[300]),
                       ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Bouton d'appel
                           IconButton(
                             icon: const Icon(Icons.call, color: Constants.secondaryGreen),
-                            onPressed: () => _makePhoneCall(client.tel),
+                            onPressed: () => _makePhoneCall('0661323363'), //user.tel
                           ),
-                          // Bouton de message
                           IconButton(
                             icon: const Icon(Icons.message, color: Constants.secondaryBleu),
                             onPressed: () {
-                              // Envoyer un message au client
-                              context.push('/chat', extra: {'idClient': client.idClient} );
+                              context.push('/chat', extra: {'userId': user.id}); // a revoir
                             },
                           ),
-                          // Flèche pour la navigation
                           const Icon(Icons.arrow_forward_ios, color: Constants.white),
                         ],
                       ),
-                      onTap: () => onClientTap(client),
+                      onTap: () => onClientTap(user),
                     ),
-                    // Liste des chevaux associés 
-                    if (clientHorses.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 44.0, right: 18.0, top: 0.0, bottom: 4.0), 
-                        child: HorseListWidget(
-                          horses: clientHorses,
-                          onHorseTap: (horse) => navigateToManagementHorsePage(context, horse),
-                          isFromListHorsePage: false, 
-                        ),
+
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 44.0, right: 18.0, top: 0.0, bottom: 4.0),
+                      child: FutureBuilder<List<Horse>>(
+                        future: _fetchClientHorses(user.id),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: LinearProgressIndicator(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Text(
+                              'Erreur lors du chargement des chevaux',
+                              style: TextStyle(color: Colors.redAccent),
+                            );
+                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return const SizedBox(); 
+                          } else {
+                            final clientHorses = snapshot.data!;
+                            return HorseListWidget(
+                              horses: clientHorses,
+                              onHorseTap: (horse) => navigateToManagementHorsePage(context, horse),
+                              isFromListHorsePage: false,
+                            );
+                          }
+                        },
                       ),
+                    ),
                   ],
                 ),
               );

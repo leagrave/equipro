@@ -47,6 +47,6 @@ samples, guidance on mobile development, and a full API reference.
 
 **→** : Flux ou appel unidirectionnel  
 **↔** : Échanges bidirectionnels  
--- texte --> : Flèche annotée  
--- HTTPS --> : Échanges sécurisés
+-texte-> : Flèche annotée  
+-HTTPS-> : Échanges sécurisés
 

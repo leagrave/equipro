@@ -3,7 +3,7 @@ import 'package:equipro/src/widgets/bottum/bottumAddFileWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-//import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

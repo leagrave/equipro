@@ -23,7 +23,7 @@ import 'package:equipro/src/pages/client/managementClient.dart';
 import 'package:equipro/src/pages/horse/listHorse.dart';
 import 'package:equipro/src/pages/horse/managementHorse.dart';
 import 'package:equipro/src/widgets/bar/navBarWidget.dart';
-import 'package:equipro/src/models/client.dart';
+import 'package:equipro/src/models/customer.dart';
 import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/models/invoice.dart';
 import 'package:equipro/src/models/event.dart';
@@ -98,8 +98,8 @@ final GoRouter go = GoRouter(
           path: 'agenda',
           builder: (context, state) {
             final arguments = state.extra as Map<String, dynamic>?;
-            String? idClient = arguments?['idClient'];
-            return MyAgendaPage(idClient: idClient);
+            String? userId = arguments?['idUser'];
+            return MyAgendaPage(userId: userId);
           },
         ),
         GoRoute(
@@ -111,63 +111,64 @@ final GoRouter go = GoRouter(
         GoRoute(
           path: 'listClient',
           builder: (context, state) {
-            final arguments = state.extra as Map<String, dynamic>?; 
-            String? idClient = arguments?['idClient'];
-            return ListClientPage(idClient: idClient);
+            final userId = state.extra as String;
+            return ListClientPage(userId: userId);
           },
         ),
-        GoRoute(
-          path: 'createClient',
-          builder: (context, state) {
-            return CreateClientPage();
-          },
-        ),
+        // GoRoute(
+        //   path: 'createClient',
+        //   builder: (context, state) {
+        //     return CreateClientPage();
+        //   },
+        // ),
         GoRoute(
           path: 'searchClient',
           builder: (context, state) {
             return SearchClientPage();
           },
         ),
-        GoRoute(
-          path: 'createHorse',
-          builder: (context, state) {
-            final arguments = state.extra as Map<String, dynamic>?; 
-            final int? idClient = arguments?['idClient'];
-            return CreateHorsePage(idClient: idClient);
-          },
-        ),
-        GoRoute(
-          path: 'managementClient',
-          builder: (context, state) {
-            final client = state.extra as Client?;
-            return ManagementClientPage(client: client!);
-          },
-        ),
-        GoRoute(
-          path: 'listHorse',
-          builder: (context, state) {
-            final arguments = state.extra as Map<String, dynamic>?;
-            int? idClient = arguments?['idClient'];
-            return ListHorsePage(idClient: idClient);
-          },
-        ),
-        GoRoute(
-          path: 'managementHorse',
-          builder: (context, state) {
-            final horse = state.extra as Horse?;
-            return ManagementHorsePage(horse: horse!);
-          },
-        ),
+        // GoRoute(
+        //   path: 'createHorse',
+        //   builder: (context, state) {
+        //     final arguments = state.extra as Map<String, dynamic>?; 
+        //     final int? idClient = arguments?['idClient'];
+        //     return CreateHorsePage(idClient: idClient);
+        //   },
+        // ),
+        //  GoRoute(
+        //    path: 'managementClient',
+        //    builder: (context, state) {
+        //      final Customer = state.extra as Customer?;
+        //      return ManagementClientPage(Customer: Customer!);
+        //    },
+        //  ),
+        // GoRoute(
+        //   path: 'listHorse',
+        //   builder: (context, state) {
+        //     final arguments = state.extra as Map<String, dynamic>?;
+        //     int? idClient = arguments?['idClient'];
+        //     return ListHorsePage(idClient: idClient);
+        //   },
+        // ),
+        // GoRoute(
+        //   path: 'managementHorse',
+        //   builder: (context, state) {
+        //     final horse = state.extra as Horse?;
+        //     return ManagementHorsePage(horse: horse!);
+        //   },
+        // ),
         GoRoute(
           path: 'invoice',
           builder: (context, state) {
-            return InvoicePage();
+            final userId = state.extra as String;
+            return InvoicePage(userId: userId);
           },
         ),
         GoRoute(
           path: 'listInvoice',
           builder: (context, state) {
-            return ListClientPage();
+            final userId = state.extra as String;
+            return ListClientPage(userId: userId,);
           },
         ),
         GoRoute(
