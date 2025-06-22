@@ -12,11 +12,13 @@ import 'package:equipro/src/widgets/list/horseListWidget.dart';
 
 
 class ClientListWidget extends StatelessWidget {
-  final List<User> filteredUsers;
-  final Function(User) onClientTap;
+  final String? currentUserId;
+  final List<Users> filteredUsers;
+  final Function(Users) onClientTap;
 
   const ClientListWidget({
     Key? key,
+    required this.currentUserId,
     required this.filteredUsers,
     required this.onClientTap,
   }) : super(key: key);
@@ -80,7 +82,7 @@ class ClientListWidget extends StatelessWidget {
                             fontWeight: FontWeight.bold, color: Constants.white),
                       ),
                       subtitle: Text(
-                        'Ville non spécifiée',//client.ville ?? 'Ville non spécifiée',
+                        user.city ?? 'Ville non spécifiée',
                         style: TextStyle(color: Colors.grey[300]),
                       ),
                       trailing: Row(
@@ -88,12 +90,16 @@ class ClientListWidget extends StatelessWidget {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.call, color: Constants.secondaryGreen),
-                            onPressed: () => _makePhoneCall('0661323363'), //user.tel
+                            onPressed: () => _makePhoneCall('${user.phone}'), 
                           ),
                           IconButton(
                             icon: const Icon(Icons.message, color: Constants.secondaryBleu),
                             onPressed: () {
-                              context.push('/chat', extra: {'userId': user.id}); // a revoir
+                            //context.push('/chat', extra: {'userId': user.id}); // a revoir
+                              context.push(
+                                '/chat/5jHqjqRJrHTyONJAj8fN', //  ${conv.id}',
+                                extra: currentUserId, 
+                            );
                             },
                           ),
                           const Icon(Icons.arrow_forward_ios, color: Constants.white),

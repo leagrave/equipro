@@ -83,7 +83,7 @@ class CustomerProfessionnal {
 
 class FullCustomer {
   final Customer customer;
-  final User? user; 
+  final Users? user; 
   final CustomerProfessionnal? link; 
 
   FullCustomer({

@@ -18,8 +18,8 @@ class ListClientPage extends StatefulWidget {
 }
 
 class _ListClientPageState extends State<ListClientPage> {
-  List<User> users = [];
-  List<User> filteredUsers = [];
+  List<Users> users = [];
+  List<Users> filteredUsers = [];
   List<Horse> horses = [];
   String searchQuery = "";
   bool isLoading = true;
@@ -32,19 +32,18 @@ class _ListClientPageState extends State<ListClientPage> {
 
   Future<void> fetchClients() async {
     try {
-      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/agenda/${widget.userId}"));
+      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/agendaAll/${widget.userId}"));
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
-        final fetchedClients = jsonData.map((data) => User.fromJson(data)).toList();
+        final fetchedClients = jsonData.map((data) => Users.fromJson(data)).toList();
 
         setState(() {
-          users = List<User>.from(fetchedClients);
+          users = List<Users>.from(fetchedClients);
           // On met filteredUsers égal à tous les clients récupérés (contacts du user)
           filteredUsers = users;
           isLoading = false;
         });
 
-        print("filteredUsers.length = ${filteredUsers.length}");
       } else {
         throw Exception("Échec du chargement des clients");
       }
@@ -72,13 +71,13 @@ class _ListClientPageState extends State<ListClientPage> {
     });
   }
 
-  void navigateToManagementClientPage(User user) {
+  void navigateToManagementClientPage(Users user) {
     context.push('/managementClient', extra: user);
   }
 
   void navigateToCreateClientPage() async {
     final newClient = await context.push('/createClient');
-    if (newClient != null && newClient is User) {
+    if (newClient != null && newClient is Users) {
       setState(() {
         users.add(newClient);
         filteredUsers = users;
@@ -131,6 +130,7 @@ class _ListClientPageState extends State<ListClientPage> {
                     // Liste
                     Expanded(
                       child: ClientListWidget(
+                        currentUserId: widget.userId,
                         filteredUsers: filteredUsers,
                         onClientTap: navigateToManagementClientPage,
                       ),
