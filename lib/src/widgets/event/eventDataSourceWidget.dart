@@ -25,5 +25,5 @@ class EventDataSource extends CalendarDataSource {
 
   // Ajouter des méthodes pour obtenir des informations supplémentaires sur l'événement
   String getClientName(int index) => "Client ID: ${appointments![index].idClient}";
-  String getAdresseEcurie(int index) => appointments![index].adresseEcurie;
+  String getAdresseEcurie(int index) => appointments![index].addressEcurie;
 }

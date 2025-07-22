@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/bottum/bottumAddFileWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class _UserFilesPageState extends State<UserFilesPage> {
   }
 
   Future<void> fetchUserFiles() async {
-    final url = Uri.parse('http://192.168.1.8:3000/api/files/user/${widget.userId}');
+    final url = Uri.parse('${Constants.apiBaseUrl}/files/user/${widget.userId}');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

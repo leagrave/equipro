@@ -3,7 +3,7 @@ class Invoice {
   final int idClient;
   final int idHorse;
   final bool isSociete;
-  final String adresseFacturation;
+  final String addressFacturation;
   final DateTime dateCreation;
   final DateTime? dateEcheance;
   final DateTime? dateModification;
@@ -20,7 +20,7 @@ class Invoice {
     required this.montant,
     required this.isSociete,
     required this.dateCreation,
-    required this.adresseFacturation,
+    required this.addressFacturation,
     this.dateModification,
     this.dateEcheance
   });

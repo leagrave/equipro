@@ -4,7 +4,7 @@ class Event {
   final int? idHorse;
   final int? idEcurie;
   final String eventName;
-  final String adresseEcurie;
+  final String addressEcurie;
   final DateTime dateDebut;
   final DateTime dateFin;
   final DateTime heureDebut;
@@ -15,7 +15,7 @@ class Event {
     required this.idEvent,
     required this.idClient,
     required this.eventName,
-    required this.adresseEcurie,
+    required this.addressEcurie,
     required this.dateDebut,
     required this.dateFin,
     required this.heureDebut,

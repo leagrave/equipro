@@ -34,23 +34,23 @@ Future<void> _login() async {
     return;
   }
 
-  // Nouvelle condition spéciale
-  if (email == "test@test.com" && password == "test") {
-    // Naviguer directement sans requête http
-          context.go('/', extra: {
-        'initialPageIndex': 2,
-      });  // <-- adapte ici la route souhaitée
+  // // Nouvelle condition spéciale
+  // if (email == "test@test.com" && password == "test") {
+  //   // Naviguer directement sans requête http
+  //         context.go('/', extra: {
+  //       'initialPageIndex': 2,
+  //     });  // <-- adapte ici la route souhaitée
 
-    setState(() {
-      _isLoading = false;
-    });
-    return;
-  }
+  //   setState(() {
+  //     _isLoading = false;
+  //   });
+  //   return;
+  // }
 
   // Sinon, on fait la requête HTTP POST
   try {
     final response = await http.post(
-      Uri.parse('http://192.168.1.8:3000/api/login'), 
+      Uri.parse('${Constants.apiBaseUrl}/login'), 
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
     );

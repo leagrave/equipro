@@ -1,78 +1,76 @@
+import 'package:equipro/src/utils/constants.dart';
+import 'package:equipro/src/widgets/bottum/bottumHistoVisitListWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/widgets/bottum/bottumFactureListWidget.dart';
 import 'package:equipro/src/widgets/bottum/bottumHoseListWidget.dart';
+import 'package:intl/intl.dart'; 
 
 class ListbottumClientcardwidget extends StatelessWidget {
-  final DateTime lastAppointmentDate;
+  final DateTime? lastAppointmentDate;
   final DateTime? nextAppointmentDate;
-  final int idClient; 
+  final String idUserPro;
+  final String idUserCustomer;
 
   const ListbottumClientcardwidget({
     Key? key,
-    required this.lastAppointmentDate,
-    required this.idClient,
+    this.lastAppointmentDate,
+    required this.idUserPro,
+    required this.idUserCustomer,
     this.nextAppointmentDate,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Card(
-        color: Colors.white.withOpacity(0.8), 
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12), 
-        ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Affichage des dates sous forme de texte
               Text(
                 'Dernier rendez-vous : ${_formatDate(lastAppointmentDate)}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 10,
+                  fontSize: 15,
+                  color: Constants.white,
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 8),
               if (nextAppointmentDate != null)
                 Text(
-                  'Prochain rendez-vous : ${_formatDate(nextAppointmentDate!)}',
-                  style: TextStyle(
+                  'Prochain rendez-vous : ${_formatDate(nextAppointmentDate)}',
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 10,
+                    fontSize: 15,
+                    color: Constants.white,
                   ),
                 )
               else
-                Text(
+                const Text(
                   'Pas de prochain rendez-vous prévu.',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 8,
+                    fontSize: 10,
                     color: Colors.grey,
                   ),
                 ),
-              
-              SizedBox(height: 2),
-
- 
+              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ButtonHorseListWidget(idClient: idClient), 
-                  ButtonFactureListWidget(), 
+                  ButtonHorseListWidget(idUser: idUserCustomer),
+                  ButtonHistoVisitListWidget(idUser: idUserCustomer),
+                  ButtonFactureListWidget(),
                 ],
               ),
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
-  String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
+  String _formatDate(DateTime? date) {
+    if (date == null) return 'Non défini';
+    return DateFormat('dd/MM/yyyy').format(date);
   }
 }

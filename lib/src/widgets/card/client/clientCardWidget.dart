@@ -1,257 +1,328 @@
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/src/models/customer.dart';
+import 'package:equipro/src/models/user.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-//class ClientCardWidget extends StatefulWidget {
-//   final Client client;
-//   final Function(Client)? onClientUpdated;
-//   final bool openWithCreateClientPage;
-//   final bool openWithCreateHorsePage;
-//   final Function()? onSave;
+class ClientCardWidget extends StatefulWidget {
+  final Users user;
+  final Function(Users)? onUserUpdated;
+  final bool openWithCreateClientPage;
+  final bool openWithCreateHorsePage;
+  final Function()? onSave;
 
-//   const ClientCardWidget({
-//     Key? key,
-//     required this.client,
-//     required this.openWithCreateClientPage,
-//     required this.openWithCreateHorsePage,
-//     this.onClientUpdated,
-//     this.onSave,
-//   }) : super(key: key);
+  const ClientCardWidget({
+    Key? key,
+    required this.user,
+    required this.openWithCreateClientPage,
+    required this.openWithCreateHorsePage,
+    this.onUserUpdated,
+    this.onSave,
+  }) : super(key: key);
 
-//   @override
-//   _ClientCardWidgetState createState() => _ClientCardWidgetState();
-// }
+  @override
+  _ClientCardWidgetState createState() => _ClientCardWidgetState();
+}
 
-// class _ClientCardWidgetState extends State<ClientCardWidget> {
-//   late Client _client;
-//   late Client _originalClient; // Garde une copie de l'état initial
-//   bool _isEditing = false;
+class _ClientCardWidgetState extends State<ClientCardWidget> {
+  late Users _user;
+  late Users _originalUser; 
+  bool _isEditing = false;
 
-//   // TextEditingControllers pour les champs non booléens
-//   late TextEditingController _nomController;
-//   late TextEditingController _prenomController;
-//   late TextEditingController _telController;
-//   late TextEditingController _emailController;
-//   late TextEditingController _villeController;
+  // TextEditingControllers pour les champs non booléens
+  late TextEditingController _idController;
+  late TextEditingController _nomController;
+  late TextEditingController _prenomController;
+  late TextEditingController _telController;
+  late TextEditingController _tel2Controller;
+  late TextEditingController _emailController;
+  late TextEditingController _societeNameController;
 
-//   // Variable temporaire pour isSociete
-//   bool? _tempIsSociete;
+  // Variable temporaire 
+  bool? _tempIsSociete;
+  bool? _tempIsProfessional;
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _client = widget.client;
-//     _originalClient = widget.client;
+  @override
+  void initState() {
+    super.initState();
+    _user = widget.user;
+    _originalUser = widget.user;
 
-//     // Initialisation des contrôleurs avec les valeurs du client
-//     _nomController = TextEditingController(text: _client.nom);
-//     _prenomController = TextEditingController(text: _client.prenom);
-//     _telController = TextEditingController(text: _client.tel);
-//     _emailController = TextEditingController(text: _client.email);
-//     _villeController = TextEditingController(text: _client.ville);
+    // Initialisation des contrôleurs avec les valeurs du client
+    _idController = TextEditingController(text: _user.id);
+    _nomController = TextEditingController(text: _user.lastName);
+    _prenomController = TextEditingController(text: _user.firstName);
+    _telController = TextEditingController(text: _user.phone);
+    _tel2Controller = TextEditingController(text: _user.phone2 ?? "");
+    _emailController = TextEditingController(text: _user.email);
+    _societeNameController = TextEditingController(text: _user.societeName);
 
-//     // Initialiser la variable temporaire avec la valeur de isSociete
-//     _tempIsSociete = _client.isSociete;
+    // Initialiser la variable temporaire avec la valeur de isSociete
+    _tempIsSociete = _user.isSociete;
+    _tempIsProfessional = _user.professional;
 
-//     if (widget.openWithCreateClientPage || widget.openWithCreateHorsePage) {
-//       _isEditing = true;
-//     }
+    if (widget.openWithCreateClientPage || widget.openWithCreateHorsePage) {
+      _isEditing = true;
+    }
 
-//   }
+  }
 
-//   @override
-//   void dispose() {
-//     _nomController.dispose();
-//     _prenomController.dispose();
-//     _telController.dispose();
-//     _emailController.dispose();
-//     _villeController.dispose();
-//     super.dispose();
-//   }
+  Future<bool> _validateForm() async {
+    final nom = _nomController.text.trim();
+    final prenom = _prenomController.text.trim();
+    final email = _emailController.text.trim();
+    final tel = _telController.text.trim();
+    final tel2 = _tel2Controller.text.trim();
 
-//   void _handleSaveOrCancel({required bool isSave}) {
-//     setState(() {
-//       if (isSave) {
-//         // Appelle onSave et onClientUpdated si nécessaire
-//         widget.onSave?.call();
-//         if (widget.onClientUpdated != null) {
-//           widget.onClientUpdated!(_client);
-//         }
-//       } else {
-//         // Restaure l'état initial du client
-//         _client = _originalClient;
-//         _nomController.text = _client.nom;
-//         _prenomController.text = _client.prenom;
-//         _telController.text = _client.tel;
-//         _emailController.text = _client.email ?? "";
-//         _villeController.text = _client.ville ?? "";
-//         _tempIsSociete = _client.isSociete;
-//       }
-//       _isEditing = false;
-//     });
-//   }
+    final emailRegex = RegExp(r"^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$");
+    final phoneRegex = RegExp(r'^(\+33|0)[1-9](\d{2}){4}$');
 
-//   void _updateClient({
-//     String? nom,
-//     String? prenom,
-//     String? tel,
-//     String? email,
-//     String? ville,
-//     bool? isSociete,
-//   }) {
-//     setState(() {
-//       _client = Client(
-//         idClient: _client.idClient,
-//         nom: nom ?? _client.nom,
-//         prenom: prenom ?? _client.prenom,
-//         tel: tel ?? _client.tel,
-//         email: email ?? _client.email,
-//         ville: ville ?? _client.ville,
-//         isSociete: isSociete ?? _tempIsSociete ?? false,
-//         societe: _client.societe,
-//         civilite: _client.civilite,
-//         derniereVisite: _client.derniereVisite,
-//         prochaineIntervention: _client.prochaineIntervention,
-//         adresse: _client.adresse,
-//         adresseFacturation: _client.adresseFacturation,
-//         region: _client.region,
-//         notes: _client.notes,
-//         adresses: _client.adresses,
-//       );
-//     });
-//   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Card(
-//         color: Colors.white,
-//         elevation: 4,
-//         shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.circular(12),
-//         ),
-//         child: Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               // Nom
-//               TextField(
-//                 controller: _nomController,
-//                 decoration: InputDecoration(
-//                   labelText: 'Nom',
-//                   border: OutlineInputBorder(
-//                     borderRadius: BorderRadius.circular(8),
-//                   ),
-//                 ),
-//                 readOnly: !_isEditing,
-//                 onChanged: (value) => _updateClient(nom: value),
-//               ),
-//               const SizedBox(height: 8),
+    if (nom.isEmpty && prenom.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Tous le nom ou prénom doit être remplis")),
+      );
+      return false;
+    }
 
-//               // Prénom
-//               TextField(
-//                 controller: _prenomController,
-//                 decoration: InputDecoration(
-//                   labelText: 'Prénom',
-//                   border: OutlineInputBorder(
-//                     borderRadius: BorderRadius.circular(8),
-//                   ),
-//                 ),
-//                 readOnly: !_isEditing,
-//                 onChanged: (value) => _updateClient(prenom: value),
-//               ),
-//               const SizedBox(height: 8),
+    if (!emailRegex.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("L'adresse email n'est pas valide.")),
+      );
+      return false;
+    }
 
-//               // Téléphone
-//               TextField(
-//                 controller: _telController,
-//                 decoration: InputDecoration(
-//                   labelText: 'Téléphone',
-//                   border: OutlineInputBorder(
-//                     borderRadius: BorderRadius.circular(8),
-//                   ),
-//                 ),
-//                 readOnly: !_isEditing,
-//                 onChanged: (value) => _updateClient(tel: value),
-//               ),
-//               const SizedBox(height: 8),
+    if (tel.isNotEmpty && !phoneRegex.hasMatch(tel)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Le numéro de téléphone principal n'est pas valide.")),
+      );
+      return false;
+    }
 
-//               // Email
-//               TextField(
-//                 controller: _emailController,
-//                 decoration: InputDecoration(
-//                   labelText: 'Email',
-//                   border: OutlineInputBorder(
-//                     borderRadius: BorderRadius.circular(8),
-//                   ),
-//                 ),
-//                 readOnly: !_isEditing,
-//                 onChanged: (value) => _updateClient(email: value),
-//               ),
-//               const SizedBox(height: 8),
+    if (tel2.isNotEmpty && !phoneRegex.hasMatch(tel2)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Le numéro de téléphone secondaire n'est pas valide.")),
+      );
+      return false;
+    }
 
-//               // Ville
-//               TextField(
-//                 controller: _villeController,
-//                 decoration: InputDecoration(
-//                   labelText: 'Ville',
-//                   border: OutlineInputBorder(
-//                     borderRadius: BorderRadius.circular(8),
-//                   ),
-//                 ),
-//                 readOnly: !_isEditing,
-//                 onChanged: (value) => _updateClient(ville: value),
-//               ),
-//               const SizedBox(height: 8),
+      // Si l'utilisateur a coché "société", alors le nom de la société est obligatoire
+    if (_tempIsSociete == true && _societeNameController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Le nom de la société est requis.")),
+      );
+      return false;
+    }
 
-//               // Societe (Checkbox)
-//               Row(
-//                 children: [
-//                   Checkbox(
-//                     value: _tempIsSociete,
-//                     onChanged: _isEditing
-//                         ? (bool? value) {
-//                             setState(() {
-//                               _tempIsSociete = value ?? false;
-//                             });
-//                           }
-//                         : null,
-//                   ),
-//                   const Text('Société'),
-//                 ],
-//               ),
-//               const SizedBox(height: 8),
 
-//               if(!widget.openWithCreateClientPage)
-//               // Boutons
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.end,
-//                 children: [
-//                   if (_isEditing)
-//                     ElevatedButton(
-//                       onPressed: () => _handleSaveOrCancel(isSave: true),
-//                       child: const Text('Annuler', style: TextStyle(color: Constants.appBarBackgroundColor),),
-//                     ),
-//                   const SizedBox(width: 8),
-//                   ElevatedButton(
-//                     onPressed: () {
-//                       if (_isEditing) {
-//                         _handleSaveOrCancel(isSave: true);
-//                       } else {
-//                         setState(() {
-//                           _isEditing = true;
-//                         });
-//                       }
-//                     },
-//                     child: Text(_isEditing ? 'Enregistrer' : 'Modifier',style: TextStyle(color: Constants.appBarBackgroundColor),),
-//                   ),
-//                 ],
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+    return true;
+  }
+
+  Future<void> _validerEtMettreAJourUtilisateur() async {
+    if (!await _validateForm()) return;
+    final url = Uri.parse("${Constants.apiBaseUrl}/customer/${_idController.text.trim()}");
+
+    final response = await http.put(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'last_Name': _nomController.text.trim(),
+        'first_Name': _prenomController.text.trim(),
+        'email': _emailController.text.trim(),
+        'phone': _telController.text.trim(),
+        'phone2': _tel2Controller.text.trim(),
+        'isSociete': _tempIsSociete,
+        'IsProfessional': _tempIsProfessional,
+        'societeName': _societeNameController.text.trim(),
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        _user = Users(
+          id: _idController.text.trim(),
+          lastName: _nomController.text.trim(),
+          firstName: _prenomController.text.trim(),
+          email: _emailController.text.trim(),
+          phone: _telController.text.trim(),
+          phone2: _tel2Controller.text.trim(),
+          professional: _tempIsProfessional ?? false,
+          isSociete: _tempIsSociete ?? false,
+          societeName: _societeNameController.text.trim(),
+        );
+        _isEditing = false;
+      });
+
+      widget.onUserUpdated?.call(_user);
+      widget.onSave?.call();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Profil mis à jour avec succès.")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erreur lors de la mise à jour : ${response.body}")),
+      );
+    }
+  }
+
+
+  @override
+  void dispose() {
+    _idController.dispose();
+    _nomController.dispose();
+    _prenomController.dispose();
+    _telController.dispose();
+    _tel2Controller.dispose();
+    _emailController.dispose();
+    _societeNameController.dispose();
+    super.dispose();
+  }
+
+  void _handleSaveOrCancel({required bool isSave}) {
+    setState(() {
+      if (isSave) {
+        // Appelle onSave et onClientUpdated si nécessaire
+        _validerEtMettreAJourUtilisateur();
+        // widget.onSave?.call();
+        // if (widget.onUserUpdated != null) {
+        //   widget.onUserUpdated!(_user);
+        // }
+      } else {
+        // Restaure l'état initial du client
+        _user = _originalUser;
+        _nomController.text = _user.lastName;
+        _prenomController.text = _user.firstName;
+        _telController.text = _user.phone ?? "";
+        _tel2Controller.text = _user.phone2 ?? "";
+        _emailController.text = _user.email ?? "";
+        _societeNameController.text = _user.societeName ?? "";
+        _tempIsSociete = _user.isSociete;
+        _tempIsProfessional = _user.professional;
+      }
+      _isEditing = false;
+    });
+  }
+
+  void _updateClient({
+    //String? id,
+    String? lastName,
+    String? firstName,
+    String? phone,
+    String? phone2,
+    String? email,
+    bool? professional,
+    bool? isSociete,
+    String? societeName,
+  }) {
+    setState(() {
+      _user = _user.copyWith(
+        id: _user.id,
+        lastName: lastName ?? _user.lastName,
+        firstName: firstName ?? _user.firstName,
+        phone: phone ?? _user.phone,
+        phone2: phone2 ?? _user.phone2,
+        email: email ?? _user.email,
+        professional: professional ?? _user.professional,
+        isSociete: isSociete ?? _user.isSociete,
+        societeName: societeName ?? _user.societeName,
+      );
+    });
+    widget.onUserUpdated?.call(_user);
+    widget.onSave?.call();
+  }
+  
+
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller,
+    IconData icon, {
+    bool obscureText = false,
+    ValueChanged<String>? onChanged,
+  }) {
+    bool obscure = obscureText;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscure,
+        readOnly: !_isEditing,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon, color: Colors.white),
+          filled: true,
+          fillColor: Colors.white.withOpacity(0.2),
+          labelStyle: const TextStyle(color: Colors.white70),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+        ),
+        style: const TextStyle(color: Colors.white),
+        onChanged: onChanged,
+      ),
+    );
+  }
+
+@override
+Widget build(BuildContext context) {
+  return SingleChildScrollView(
+    padding: const EdgeInsets.all(16.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildTextField("Nom", _nomController, Icons.person, onChanged: (value) => _updateClient(lastName: value)),
+        _buildTextField("Prénom", _prenomController, Icons.person, onChanged: (value) => _updateClient(firstName: value)),
+        _buildTextField("Téléphone", _telController, Icons.phone, onChanged: (value) => _updateClient(phone: value),),
+        _buildTextField("Téléphone 2", _tel2Controller, Icons.phone, onChanged: (value) => _updateClient(phone2: value),),
+        _buildTextField("Email", _emailController, Icons.email, onChanged: (value) => _updateClient(email: value),),
+
+        SwitchListTile(
+          title: const Text("Est une société ?", style: TextStyle(color: Colors.white)),
+          value: _tempIsSociete ?? false,
+          onChanged: _isEditing
+              ? (value) {
+                  setState(() {
+                    _tempIsSociete = value;
+                  });
+                  _updateClient(isSociete: value);
+                }
+              : null,
+        ),
+
+        if (_tempIsSociete == true)
+          _buildTextField("Nom de la société", _societeNameController, Icons.business, onChanged: (value) => _updateClient(societeName: value),),
+
+              const SizedBox(height: 8),
+
+              if(!widget.openWithCreateClientPage)
+              // Boutons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (_isEditing)
+                    ElevatedButton(
+                      onPressed: () => _handleSaveOrCancel(isSave: false),
+                      child: const Text('Annuler', style: TextStyle(color: Constants.appBarBackgroundColor),),
+                    ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_isEditing) {
+                        _handleSaveOrCancel(isSave: true);
+                      } else {
+                        setState(() {
+                          _isEditing = true;
+                        });
+                      }
+                    },
+                    child: Text(_isEditing ? 'Enregistrer' : 'Modifier',style: TextStyle(color: Constants.appBarBackgroundColor),),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+  }
+}

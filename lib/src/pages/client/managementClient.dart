@@ -13,8 +13,9 @@ import 'dart:convert';
 
 class ManagementClientPage extends StatefulWidget {
   final Users userSelected;
+  final String currentUserId;
 
-  const ManagementClientPage({Key? key, required this.userSelected}) : super(key: key);
+  const ManagementClientPage({Key? key, required this.userSelected, required this.currentUserId}) : super(key: key);
 
   @override
   _ManagementClientPageState createState() => _ManagementClientPageState();
@@ -22,13 +23,17 @@ class ManagementClientPage extends StatefulWidget {
 
 class _ManagementClientPageState extends State<ManagementClientPage> {
   late Users user;
+  String? visitId;
 
   @override
   void initState() {
     super.initState();
     user = widget.userSelected;
     _loadAddresses();
+    _fetchLastAppointmentBetweenProAndCustomer();
+    _fetchNoteBetweenProAndCustomer();
   }
+
 
   Future<void> _loadAddresses() async {
     try {
@@ -41,6 +46,12 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
         setState(() {
           user = user.copyWith(addresses: addresses);
         });
+      } else if (response.statusCode == 404) {
+        // Pas d'adresse pour cet utilisateur
+        setState(() {
+          user = user.copyWith(addresses: []);
+        });
+        print("Aucune adresse trouvée pour cet utilisateur.");
       } else {
         print('Erreur API : statut ${response.statusCode}');
       }
@@ -48,6 +59,90 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
       print('Erreur lors du chargement des adresses : $e');
     }
   }
+
+
+
+
+  void _updateUserAddresses(List<Address> updatedAddresses) {
+    setState(() {
+      user = user.copyWith(addresses: updatedAddresses);
+    });
+  }
+
+  Future<void> _fetchLastAppointmentBetweenProAndCustomer() async {
+    try {
+      final response = await http.get(Uri.parse(
+          "${Constants.apiBaseUrl}/lastVisit/pro/${widget.currentUserId}/customer/${widget.userSelected.id}"));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data == null || data.isEmpty || data['id'] == null) {
+          setState(() {
+          user = user.copyWith(
+            lastVisitDate: null,
+            nextVisitDate: null,
+          );
+        });
+      } else {
+          final lastVisit = data['last_visit_date'] != null
+              ? DateTime.parse(data['last_visit_date'])
+              : null;
+
+          final nextVisit = data['next_visit_date'] != null
+              ? DateTime.parse(data['next_visit_date'])
+              : null;
+
+          setState(() {
+            user = user.copyWith(
+              lastVisitDate: lastVisit,
+              nextVisitDate: nextVisit,
+            );
+          });
+        }
+      } else {
+        print("Erreur fetch rendez-vous ici: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Erreur lors du fetch du dernier rendez-vous: $e");
+    }
+  }
+
+  Future<void> _fetchNoteBetweenProAndCustomer() async {
+    try {
+      final response = await http.get(Uri.parse(
+          "${Constants.apiBaseUrl}/note/by-user/${user.id}/${widget.currentUserId}"));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data == null || data.isEmpty || data['id'] == null) {
+          setState(() {
+          user = user.copyWith(
+            notes: null,
+          );
+          visitId = null;
+        });
+      } else {
+
+          final notes = data['notes'] as String?;
+          final id = data['id'] as String?;
+
+          setState(() {
+            user = user.copyWith(
+              notes: notes,
+            );
+            visitId = id;
+          });
+        }
+      } else {
+        print("Erreur fetch rendez-vous: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Erreur lors du fetch du dernier rendez-vous: $e");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,38 +165,39 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // ClientCardWidget(
-                //   user: user,
-                //   onClientUpdated: (updatedClient) {
-                //     setState(() {
-                //       user = updatedClient;
-                //     });
-                //   },
-                //   openWithCreateClientPage: false,
-                //   openWithCreateHorsePage: false,
-                // ),
+                ClientCardWidget(
+                  user: user,
+                  onUserUpdated: (updatedUser) {
+                    setState(() {
+                      user = updatedUser;
+                    });
+                  },
+                  openWithCreateClientPage: false,
+                  openWithCreateHorsePage: false,
+                ),
                 const SizedBox(height: 2),
-                if (user.addresses != null && user.addresses!.isNotEmpty)
-                  ...user.addresses!.map((address) => AddressCardWidget(
-                        addresses: [address.adresse],
-                        location: Location(
-                          latitude: address.latitude ?? 0.0,
-                          longitude: address.longitude ?? 0.0,
-                        ),
-                        openWithCreateClientPage: false,
-                      )),
+                AddressCardWidget(
+                  addresses: user.addresses ?? [],
+                  openWithCreateClientPage: false,
+                  onAdresseChanged: _updateUserAddresses,
+                ),
+
                 const SizedBox(height: 2),
-                // ListbottumClientcardwidget(
-                //   lastAppointmentDate: user.derniereVisite ?? DateTime.now(),
-                //   nextAppointmentDate: user.prochaineIntervention ?? DateTime.now(),
-                //   idUser: user.id,
-                // ),
-                // const SizedBox(height: 2),
-                // NotesCardWidget(
-                //   initialNotes: user.notes ?? "",
-                //   openWithCreateHorsePage: false,
-                //   openWithCreateClientPage: false,
-                // ),
+                ListbottumClientcardwidget(
+                  lastAppointmentDate: user.lastVisitDate ?? null,
+                  nextAppointmentDate: user.nextVisitDate ?? null,
+                  idUserPro: widget.currentUserId,
+                  idUserCustomer: widget.userSelected.id,
+                ),
+                const SizedBox(height: 2),
+                NotesCardWidget(
+                  initialNotes: user.notes ?? "",
+                  openWithCreateHorsePage: false,
+                  openWithCreateClientPage: false,
+                  visitId: visitId,
+                  proID : widget.currentUserId,
+                  customId : widget.userSelected.id,
+                ),
               ],
             ),
           ),

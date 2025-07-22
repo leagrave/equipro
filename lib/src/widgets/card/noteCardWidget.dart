@@ -1,17 +1,25 @@
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class NotesCardWidget extends StatefulWidget {
+  final String? visitId;
   final String initialNotes;
   final Function(String)? onNotesChanged;
   final bool openWithCreateHorsePage;
   final bool openWithCreateClientPage;
+  final String proID;
+  final String? customId;
 
   const NotesCardWidget({
     Key? key,
+    this.visitId,
     required this.initialNotes,
     required this.openWithCreateHorsePage,
     required this.openWithCreateClientPage,
+    required this.proID,
+    this.customId,
     this.onNotesChanged,
   }) : super(key: key);
 
@@ -30,10 +38,8 @@ class _NotesCardWidgetState extends State<NotesCardWidget> {
     _notesController = TextEditingController(text: widget.initialNotes);
     _originalNotes = widget.initialNotes;
 
-    if (widget.openWithCreateHorsePage == true || widget.openWithCreateClientPage) {
-      setState(() {
-        _isEditing = !_isEditing;
-      });
+    if (widget.openWithCreateHorsePage || widget.openWithCreateClientPage) {
+      _isEditing = true;
     }
   }
 
@@ -44,76 +50,147 @@ class _NotesCardWidgetState extends State<NotesCardWidget> {
   }
 
   @override
+void didUpdateWidget(covariant NotesCardWidget oldWidget) {
+  super.didUpdateWidget(oldWidget);
+  if (oldWidget.initialNotes != widget.initialNotes) {
+    _notesController.text = widget.initialNotes;
+    _originalNotes = widget.initialNotes;
+  }
+}
+
+
+  Future<void> _handleSave() async {
+    final newNotes = _notesController.text.trim();
+
+    if (newNotes == _originalNotes) {
+      setState(() => _isEditing = false);
+      return;
+    }
+
+    if (widget.onNotesChanged != null) {
+      widget.onNotesChanged!(newNotes);
+    }
+
+    if (widget.visitId != null) {
+      await updateNotes(
+        visitId: widget.visitId!,
+        notes: newNotes,
+      );
+    }else {
+       await updateNotes(
+        visitId: null,
+        notes: newNotes,
+      );
+    }
+
+    setState(() {
+      _originalNotes = newNotes;
+      _isEditing = false;
+      if (widget.onNotesChanged != null) {
+      widget.onNotesChanged!(newNotes);
+    }
+    });
+  }
+
+  
+Future<void> updateNotes({
+    required String? visitId,
+    required String notes,
+  }) async {
+    final url = visitId == null
+        ? '${Constants.apiBaseUrl}/note' // création
+        : '${Constants.apiBaseUrl}/note/$visitId'; // mise à jour
+
+    final method = visitId == null ? 'POST' : 'PUT';
+
+    final body = visitId == null
+        ? jsonEncode({
+            'customer_id': widget.customId,
+            'professionals_id': widget.proID,
+            'notes': notes,
+          })
+        : jsonEncode({'notes': notes});
+
+    try {
+      final response = await http.Request(method, Uri.parse(url))
+        ..headers['Content-Type'] = 'application/json'
+        ..body = body;
+
+      final streamedResponse = await response.send();
+      final res = await http.Response.fromStream(streamedResponse);
+
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        print('Notes mises à jour avec succès.');
+        // Optionnel : fetch des données mises à jour
+        //await _fetchLastAppointmentBetweenProAndCustomer();
+      } else {
+        print('Erreur lors de la mise à jour des notes : ${res.statusCode} - ${res.body}');
+      }
+    } catch (e) {
+      print('Erreur réseau lors de la mise à jour des notes : $e');
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Center(
-      child: Card(
-        color: Colors.white.withOpacity(0.8),
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: _notesController,
-                decoration: InputDecoration(
-                  labelText: 'Commentaires',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                onChanged: widget.onNotesChanged,
-                maxLines: 5,
-                keyboardType: TextInputType.multiline,
-                textInputAction: TextInputAction.newline,
-                maxLength: 500,
-                readOnly: !_isEditing,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _notesController,
+              decoration: InputDecoration(
+                labelText: 'Commentaire',
+                labelStyle: const TextStyle(color: Constants.white),
+                fillColor: Constants.white.withOpacity(0.1),
+                filled: true,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                enabledBorder: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                focusedBorder: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
               ),
-              const SizedBox(height: 16),
+              style: const TextStyle(color: Constants.white),
+              cursorColor: Constants.white,
+              maxLines: 5,
+              readOnly: !_isEditing,
+              maxLength: 500,
 
-              if (!widget.openWithCreateHorsePage && !widget.openWithCreateClientPage)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (_isEditing) ...[
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _notesController.text = _originalNotes;
-                            _isEditing = false;
-                          });
-                        },
-                        child: const Text(
-                          'Annuler',
-                          style: TextStyle(color: Constants.appBarBackgroundColor),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                    ],
+              onChanged: (text) {
+                if (widget.onNotesChanged != null) {
+                  widget.onNotesChanged!(text);
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+            if (!widget.openWithCreateHorsePage && !widget.openWithCreateClientPage)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (_isEditing)
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          if (_isEditing) {
-                            if (widget.onNotesChanged != null) {
-                              widget.onNotesChanged!(_notesController.text);
-                            }
-                          }
-                          _isEditing = !_isEditing;
+                          _notesController.text = _originalNotes;
+                          _isEditing = false;
                         });
                       },
-                      child: Text(
-                        _isEditing ? 'Enregistrer' : 'Modifier',
-                         style: const TextStyle(color: Constants.appBarBackgroundColor),
-                      ),
+                      child: const Text('Annuler',style: TextStyle(color: Constants.appBarBackgroundColor)),
                     ),
-                  ],
-                ),
-            ],
-          ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_isEditing) {
+                        await _handleSave();
+                      } else {
+                        setState(() => _isEditing = true);
+                      }
+                    },
+                    child: Text(_isEditing ? 'Enregistrer' : 'Modifier',style: TextStyle(color: Constants.appBarBackgroundColor)),
+                  ),
+                ],
+              ),
+          ],
         ),
       ),
     );

@@ -1,5 +1,8 @@
-import 'adresses.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'adresses.dart';
+import 'horse.dart';
+import 'professionalType.dart';
 class Users {
   final String id;
   final String firstName;
@@ -7,16 +10,24 @@ class Users {
   final String email;
   final bool professional;
 
+  final String? password;
+  final ProfessionalType? typeProfessional;
+
+  final bool? isSociete;
+  final String? societeName;
+
+  final bool? isVerified;
+  final String? siretNumber;
+
   final String? phone;
   final String? phone2;
-  final String? address;
-  final String? postalCode;
-  final String? city;
-  final String? country;
-  final double? longitude;
-  final double? latitude;
+
+  final DateTime? lastVisitDate;
+  final DateTime? nextVisitDate;
+  final String? notes;
 
   final List<Address>? addresses;
+  final List<Horse>? horses;
 
   const Users({
     required this.id,
@@ -24,59 +35,79 @@ class Users {
     required this.lastName,
     required this.email,
     required this.professional,
+    this.password,
+    this.typeProfessional,
+    this.isSociete,
+    this.isVerified,
+    this.siretNumber,
+    this.societeName,
     this.phone,
     this.phone2,
-    this.address,
-    this.postalCode,
-    this.city,
-    this.country,
-    this.longitude,
-    this.latitude,
+    this.lastVisitDate,
+    this.nextVisitDate,
+    this.notes,
     this.addresses,
+    this.horses = const [],
   });
 
   factory Users.fromJson(Map<String, dynamic> json) {
-    final phone = json['professional_phone'] as String? ?? json['customer_phone'] as String?;
-    final phone2 = json['professional_phone2'] as String? ?? json['customer_phone2'] as String?;
-
     return Users(
       id: json['id'].toString(),
       firstName: json['first_name'] ?? '',
       lastName: json['last_name'] ?? '',
       email: json['email'] ?? '',
       professional: json['professional'] ?? false,
-      phone: (phone != null && phone.isNotEmpty) ? phone : null,
-      phone2: (phone2 != null && phone2.isNotEmpty) ? phone2 : null,
-      address: json['adresse'],
-      postalCode: json['postal_code'],
-      city: json['city'],
-      country: json['country'],
-      longitude: json['longitude'] != null ? double.tryParse(json['longitude'].toString()) : null,
-      latitude: json['latitude'] != null ? double.tryParse(json['latitude'].toString()) : null,
+      password: json['password'] ?? '',
+      typeProfessional: json['professional_type_name'] != null
+          ? ProfessionalType(
+              idProfessional: json['professional_type_id'],
+              nameProfessional: json['professional_type_name'],
+            )
+          : null,
+      isSociete: json['is_societe'] ?? false,
+      isVerified: json['is_verified'] ?? false,
+      societeName: json['societe_name'] ?? '',
+      siretNumber: json['siret_number'] ?? '',
+      phone: (json['phone'] as String?)?.isNotEmpty == true ? json['phone'] : null,
+      phone2: (json['phone2'] as String?)?.isNotEmpty == true ? json['phone2'] : null,
+      lastVisitDate: json['last_visit_date'] != null
+          ? DateTime.tryParse(json['last_visit_date'].toString())
+          : null,
+      nextVisitDate: json['next_visit_date'] != null
+          ? DateTime.tryParse(json['next_visit_date'].toString())
+          : null,
+      notes: json['notes'] ?? '',
       addresses: json['addresses'] != null
           ? (json['addresses'] as List)
               .map((addrJson) => Address.fromJson(addrJson))
               .toList()
-          : null,
+          : [],
+      horses: (json['horses'] as List<dynamic>? ?? [])
+          .map((horseJson) => Horse.fromJson(horseJson))
+          .toList(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'first_name': firstName,
-      'last_name': lastName,
+      'firstName': firstName,
+      'lastName': lastName,
       'email': email,
       'professional': professional,
+      'password': password,
+      'typeProfessional': typeProfessional?.toJson(),
+      'isSociete': isSociete,
+      'isVerified': isVerified,
+      'societeName': societeName,
+      'siretNumber': siretNumber,
       'phone': phone,
       'phone2': phone2,
-      'adresse': address,
-      'postal_code': postalCode,
-      'city': city,
-      'country': country,
-      'longitude': longitude,
-      'latitude': latitude,
+      'lastVisitDate': lastVisitDate,
+      'nextVisitDate': nextVisitDate,
+      'notes': notes,
       'addresses': addresses?.map((a) => a.toJson()).toList(),
+      'horses': horses?.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -86,15 +117,19 @@ class Users {
     String? lastName,
     String? email,
     bool? professional,
+    String? password,
+    ProfessionalType? typeProfessional,
+    bool? isSociete,
+    bool? isverified,
+    String? societeName,
+    String? sirenNumber,
     String? phone,
     String? phone2,
-    String? address,
-    String? postalCode,
-    String? city,
-    String? country,
-    double? longitude,
-    double? latitude,
+    DateTime? lastVisitDate,
+    DateTime? nextVisitDate,
+    String? notes,
     List<Address>? addresses,
+    List<Horse>? horses,
   }) {
     return Users(
       id: id ?? this.id,
@@ -102,15 +137,19 @@ class Users {
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
       professional: professional ?? this.professional,
+      password: password ?? this.password,
+      typeProfessional: typeProfessional ?? this.typeProfessional,
+      isSociete: isSociete ?? this.isSociete,
+      isVerified: isVerified ?? this.isVerified,
+      societeName: societeName ?? this.societeName,
+      siretNumber: siretNumber ?? this.siretNumber,
       phone: phone ?? this.phone,
       phone2: phone2 ?? this.phone2,
-      address: address ?? this.address,
-      postalCode: postalCode ?? this.postalCode,
-      city: city ?? this.city,
-      country: country ?? this.country,
-      longitude: longitude ?? this.longitude,
-      latitude: latitude ?? this.latitude,
+      lastVisitDate: lastVisitDate ?? this.lastVisitDate,
+      nextVisitDate: nextVisitDate ?? this.nextVisitDate,
+      notes: notes ?? this.notes,
       addresses: addresses ?? this.addresses,
+      horses: horses ?? this.horses,
     );
   }
 

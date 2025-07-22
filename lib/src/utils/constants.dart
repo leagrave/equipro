@@ -86,6 +86,8 @@ class Constants {
 // CONNEXION BDD
 
 static const String apiBaseUrl = "http://192.168.1.8:3000/api";
+//static const String apiBaseUrl = "http://10.208.74.76:3000/api";
+
 
    // ASSET ICONS
   // static const String addIcon = "assets/icons/add.svg";

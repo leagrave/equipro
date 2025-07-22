@@ -1,10 +1,11 @@
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 
 class UserCard extends StatelessWidget {
   final String profileImageUrl;
-  final String firstName;
-  final String lastName;
+  final String? firstName;
+  final String? lastName;
   final bool isProfessional;
   final bool isVerified;
   final VoidCallback onEditProfile;
@@ -56,6 +57,7 @@ class UserCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
+                        color: Constants.black,
                       ),
                     ),
 
@@ -74,7 +76,7 @@ class UserCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            isVerified ? 'Professionnel' : 'Non Particulier',
+                            isVerified ? 'Particulier' : 'Professionnel',
                             style: TextStyle(
                               fontSize: 12,
                               color: isVerified ? Colors.grey : Colors.grey,

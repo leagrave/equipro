@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -51,7 +52,7 @@ class _AddFileWidgetState extends State<AddFileWidget> {
       });
 
       final response = await Dio().post(
-        'http://192.168.1.8:3000/api/upload', // Mets ici ton URL d'API
+        '${Constants.apiBaseUrl}/upload', 
         data: formData,
         options: Options(
           headers: {

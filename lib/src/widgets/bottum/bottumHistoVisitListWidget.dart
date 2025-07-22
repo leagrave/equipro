@@ -2,7 +2,11 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart'; 
 
-class ButtonFactureListWidget extends StatelessWidget {
+class ButtonHistoVisitListWidget extends StatelessWidget {
+  final String idUser;
+
+  const ButtonHistoVisitListWidget({Key? key, required this.idUser}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -13,22 +17,22 @@ class ButtonFactureListWidget extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6), 
           ),
-          elevation: 3, 
+          elevation: 3,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), 
         ),
         onPressed: () {
-          context.push('/facture');
+          context.push('/listHistoVisit', extra: {'idUser': idUser});
         },
         child: const Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Icon(
-              Icons.receipt,
+              Icons.list,
               color: Constants.gradientStartColor,
               size: 30,
             ),
             Text(
-              "Mes Factures",
+              "Mes interventions",
               style: TextStyle(
                 color: Constants.gradientStartColor,
               ),

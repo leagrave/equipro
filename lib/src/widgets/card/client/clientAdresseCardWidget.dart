@@ -1,27 +1,24 @@
+import 'package:equipro/src/models/adresses.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-// Classe représentant une position géographique avec latitude et longitude
-class Location {
-  final double latitude;
-  final double longitude;
-
-  Location({required this.latitude, required this.longitude});
-}
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class AddressCardWidget extends StatefulWidget {
-  final List<String>? addresses;
-  final Location location;
-  final Function(String)? onAdresseChanged;
+  final List<Address>? addresses;
+  final Function(List<Address>)? onAdresseChanged;
   final bool openWithCreateClientPage;
+  final Function()? onSave;
+  final Function(Map<String, dynamic>)? onChanged;
 
   const AddressCardWidget({
     Key? key,
     required this.addresses,
-    required this.location,
     required this.openWithCreateClientPage,
     this.onAdresseChanged,
+    this.onSave,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -29,152 +26,383 @@ class AddressCardWidget extends StatefulWidget {
 }
 
 class _AddressCardWidgetState extends State<AddressCardWidget> {
-  late List<TextEditingController> _addressControllers;
-  late List<bool> _isEditing;
+  late List<Address> _addresses;
+
+
+  late TextEditingController _idController;
+  late TextEditingController _adresseController;
+  late TextEditingController _postalController;
+  late TextEditingController _cityController;
+  late TextEditingController _countryController;
+  late TextEditingController _typeController;
+
+  late TextEditingController _idFacturationController;
+  late TextEditingController _adresseFacturationController;
+  late TextEditingController _postalFacturationController;
+  late TextEditingController _cityFacturationController;
+  late TextEditingController _countryFacturationController;
+  late TextEditingController _typeFacturationController;
+
+  bool _isEditing = false;
 
   @override
   void initState() {
     super.initState();
 
-    // Initialiser les contrôleurs avec les adresses
-    _addressControllers = widget.addresses?.map((address) {
-      return TextEditingController(text: address);
-    }).toList() ?? [];
+    _addresses = List<Address>.filled(2, Address.empty(), growable: false);
 
-    // Initialiser l'état de l'édition pour chaque adresse (false par défaut)
-    _isEditing = List.generate(widget.addresses?.length ?? 0, (index) => false);
+    final adresses = widget.addresses ?? [];
+    final adressePrincipale = adresses.isNotEmpty ? adresses.first : Address.empty();
+    final adresseFacturation = adresses.length > 1 ? adresses[1] : Address.empty();
 
-    if (widget.openWithCreateClientPage) {
-      setState(() {
-        // Initialisation de l'édition pour afficher les champs vide
-        _isEditing = List.generate(_addressControllers.length + 2, (index) => true);
-        _addressControllers.add(TextEditingController());  
-        _addressControllers.add(TextEditingController());  
-      });
+    // Adresse principale
+    _idController = TextEditingController(text: adressePrincipale.idAddress);
+    _adresseController = TextEditingController(text: adressePrincipale.address);
+    _postalController = TextEditingController(text: adressePrincipale.postalCode);
+    _cityController = TextEditingController(text: adressePrincipale.city);
+    _countryController = TextEditingController(text: adressePrincipale.country);
+    _typeController = TextEditingController(text: adressePrincipale.type);
+
+    // Adresse de facturation
+    _idFacturationController = TextEditingController(text: adresseFacturation.idAddress);
+    _adresseFacturationController = TextEditingController(text: adresseFacturation.address);
+    _postalFacturationController = TextEditingController(text: adresseFacturation.postalCode);
+    _cityFacturationController = TextEditingController(text: adresseFacturation.city);
+    _countryFacturationController = TextEditingController(text: adresseFacturation.country);
+    _typeFacturationController = TextEditingController(text: adresseFacturation.type);
+
+    if (adresses.isEmpty && widget.openWithCreateClientPage) {
+      _isEditing = true;
     }
   }
 
   @override
   void dispose() {
-    // Libérer les contrôleurs lorsque le widget est détruit
-    for (var controller in _addressControllers) {
-      controller.dispose();
+    for (final c in [
+      _idController,_adresseController, _postalController, _cityController, _countryController, _typeController,
+      _idFacturationController,_adresseFacturationController, _postalFacturationController, _cityFacturationController,
+      _countryFacturationController, _typeFacturationController
+    ]) {
+      c.dispose();
     }
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final addresses = widget.addresses ?? [];
+  Future<bool> _validateForm() async {
+    // if (_adresseController.text.trim().isEmpty ||
+    //     _postalController.text.trim().isEmpty ||
+    //     _cityController.text.trim().isEmpty ||
+    //     _countryController.text.trim().isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text("Tous les champs de l'adresse principale doivent être remplis.")),
+    //   );
+    //   return false;
+    // }
 
-    return Center(
-      child: Card(
-        color: Colors.white.withOpacity(0.8),
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Affichage des adresses avec labelText conditionnels
-              for (int i = 0; i < _addressControllers.length; i++) 
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              labelText: i == 0
-                                  ? 'Adresse'
-                                  : i == 1
-                                      ? 'Adresse de facturation'
-                                      : i == 2
-                                          ? 'Autres adresses' 
-                                          : 'Autre adresse', 
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            controller: _addressControllers[i],
-                            onChanged: widget.onAdresseChanged,
-                            readOnly: !_isEditing[i], 
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.place),
-                          onPressed: () {
-                            final googleMapsUrl =
-                                'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(_addressControllers[i].text)}';
-                            launchUrl(Uri.parse(googleMapsUrl));
-                          },
-                          color: const Color.fromARGB(255, 219, 27, 27),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                  ],
-                ),
+    // if (_adresseFacturationController.text.trim().isEmpty ||
+    //     _postalFacturationController.text.trim().isEmpty ||
+    //     _cityFacturationController.text.trim().isEmpty ||
+    //     _countryFacturationController.text.trim().isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text("Tous les champs de l'adresse de facturation doivent être remplis.")),
+    //   );
+    //   return false;
+    // }
 
-              if(!widget.openWithCreateClientPage)
-              // Boutons "Modifier", "Annuler" et "Enregistrer" en dehors de la boucle
-              if (_isEditing.contains(true)) ...[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          // Réinitialiser tous les champs à leur valeur d'origine
-                          for (int i = 0; i < addresses.length; i++) {
-                            _addressControllers[i].text = addresses[i];
-                          }
-                          _isEditing = List.generate(addresses.length, (index) => false); 
-                        });
-                      },
-                      child: const Text('Annuler',style: const TextStyle(color: Constants.appBarBackgroundColor),),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          // Sauvegarder les modifications pour chaque champ
-                          if (widget.onAdresseChanged != null) {
-                            for (int i = 0; i < addresses.length; i++) {
-                              widget.onAdresseChanged!(_addressControllers[i].text);
-                            }
-                          }
-                          _isEditing = List.generate(addresses.length, (index) => false); 
-                        });
-                      },
-                      child: const Text('Enregistrer', style: const TextStyle(color: Constants.appBarBackgroundColor),),
-                    ),
-                  ],
-                ),
-              ] else ...[
-                // Si aucun champ n'est en mode édition, afficher "Modifier"
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _isEditing = List.generate(addresses.length, (index) => true); 
-                        });
-                      },
-                      child: const Text('Modifier', style: TextStyle(color: Constants.appBarBackgroundColor),),
-                    ),
-                  ],
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
+    return true;
+  }
+
+Future<void> _validerEtMettreAJourAdressesUser() async {
+  if (!await _validateForm()) return;
+
+  final addressesToUpdate = [
+    Address(
+      idAddress: _idController.text.trim(),
+      address: _adresseController.text.trim(),
+      postalCode: _postalController.text.trim(),
+      city: _cityController.text.trim(),
+      country: _countryController.text.trim(),
+      type: _typeController.text.trim(),
+    ),
+    Address(
+      idAddress: _idFacturationController.text.trim(),
+      address: _adresseFacturationController.text.trim(),
+      postalCode: _postalFacturationController.text.trim(),
+      city: _cityFacturationController.text.trim(),
+      country: _countryFacturationController.text.trim(),
+      type: _typeFacturationController.text.trim(),
+    )
+    
+  ];
+
+  bool success = true;
+
+  for (final address in addressesToUpdate) {
+    final url = Uri.parse("${Constants.apiBaseUrl}/adresses/${address.idAddress}");
+    final response = await http.put(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'address': address.address,
+        'postalCode': address.postalCode,
+        'city': address.city,
+        'country': address.country,
+        'type': address.type,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      success = false;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erreur lors de la mise à jour de l'adresse ${address.idAddress} : ${response.body}")),
+      );
+    }
+  }
+
+  if (success) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Adresses mises à jour avec succès.")),
     );
   }
+}
+
+
+ void _handleSaveOrCancel({required bool isSave}) {
+  if (isSave) {
+
+    _validerEtMettreAJourAdressesUser();
+    widget.onSave?.call();
+  } else {
+    // Restaure les données initiales à partir de widget.addresses
+    final adresses = widget.addresses ?? [];
+    final adressePrincipale = adresses.isNotEmpty ? adresses.first : Address.empty();
+    final adresseFacturation = adresses.length > 1 ? adresses[1] : Address.empty();
+
+    _idController.text = adressePrincipale.idAddress ?? '';
+    _adresseController.text = adressePrincipale.address;
+    _postalController.text = adressePrincipale.postalCode;
+    _cityController.text = adressePrincipale.city;
+    _countryController.text = adressePrincipale.country;
+
+
+    _idFacturationController.text = adresseFacturation.idAddress ?? '';
+    _adresseFacturationController.text = adresseFacturation.address;
+    _postalFacturationController.text = adresseFacturation.postalCode;
+    _cityFacturationController.text = adresseFacturation.city;
+    _countryFacturationController.text = adresseFacturation.country;
+
+  }
+
+  setState(() {
+    _isEditing = false;
+  });
+}
+
+  void _updateAddress({
+    required int index,
+    String? idAddress,
+    String? address,
+    String? city,
+    String? postalCode,
+    String? country,
+    double? latitude,
+    double? longitude,
+    String? type,
+  }) {
+    setState(() {
+      final updatedAddresses = List<Address>.from(_addresses);
+      final oldAddress = updatedAddresses[index];
+      updatedAddresses[index] = oldAddress.copyWith(
+        idAddress: idAddress ?? oldAddress.idAddress,
+        address: address ?? oldAddress.address,
+        city: city ?? oldAddress.city,
+        postalCode: postalCode ?? oldAddress.postalCode,
+        country: country ?? oldAddress.country,
+        latitude: latitude ?? oldAddress.latitude,
+        longitude: longitude ?? oldAddress.longitude,
+        type: type ?? oldAddress.type,
+      );
+      _addresses = updatedAddresses;
+    });
+
+    widget.onAdresseChanged?.call(_addresses);
+    widget.onSave?.call();
+  }
+
+
+
+  void _cancel() {
+    setState(() {
+      _isEditing = false;
+    });
+  }
+
+Widget buildStyledTextField({
+  required TextEditingController controller,
+  required String label,
+  required IconData icon,
+  ValueChanged<String>? onChanged,
+}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: TextField(
+      controller: controller,
+      readOnly: !_isEditing,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: Colors.white),
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.2),
+        labelStyle: const TextStyle(color: Colors.white70),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      style: const TextStyle(color: Colors.white),
+      onChanged: onChanged,
+    ),
+  );
+}
+
+Widget buildStyledDisplayField({
+  required String value,
+  required String label,
+  required IconData icon,
+  void Function()? onSuffixTap,
+}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: TextField(
+      controller: TextEditingController(text: value),
+      readOnly: true,
+      enabled: false,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: Colors.white),
+        suffixIcon: onSuffixTap != null
+            ? IconButton(
+                icon: const Icon(Icons.place, color: Colors.red),
+                onPressed: onSuffixTap,
+              )
+            : null,
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.2),
+        labelStyle: const TextStyle(color: Colors.white70),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      style: const TextStyle(color: Colors.white),
+    ),
+  );
+}
+
+
+@override
+Widget build(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _isEditing ? _buildFieldsPrincipal() : _buildTextDisplayPrincipal(),
+        const Divider(height: 16),
+        _isEditing ? _buildFieldsFacturation() : _buildTextDisplayFacturation(),
+
+              if(!widget.openWithCreateClientPage)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (_isEditing)
+                    ElevatedButton(
+                      onPressed: () => _handleSaveOrCancel(isSave: false),
+                      child: const Text('Annuler', style: TextStyle(color: Constants.appBarBackgroundColor),),
+                    ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_isEditing) {
+                        _handleSaveOrCancel(isSave: true);
+                      } else {
+                        setState(() {
+                          _isEditing = true;
+                        });
+                      }
+                    },
+                    child: Text(_isEditing ? 'Enregistrer' : 'Modifier',style: TextStyle(color: Constants.appBarBackgroundColor),),
+                  ),
+                ],
+              ),
+      ],
+    ),
+  );
+}
+
+
+  Widget _buildField(TextEditingController controller, String label, IconData icon, {ValueChanged<String>? onChanged}) {
+    return buildStyledTextField(
+      controller: controller,
+      label: label,
+      icon: icon,
+      onChanged: onChanged,
+    );
+  }
+
+
+  Widget _buildFieldsPrincipal() {
+    return Column(
+      children: [
+        _buildField(_adresseController, "Adresse", Icons.home, onChanged: (value) => _updateAddress(index: 0, address: value)),
+        _buildField(_postalController, "Code Postal", Icons.local_post_office, onChanged: (value) => _updateAddress(index: 0,postalCode: value)),
+        _buildField(_cityController, "Ville", Icons.location_city, onChanged: (value) => _updateAddress(index: 0,city: value)),
+        _buildField(_countryController, "Pays", Icons.flag,  onChanged: (value) => _updateAddress(index: 0,country: value)),
+        //_buildField(_typeController, "Type", Icons.info_outline),
+      ],
+    );
+  }
+
+
+  Widget _buildFieldsFacturation() {
+    return Column(
+      children: [
+        _buildField(_adresseFacturationController, "Adresse Facturation", Icons.home_outlined,  onChanged: (value) => _updateAddress(index: 1,address: value)),
+        _buildField(_postalFacturationController, "Code Postal Facturation", Icons.markunread_mailbox,  onChanged: (value) => _updateAddress(index: 1,postalCode: value)),
+        _buildField(_cityFacturationController, "Ville Facturation", Icons.location_city_outlined,  onChanged: (value) => _updateAddress(index: 1,city: value)),
+        _buildField(_countryFacturationController, "Pays Facturation", Icons.flag_outlined,  onChanged: (value) => _updateAddress(index: 1,country: value)),
+       // _buildField(_typeFacturationController, "Type", Icons.info_outline),
+      ],
+    );
+  }
+
+
+  Widget _buildTextDisplayPrincipal() {
+    final address = '${_adresseController.text} ${_postalController.text} ${_cityController.text} ${_countryController.text}';
+    return buildStyledDisplayField(
+      value: address,
+      label: "Adresse principale",
+      icon: Icons.home,
+      onSuffixTap: () {
+        final query = Uri.encodeComponent(address);
+        final url = 'https://www.google.com/maps/search/?api=1&query=$query';
+        launchUrl(Uri.parse(url));
+      },
+    );
+  }
+
+  Widget _buildTextDisplayFacturation() {
+    final address = '${_adresseFacturationController.text} ${_postalFacturationController.text} ${_cityFacturationController.text} ${_countryFacturationController.text}';
+    return buildStyledDisplayField(
+      value: address,
+      label: "Adresse de facturation",
+      icon: Icons.home_outlined,
+      onSuffixTap: () {
+        final query = Uri.encodeComponent(address);
+        final url = 'https://www.google.com/maps/search/?api=1&query=$query';
+        launchUrl(Uri.parse(url));
+      },
+    );
+  }
+
 }

@@ -15,7 +15,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
   int idClient = 0;
   int idHorse = 0;
   bool isSociete = false;
-  String adresseFacturation = '';
+  String addressFacturation = '';
   DateTime dateCreation = DateTime.now();
   DateTime? dateEcheance;
   String etat = 'En cours';
@@ -81,7 +81,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       labelText: 'Adresse de facturation',
                       border: OutlineInputBorder(),
                     ),
-                    onSaved: (value) => adresseFacturation = value ?? '',
+                    onSaved: (value) => addressFacturation = value ?? '',
                     validator: (value) => value == null || value.isEmpty ? 'Champ obligatoire' : null,
                   ),
                   SizedBox(height: 16),
@@ -157,7 +157,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
               montant: montant,
               isSociete: isSociete,
               dateCreation: dateCreation,
-              adresseFacturation: adresseFacturation,
+              addressFacturation: addressFacturation,
               dateEcheance: dateEcheance,
             );
             Navigator.pop(context, newInvoice); 

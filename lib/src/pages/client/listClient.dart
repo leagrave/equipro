@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/user.dart';
+import 'package:equipro/src/models/adresses.dart';
 import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/widgets/list/clientListWidget.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:diacritic/diacritic.dart';
 
 
 class ListClientPage extends StatefulWidget {
@@ -56,27 +58,57 @@ class _ListClientPageState extends State<ListClientPage> {
   }
 
 
-  void filterClients(String query) {
-    setState(() {
-      searchQuery = query;
-      filteredUsers = users.where((user) {
-        final fullName = "${user.lastName} ${user.firstName}".toLowerCase();
-        // final fullTel = "${user.tel}".toLowerCase();
-        // final cityRegion = "${client.ville} ${client.region ?? ''}".toLowerCase();
+void filterClients(String query) {
+  setState(() {
+    final normalizedQuery = removeDiacritics(query.toLowerCase());
 
-        return fullName.contains(query.toLowerCase());
-            // cityRegion.contains(query.toLowerCase()) ||
-            // fullTel.contains(query.toLowerCase());
-      }).toList();
-    });
-  }
+    filteredUsers = users.where((user) {
+      final fullName = removeDiacritics("${user.lastName} ${user.firstName}".toLowerCase());
+      final fullTel = removeDiacritics("${user.phone}".toLowerCase());
+
+      String city = '';
+
+      // Cherche en priorité la ville de l'adresse principale
+      if (user.addresses != null) {
+        Address? mainAddress;
+        Address? billingAddress;
+
+        for (final addr in user.addresses!) {
+          if (addr.type == 'main') {
+            mainAddress = addr;
+            break;
+          } else if (addr.type == 'billing') {
+            billingAddress = addr;
+          }
+        }
+
+        city = removeDiacritics((mainAddress ?? billingAddress)?.city?.toLowerCase() ?? '');
+      }
+
+      final horseMatch = user.horses?.any((horse) =>
+        removeDiacritics(horse.name.toLowerCase()).contains(normalizedQuery)
+      ) ?? false;
+
+      return fullName.contains(normalizedQuery) ||
+          fullTel.contains(normalizedQuery) ||
+          city.contains(normalizedQuery) ||
+          horseMatch;
+    }).toList();
+  });
+}
+
+
+
 
   void navigateToManagementClientPage(Users user) {
-    context.push('/managementClient', extra: user);
+    context.push('/managementClient', extra: {
+            'userSelected': user,
+            'currentUserId': widget.userId,
+          });
   }
 
   void navigateToCreateClientPage() async {
-    final newClient = await context.push('/createClient');
+    final newClient = await context.push('/createClient', extra: widget.userId);
     if (newClient != null && newClient is Users) {
       setState(() {
         users.add(newClient);
@@ -119,7 +151,7 @@ class _ListClientPageState extends State<ListClientPage> {
                         onChanged: filterClients,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.search, color: Color(0xFF28313E)),
-                          hintText: "Rechercher par nom, prénom, tel ou ville",
+                          hintText: "Rechercher par nom, prénom, tel, ville ou cheval",
                           hintStyle: TextStyle(color: Colors.grey[600]),
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.symmetric(vertical: 16),

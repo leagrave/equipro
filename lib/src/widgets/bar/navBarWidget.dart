@@ -25,7 +25,7 @@ class MyWidgetBottomNavBar extends StatefulWidget {
 
 class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
   late int currentPageIndex;
-  String? currentIdClient;
+  String? currentIdUser;
   String? currentToken;
   bool professional = false;
 
@@ -45,13 +45,13 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
     if (userJson != null) {
       final user = jsonDecode(userJson);
       setState(() {
-        currentIdClient = user['id']?.toString();
+        currentIdUser = user['id']?.toString();
         professional = user['professional'] ?? false;
         currentToken = token;
       });
     } else {
       setState(() {
-        currentIdClient = null;
+        currentIdUser = null;
         currentToken = null;
         professional = false;
       });
@@ -64,10 +64,10 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
 
     final List<Widget> _pages = [
       MessagesPage(),
-      MyAgendaPage(userId: currentIdClient),
+      MyAgendaPage(userId: currentIdUser),
       homePage,
       CalendarPage(),
-      InvoicePage(userId: currentIdClient),
+      InvoicePage(userId: currentIdUser),
     ];
 
     return Scaffold(

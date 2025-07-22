@@ -19,7 +19,7 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
       dateCreation: DateTime(2024, 12, 1),
       paye: false,
       montant: 150.0,
-      adresseFacturation: "17 rue du marchand 13110 port de bouc",
+      addressFacturation: "17 rue du marchand 13110 port de bouc",
       isSociete: false,
     ),
     Invoice(
@@ -30,7 +30,7 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
       dateCreation: DateTime(2024, 11, 20),
       paye: true,
       montant: 200.0,
-      adresseFacturation: "17 rue du marchand 13110 port de bouc",
+      addressFacturation: "17 rue du marchand 13110 port de bouc",
       isSociete: false,
     ),
     Invoice(
@@ -41,7 +41,7 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
       dateCreation: DateTime(2024, 12, 5),
       paye: false,
       montant: 120.0,
-      adresseFacturation: "17 rue du marchand 13110 port de bouc",
+      addressFacturation: "17 rue du marchand 13110 port de bouc",
       isSociete: true,
     ),
   ];

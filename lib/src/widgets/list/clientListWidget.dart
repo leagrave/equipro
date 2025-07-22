@@ -5,11 +5,9 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
-import 'package:equipro/src/utils/constants.dart';
-import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:equipro/src/widgets/list/horseListWidget.dart';
-
+import 'package:collection/collection.dart';
 
 class ClientListWidget extends StatelessWidget {
   final String? currentUserId;
@@ -22,6 +20,17 @@ class ClientListWidget extends StatelessWidget {
     required this.filteredUsers,
     required this.onClientTap,
   }) : super(key: key);
+
+
+String getMainOrBillingCity(Users user) {
+  final addresses = user.addresses ?? [];
+
+  final main = addresses.firstWhereOrNull((addr) => addr.type == 'main');
+  if (main?.city != null) return main!.city!;
+
+  final billing = addresses.firstWhereOrNull((addr) => addr.type == 'billing');
+  return billing?.city ?? 'Ville non spécifiée';
+}
 
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
@@ -82,7 +91,7 @@ class ClientListWidget extends StatelessWidget {
                             fontWeight: FontWeight.bold, color: Constants.white),
                       ),
                       subtitle: Text(
-                        user.city ?? 'Ville non spécifiée',
+                        getMainOrBillingCity(user),
                         style: TextStyle(color: Colors.grey[300]),
                       ),
                       trailing: Row(
@@ -108,35 +117,16 @@ class ClientListWidget extends StatelessWidget {
                       onTap: () => onClientTap(user),
                     ),
 
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 44.0, right: 18.0, top: 0.0, bottom: 4.0),
-                      child: FutureBuilder<List<Horse>>(
-                        future: _fetchClientHorses(user.id),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: LinearProgressIndicator(),
-                            );
-                          } else if (snapshot.hasError) {
-                            return const Text(
-                              'Erreur lors du chargement des chevaux',
-                              style: TextStyle(color: Colors.redAccent),
-                            );
-                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                            return const SizedBox(); 
-                          } else {
-                            final clientHorses = snapshot.data!;
-                            return HorseListWidget(
-                              horses: clientHorses,
-                              onHorseTap: (horse) => navigateToManagementHorsePage(context, horse),
-                              isFromListHorsePage: false,
-                            );
-                          }
-                        },
+                    // Liste des chevaux associés 
+                    if ((user.horses ?? []).isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 44.0, right: 18.0, top: 0.0, bottom: 4.0), 
+                        child: HorseListWidget(
+                          horses: user.horses ?? [],
+                          onHorseTap: (horse) => navigateToManagementHorsePage(context, horse),
+                          isFromListHorsePage: false, 
+                        ),
                       ),
-                    ),
                   ],
                 ),
               );

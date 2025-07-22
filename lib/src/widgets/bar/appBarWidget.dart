@@ -11,6 +11,8 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showChat;
   final bool showSearch;
   final bool showSearchEvent;
+  final bool showEdit; 
+  final VoidCallback? onEditPressed; 
 
   const MyWidgetAppBar({
     Key? key,
@@ -22,7 +24,10 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showChat = true,
     this.showSearch = false,
     this.showSearchEvent = false,
+    this.showEdit = false, 
+    this.onEditPressed,
   }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +71,14 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
+        if (showEdit)
+          IconButton(
+            icon: const Icon(Icons.edit, color: Constants.white),
+            onPressed: onEditPressed,
+          ),
         if (showNotifications)
           IconButton(
-            icon: const Icon(Icons.notifications, color: Constants.secondaryYellow),
+            icon: const Icon(Icons.notifications, color: Constants.white),
             onPressed: () {
               context.push('/notifications');
             },

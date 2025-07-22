@@ -19,7 +19,7 @@ class _SearchEventPageState extends State<SearchEventPage> {
       idEvent: 1,
       idClient: 101,
       eventName: "Vérification annuelle",
-      adresseEcurie: "Écurie Saint-Michel",
+      addressEcurie: "Écurie Saint-Michel",
       dateDebut: DateTime(2025, 2, 10),
       dateFin: DateTime(2025, 2, 10),
       heureDebut: DateTime(2025, 2, 10, 9, 0),
@@ -30,7 +30,7 @@ class _SearchEventPageState extends State<SearchEventPage> {
       idEvent: 2,
       idClient: 102,
       eventName: "Consultation spéciale",
-      adresseEcurie: "Écurie du Vent",
+      addressEcurie: "Écurie du Vent",
       dateDebut: DateTime(2025, 3, 15),
       dateFin: DateTime(2025, 3, 15),
       heureDebut: DateTime(2025, 3, 15, 14, 30),
@@ -46,7 +46,7 @@ class _SearchEventPageState extends State<SearchEventPage> {
       _hasSearched = query.isNotEmpty;
       _filteredEvents = _events.where((event) {
         return event.eventName.toLowerCase().contains(query.toLowerCase()) ||
-            event.adresseEcurie.toLowerCase().contains(query.toLowerCase()) ||
+            event.addressEcurie.toLowerCase().contains(query.toLowerCase()) ||
             event.dateDebut.toString().contains(query) ||
             event.dateFin.toString().contains(query) ||
             event.heureDebut.toString().contains(query) ||
@@ -139,7 +139,7 @@ class _SearchEventPageState extends State<SearchEventPage> {
                                   style: const TextStyle(color: Colors.white),
                                 ),
                                 subtitle: Text(
-                                  "${event.adresseEcurie} • ${event.dateDebut.day}/${event.dateDebut.month}/${event.dateDebut.year}",
+                                  "${event.addressEcurie} • ${event.dateDebut.day}/${event.dateDebut.month}/${event.dateDebut.year}",
                                   style: const TextStyle(color: Colors.white70),
                                 ),
                                 leading: const Icon(Icons.event, color: Colors.white),

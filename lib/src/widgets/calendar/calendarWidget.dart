@@ -72,7 +72,7 @@ class CalendarWidget extends StatelessWidget {
                           children: [
                             Text("De $heureDebut à $heureFin"),
                             Text("Client: ${event.idClient}"), 
-                            Text("Adresse: ${event.adresseEcurie}"), 
+                            Text("Adresse: ${event.addressEcurie}"), 
                           ],
                         ),
                       ),

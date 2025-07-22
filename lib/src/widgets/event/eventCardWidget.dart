@@ -41,7 +41,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
     _clientNameController = TextEditingController(text: _event.idClient.toString());
     _horseNameController = TextEditingController(text: _event.idHorse?.toString() ?? '');
     _stableNameController = TextEditingController(text: _event.idEcurie?.toString() ?? '');
-    _addressController = TextEditingController(text: _event.adresseEcurie);
+    _addressController = TextEditingController(text: _event.addressEcurie);
 
     if (widget.openWithCreateEventPage) {
       _isEditing = true;
@@ -70,7 +70,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
         _clientNameController.text = _event.idClient.toString();
         _horseNameController.text = _event.idHorse?.toString() ?? '';
         _stableNameController.text = _event.idEcurie?.toString() ?? '';
-        _addressController.text = _event.adresseEcurie;
+        _addressController.text = _event.addressEcurie;
       }
       _isEditing = false;
     });
@@ -82,7 +82,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
     int? idClient,
     int? idHorse,
     int? idEcurie,
-    String? adresseEcurie,
+    String? addressEcurie,
     DateTime? dateDebut,
     DateTime? dateFin,
     DateTime? heureDebut,
@@ -95,7 +95,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
         eventName: eventName ?? _event.eventName,
         idHorse: idHorse ?? _event.idHorse,
         idEcurie: idEcurie ?? _event.idEcurie,
-        adresseEcurie: adresseEcurie ?? _event.adresseEcurie,
+        addressEcurie: addressEcurie ?? _event.addressEcurie,
         dateDebut: dateDebut ?? _event.dateDebut,
         dateFin: dateFin ?? _event.dateFin,
         heureDebut: heureDebut ?? _event.heureDebut,
@@ -184,7 +184,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                   ),
                 ),
                 readOnly: !_isEditing,
-                onChanged: (value) => _updateEvent(adresseEcurie: value),
+                onChanged: (value) => _updateEvent(addressEcurie: value),
               ),
               const SizedBox(height: 8),
 

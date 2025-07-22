@@ -40,7 +40,7 @@ class _InvoiceCardWidgetState extends State<InvoiceCardWidget> {
         dateEcheance: dueDate ?? _invoice.dateEcheance,
         paye: _invoice.paye,
         isSociete: _invoice.isSociete,
-        adresseFacturation: _invoice.adresseFacturation,
+        addressFacturation: _invoice.addressFacturation,
       );
     });
 

@@ -29,7 +29,7 @@
 //   int idEcurie = 0;
 //   String nameEcurie = "";
 //   int ownerId = 0;
-//   String adresseEcurie = "";
+//   String addressEcurie = "";
 
 //   // Champs pour le client
 //   int idClient = 0;
@@ -38,8 +38,8 @@
 //   String tel = '';
 //   String tel2 = '';
 //   String email = '';
-//   String adressePerso = '';
-//   String adresseEcuries = '';
+//   String addressPerso = '';
+//   String addressEcuries = '';
 //   String ville = '';
 //   String region = '';
 //   DateTime derniereVisite = DateTime.now();
@@ -53,7 +53,7 @@
 //   String? feedingType;
 //   String? activityType;
 //   DateTime? lastAppointmentDate;
-//   String? adresse;
+//   String? address;
 //   String? notes;
 //   int? idEcurieCheval;
 
@@ -106,11 +106,11 @@
 //     // Simuler le chargement des ecruries (à remplacer par une vraie requête)
 //     setState(() {
 //       ecurieList = [
-//         Ecurie(idEcurie: 0, name: "", ownerId: 0, adresse: ""),
-//         Ecurie(idEcurie: 1, name: "Ecruie Triomphe", ownerId: 2, adresse: ""),
-//         Ecurie(idEcurie: 2, name: "Deven", ownerId: 1, adresse: "rue du pavillon"),
-//         Ecurie(idEcurie: 3, name: "Ecurie entressen", ownerId: 3, adresse: "boulevard de la nuée"),
-//         Ecurie(idEcurie: 4, name: "Etoile", ownerId: 4, adresse: ""),
+//         Ecurie(idEcurie: 0, name: "", ownerId: 0, address: ""),
+//         Ecurie(idEcurie: 1, name: "Ecruie Triomphe", ownerId: 2, address: ""),
+//         Ecurie(idEcurie: 2, name: "Deven", ownerId: 1, address: "rue du pavillon"),
+//         Ecurie(idEcurie: 3, name: "Ecurie entressen", ownerId: 3, address: "boulevard de la nuée"),
+//         Ecurie(idEcurie: 4, name: "Etoile", ownerId: 4, address: ""),
 //       ];
 //     });
 //   }
@@ -224,10 +224,10 @@
 //                   idEcurie: idEcurie,
 //                   initialName: nameEcurie,
 //                   ownerId: ownerId,
-//                   adresse: adresseEcurie,
+//                   address: addressEcurie,
 //                   onNameChanged: (value) => setState(() => nameEcurie = value),
 //                   onOwnerIdChanged:(value) => setState(() => ownerId = value),
-//                   onAdresseChanged: (value) => setState(() => adresseEcurie = value),
+//                   onAdresseChanged: (value) => setState(() => addressEcurie = value),
 //                   onSave: _onSaveEcurieCard,
 //                 ),
 
@@ -295,7 +295,7 @@
 //               idEcurie: idEcurie,
 //               name: name,
 //               ownerId: widget.idClient ?? selectedClient?.idClient ?? 0,
-//               adresse: horseAddress,
+//               address: horseAddress,
 //               age: age,
 //               race: race,
 //               lastAppointmentDate: lastAppointmentDate,

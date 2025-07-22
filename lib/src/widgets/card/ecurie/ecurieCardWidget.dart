@@ -6,7 +6,7 @@ class EcurieCardWidget extends StatefulWidget {
   final int idEcurie;
   final String initialName;
   final int ownerId;
-  final String adresse;
+  final String address;
   final Function(String)? onNameChanged;
   final Function(int)? onOwnerIdChanged;
   final Function(String)? onAdresseChanged;
@@ -17,7 +17,7 @@ class EcurieCardWidget extends StatefulWidget {
     required this.idEcurie,
     required this.initialName,
     required this.ownerId,
-    required this.adresse,
+    required this.address,
     this.onNameChanged,
     this.onOwnerIdChanged,
     this.onAdresseChanged,
@@ -39,7 +39,7 @@ class _EcurieCardWidgetState extends State<EcurieCardWidget> {
     super.initState();
     _nameController = TextEditingController(text: widget.initialName);
     _ownerController = TextEditingController(text: widget.ownerId.toString());
-    _adresseController = TextEditingController(text: widget.adresse);
+    _adresseController = TextEditingController(text: widget.address);
   }
 
   @override
@@ -62,7 +62,7 @@ class _EcurieCardWidgetState extends State<EcurieCardWidget> {
     setState(() {
       _nameController.text = widget.initialName;
       _ownerController.text = widget.ownerId.toString();
-      _adresseController.text = widget.adresse;
+      _adresseController.text = widget.address;
       _isEditing = false;
     });
   }

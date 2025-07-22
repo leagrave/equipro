@@ -115,12 +115,13 @@ final GoRouter go = GoRouter(
             return ListClientPage(userId: userId);
           },
         ),
-        // GoRoute(
-        //   path: 'createClient',
-        //   builder: (context, state) {
-        //     return CreateClientPage();
-        //   },
-        // ),
+        GoRoute(
+          path: 'createClient',
+          builder: (context, state) {
+            final userId = state.extra as String;
+            return CreateClientPage(proID: userId);
+          },
+        ),
         GoRoute(
           path: 'searchClient',
           builder: (context, state) {
@@ -135,13 +136,20 @@ final GoRouter go = GoRouter(
         //     return CreateHorsePage(idClient: idClient);
         //   },
         // ),
-         GoRoute(
-           path: 'managementClient',
-           builder: (context, state) {
-             final userSelect= state.extra as Users?;
-             return ManagementClientPage(userSelected: userSelect!);
-           },
-         ),
+        GoRoute(
+          path: 'managementClient',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            final userSelect = extra['userSelected'] as Users;
+            final currentUserId = extra['currentUserId'] as String;
+
+            return ManagementClientPage(
+              userSelected: userSelect,
+              currentUserId: currentUserId,
+            );
+          },
+        ),
+
         // GoRoute(
         //   path: 'listHorse',
         //   builder: (context, state) {
@@ -199,7 +207,9 @@ final GoRouter go = GoRouter(
         GoRoute(
           path: 'profile',
           builder: (context, state) {
-            return EditProfilePage();
+            final extra = state.extra as Map<String, dynamic>;
+            final currentUser = extra['currentUser'] as Users;
+            return EditProfilePage(currentUser: currentUser);
           },
         ),
         GoRoute(
