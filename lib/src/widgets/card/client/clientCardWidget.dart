@@ -57,6 +57,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
     _emailController = TextEditingController(text: _user.email);
     _societeNameController = TextEditingController(text: _user.societeName);
 
+
     // Initialiser la variable temporaire avec la valeur de isSociete
     _tempIsSociete = _user.isSociete;
     _tempIsProfessional = _user.professional;

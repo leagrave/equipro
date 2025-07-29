@@ -32,7 +32,7 @@ class ButtonHistoVisitListWidget extends StatelessWidget {
               size: 30,
             ),
             Text(
-              "Mes interventions",
+              "Interventions",
               style: TextStyle(
                 color: Constants.gradientStartColor,
               ),

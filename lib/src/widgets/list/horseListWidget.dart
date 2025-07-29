@@ -39,36 +39,46 @@ class _HorseListWidgetState extends State<HorseListWidget> {
         _isExpanded ? widget.horses : widget.horses.take(displayLimit).toList();
 
     return Column(
-      children: [
-        if (widget.horses.isEmpty)
-          const Center(
-            child: Text(
-              "Aucun cheval trouvé",
-              style: TextStyle(color: Colors.grey, fontSize: 18),
-            ),
-          )
-        else
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,           
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: displayedHorses.length,
-              itemBuilder: (context, index) {
-                final horse = displayedHorses[index];
-                return ListTile(
-                  title: Text(horse.name),
-                  subtitle: Text(horse.lastVisitDate != null
+  crossAxisAlignment: CrossAxisAlignment.stretch,
+  children: [
+    if (widget.horses.isEmpty)
+      const Center(
+        child: Text(
+          "Aucun cheval trouvé",
+          style: TextStyle(color: Colors.grey, fontSize: 18),
+        ),
+      )
+    else
+      Column(
+        children: displayedHorses.map((horse) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0.5),
+                title: Text(horse.name),
+                subtitle: Text(
+                  horse.lastVisitDate != null
                       ? "Dernière visite : ${dateFormatter.format(horse.lastVisitDate!)}"
-                      : "Aucune visite"),
-                  onTap: () => widget.onHorseTap(horse),
-                );
-              },
+                      : "Aucune visite",
+                ),
+                onTap: () => widget.onHorseTap(horse),
+              ),
             ),
-          ),
+          );
+        }).toList(),
+      ),
 
         if (!widget.isFromListHorsePage && widget.horses.length > displayLimit)
           TextButton(

@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equipro/src/models/ecurie.dart';
 
 import 'adresses.dart';
 import 'horse.dart';
 import 'professionalType.dart';
+import 'ecurie.dart';
 class Users {
   final String id;
+  final String? customer_id;
   final String firstName;
   final String lastName;
   final String email;
@@ -28,6 +31,7 @@ class Users {
 
   final List<Address>? addresses;
   final List<Horse>? horses;
+  final List<Ecurie>? ecuries;
 
   const Users({
     required this.id,
@@ -35,6 +39,7 @@ class Users {
     required this.lastName,
     required this.email,
     required this.professional,
+    this.customer_id,
     this.password,
     this.typeProfessional,
     this.isSociete,
@@ -48,11 +53,13 @@ class Users {
     this.notes,
     this.addresses,
     this.horses = const [],
+    this.ecuries = const [],
   });
 
   factory Users.fromJson(Map<String, dynamic> json) {
     return Users(
-      id: json['id'].toString(),
+      id: json['user_id'].toString(),
+      customer_id: json['id'].toString(),
       firstName: json['first_name'] ?? '',
       lastName: json['last_name'] ?? '',
       email: json['email'] ?? '',
@@ -85,12 +92,16 @@ class Users {
       horses: (json['horses'] as List<dynamic>? ?? [])
           .map((horseJson) => Horse.fromJson(horseJson))
           .toList(),
+      ecuries: (json['ecuries'] as List<dynamic>? ?? [])
+          .map((ecurieJson) => Ecurie.fromJson(ecurieJson))
+          .toList(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'customer_id': customer_id,
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
@@ -108,11 +119,13 @@ class Users {
       'notes': notes,
       'addresses': addresses?.map((a) => a.toJson()).toList(),
       'horses': horses?.map((e) => e.toJson()).toList(),
+      'ecuries': ecuries?.map((e) => e.toJson()).toList(),
     };
   }
 
   Users copyWith({
     String? id,
+    String? customer_id,
     String? firstName,
     String? lastName,
     String? email,
@@ -130,9 +143,11 @@ class Users {
     String? notes,
     List<Address>? addresses,
     List<Horse>? horses,
+    List<Ecurie>? ecuries,
   }) {
     return Users(
       id: id ?? this.id,
+      customer_id: customer_id ?? this.customer_id,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
@@ -150,6 +165,7 @@ class Users {
       notes: notes ?? this.notes,
       addresses: addresses ?? this.addresses,
       horses: horses ?? this.horses,
+      ecuries: ecuries ?? this.ecuries,
     );
   }
 

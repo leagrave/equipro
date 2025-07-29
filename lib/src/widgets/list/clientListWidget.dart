@@ -18,7 +18,7 @@ class ClientListWidget extends StatelessWidget {
     Key? key,
     required this.currentUserId,
     required this.filteredUsers,
-    required this.onClientTap,
+    required this.onClientTap
   }) : super(key: key);
 
 
@@ -41,9 +41,14 @@ String getMainOrBillingCity(Users user) {
     }
   }
 
-  void navigateToManagementHorsePage(BuildContext context, Horse horse) {
-    context.push('/managementHorse', extra: horse);
+
+    void navigateToManagementHorsePage(BuildContext context, String horseId) async {
+    context.push('/managementHorse', extra: {
+      'horseId': horseId,
+      'proID': currentUserId,
+    });
   }
+
 
   Future<List<Horse>> _fetchClientHorses(String userId) async {
     try {
@@ -123,7 +128,7 @@ String getMainOrBillingCity(Users user) {
                         padding: const EdgeInsets.only(left: 44.0, right: 18.0, top: 0.0, bottom: 4.0), 
                         child: HorseListWidget(
                           horses: user.horses ?? [],
-                          onHorseTap: (horse) => navigateToManagementHorsePage(context, horse),
+                          onHorseTap: (horse) => navigateToManagementHorsePage(context, horse.id),
                           isFromListHorsePage: false, 
                         ),
                       ),

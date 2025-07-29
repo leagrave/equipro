@@ -8,9 +8,11 @@ class NotesCardWidget extends StatefulWidget {
   final String initialNotes;
   final Function(String)? onNotesChanged;
   final bool openWithCreateHorsePage;
+  final bool openWithManagementHorsePage;
   final bool openWithCreateClientPage;
   final String proID;
   final String? customId;
+  final String? horseId;
 
   const NotesCardWidget({
     Key? key,
@@ -18,9 +20,11 @@ class NotesCardWidget extends StatefulWidget {
     required this.initialNotes,
     required this.openWithCreateHorsePage,
     required this.openWithCreateClientPage,
+    required this.openWithManagementHorsePage,
     required this.proID,
     this.customId,
     this.onNotesChanged,
+    this.horseId,
   }) : super(key: key);
 
   @override
@@ -35,8 +39,8 @@ class _NotesCardWidgetState extends State<NotesCardWidget> {
   @override
   void initState() {
     super.initState();
+        _originalNotes = widget.initialNotes;
     _notesController = TextEditingController(text: widget.initialNotes);
-    _originalNotes = widget.initialNotes;
 
     if (widget.openWithCreateHorsePage || widget.openWithCreateClientPage) {
       _isEditing = true;
@@ -49,14 +53,16 @@ class _NotesCardWidgetState extends State<NotesCardWidget> {
     super.dispose();
   }
 
-  @override
+@override
 void didUpdateWidget(covariant NotesCardWidget oldWidget) {
   super.didUpdateWidget(oldWidget);
-  if (oldWidget.initialNotes != widget.initialNotes) {
+  // On met à jour seulement si le contenu est différent ET qu'on n'est pas en train d’éditer
+  if (!_isEditing && oldWidget.initialNotes != widget.initialNotes) {
     _notesController.text = widget.initialNotes;
     _originalNotes = widget.initialNotes;
   }
 }
+
 
 
   Future<void> _handleSave() async {
@@ -71,18 +77,15 @@ void didUpdateWidget(covariant NotesCardWidget oldWidget) {
       widget.onNotesChanged!(newNotes);
     }
 
-    if (widget.visitId != null) {
-      await updateNotes(
-        visitId: widget.visitId!,
-        notes: newNotes,
-      );
-    }else {
-       await updateNotes(
-        visitId: null,
-        notes: newNotes,
-      );
+    if (widget.openWithManagementHorsePage) {
+      await updateNotesHorse(notes: newNotes);
+    } else {
+      if (widget.visitId != null) {
+        await updateNotes(visitId: widget.visitId!, notes: newNotes);
+      } else {
+        await updateNotes(visitId: null, notes: newNotes);
+      }
     }
-
     setState(() {
       _originalNotes = newNotes;
       _isEditing = false;
@@ -91,6 +94,30 @@ void didUpdateWidget(covariant NotesCardWidget oldWidget) {
     }
     });
   }
+
+Future<void> updateNotesHorse({
+  required String notes,
+}) async {
+  final url = '${Constants.apiBaseUrl}/horse/${widget.horseId}/notes';
+  try {
+    final response = await http.put(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'notes': notes,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Notes cheval mises à jour avec succès.');
+    } else {
+      print('Erreur lors de la mise à jour des notes cheval : ${response.statusCode} - ${response.body}');
+    }
+  } catch (e) {
+    print('Erreur réseau lors de la mise à jour des notes cheval : $e');
+  }
+}
+
 
   
 Future<void> updateNotes({

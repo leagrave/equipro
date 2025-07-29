@@ -118,24 +118,37 @@ final GoRouter go = GoRouter(
         GoRoute(
           path: 'createClient',
           builder: (context, state) {
-            final userId = state.extra as String;
-            return CreateClientPage(proID: userId);
+            final extra = state.extra as Map<String, dynamic>;
+            final proID = extra['proID'] as String;
+            final openWithCreateHorsePage = extra['openWithCreateHorsePage'] as bool? ?? false;
+            return CreateClientPage(
+              proID: proID,
+              openWithCreateHorsePage: openWithCreateHorsePage,
+            );
           },
         ),
+
         GoRoute(
           path: 'searchClient',
           builder: (context, state) {
             return SearchClientPage();
           },
         ),
-        // GoRoute(
-        //   path: 'createHorse',
-        //   builder: (context, state) {
-        //     final arguments = state.extra as Map<String, dynamic>?; 
-        //     final int? idClient = arguments?['idClient'];
-        //     return CreateHorsePage(idClient: idClient);
-        //   },
-        // ),
+        GoRoute(
+          path: 'createHorse',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            final proID = extra['proID'] as String;
+            final userCustomId = extra['userCustomId'] as String?;
+            final userCreate = extra['customer'] as Users?;
+
+            return CreateHorsePage(
+              proID: proID,
+              customer: userCreate,
+              userCustomId: userCustomId,
+            );
+          },
+        ),
         GoRoute(
           path: 'managementClient',
           builder: (context, state) {
@@ -149,22 +162,28 @@ final GoRouter go = GoRouter(
             );
           },
         ),
+        GoRoute(
+          path: 'listHorse',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            final proID = extra['proID'] as String;
+            final userCustomerId = extra['userCustomerID'] as String?;
+            return ListHorsePage(proID: proID, userCustomerID: userCustomerId);
+          },
+        ),
+        GoRoute(
+          path: 'managementHorse',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            final horseID = extra['horseId'] as String; 
+            final proID = extra['proID'] as String;
+            return ManagementHorsePage(
+              horseId: horseID,
+              proID: proID,
+            );
+          },
 
-        // GoRoute(
-        //   path: 'listHorse',
-        //   builder: (context, state) {
-        //     final arguments = state.extra as Map<String, dynamic>?;
-        //     int? idClient = arguments?['idClient'];
-        //     return ListHorsePage(idClient: idClient);
-        //   },
-        // ),
-        // GoRoute(
-        //   path: 'managementHorse',
-        //   builder: (context, state) {
-        //     final horse = state.extra as Horse?;
-        //     return ManagementHorsePage(horse: horse!);
-        //   },
-        // ),
+        ),
         GoRoute(
           path: 'invoice',
           builder: (context, state) {

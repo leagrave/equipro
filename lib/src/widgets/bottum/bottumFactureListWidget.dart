@@ -28,7 +28,7 @@ class ButtonFactureListWidget extends StatelessWidget {
               size: 30,
             ),
             Text(
-              "Mes Factures",
+              "Factures",
               style: TextStyle(
                 color: Constants.gradientStartColor,
               ),

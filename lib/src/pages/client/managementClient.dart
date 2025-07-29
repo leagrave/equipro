@@ -177,8 +177,11 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
                 ),
                 const SizedBox(height: 2),
                 AddressCardWidget(
+                  userSelectedId: widget.userSelected.id,
                   addresses: user.addresses ?? [],
                   openWithCreateClientPage: false,
+                  openWithCreateHorsePage: false,
+                  openWithManagementHorsePage: false,
                   onAdresseChanged: _updateUserAddresses,
                 ),
 
@@ -194,6 +197,7 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
                   initialNotes: user.notes ?? "",
                   openWithCreateHorsePage: false,
                   openWithCreateClientPage: false,
+                  openWithManagementHorsePage: false,
                   visitId: visitId,
                   proID : widget.currentUserId,
                   customId : widget.userSelected.id,

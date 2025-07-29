@@ -6,13 +6,15 @@ import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';  
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientAdresseCardWidget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class CreateClientPage extends StatefulWidget {
   final String proID;
+  final bool?  openWithCreateHorsePage;
 
-  const CreateClientPage({Key? key, required this.proID}) : super(key: key);
+  const CreateClientPage({Key? key, required this.proID, this.openWithCreateHorsePage =false}) : super(key: key);
 
   @override
   _CreateClientPageState createState() => _CreateClientPageState();
@@ -80,6 +82,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
 
         final createdUser = jsonDecode(createUserResponse.body);
         userId = createdUser["id"]; 
+        newUser = newUser.copyWith(id: userId);
       } else {
         // L'email existe déjà = erreur
         // inofrmer le user si oui il veut recup les inofs de ce user sinon on annule
@@ -143,6 +146,15 @@ class _CreateClientPageState extends State<CreateClientPage> {
     }
 }
 
+  // void navigateToCreateClientPage(Users user) async {
+  //   context.push('/createHorse', extra: {
+  //     'proID': widget.proID,
+  //     'customer': user,
+  //     'customId': newUser.customer_id
+  //   });
+
+  // }
+
 
 @override
   Widget build(BuildContext context) {
@@ -187,6 +199,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
                   const SizedBox(height: 16),
                   AddressCardWidget(
                     addresses: newUser.addresses ?? [],
+                    userSelectedId: null,
                     onAdresseChanged: (updatedAddresses) {
                       setState(() {
                         newUser = newUser.copyWith(
@@ -195,6 +208,8 @@ class _CreateClientPageState extends State<CreateClientPage> {
                       });
                     },
                     openWithCreateClientPage: true,
+                    openWithCreateHorsePage: false,
+                    openWithManagementHorsePage: false,
                   ),
                   const SizedBox(height: 16),
                   NotesCardWidget(
@@ -205,6 +220,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
                     }),
                     openWithCreateHorsePage: false,
                     openWithCreateClientPage: true,
+                    openWithManagementHorsePage: false,
                     visitId: null,
                     proID: widget.proID,
                     customId: null,
@@ -221,12 +237,45 @@ class _CreateClientPageState extends State<CreateClientPage> {
             _formKey.currentState!.save();
             bool success = await saveClient();
             if (success) {
-              Navigator.pop(context, newUser);
+              if (widget.openWithCreateHorsePage == true) {
+                Navigator.pop(context, newUser.id); 
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Client enregistré'),
+                      content: Text('Souhaitez-vous ajouter un cheval à cette personne ?'),
+                      actions: [
+                        TextButton(
+                          child: Text('Non'),
+                          onPressed: () {
+                            Navigator.pop(context); // Ferme le dialogue
+                            Navigator.pop(context, newUser); // Retour à la page précédente avec le client créé
+                          },
+                        ),
+                        ElevatedButton(
+                          child: Text('Oui'),
+                          onPressed: () {
+                            Navigator.pop(context); // Ferme le dialogue
+                            context.push('/createHorse', extra: {
+                              'proID': widget.proID,
+                              'customer': newUser,
+                              'userCustomId': newUser.id
+                            });
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Erreur lors de la sauvegarde.')),
               );
             }
+
           }
         },
         child: const Icon(Icons.save, color: Constants.white),

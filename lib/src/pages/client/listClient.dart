@@ -108,7 +108,10 @@ void filterClients(String query) {
   }
 
   void navigateToCreateClientPage() async {
-    final newClient = await context.push('/createClient', extra: widget.userId);
+    final newClient = await context.push('/createClient', extra: {
+      'proID': widget.userId ,
+      'openWithCreateHorsePage': false,
+    });
     if (newClient != null && newClient is Users) {
       setState(() {
         users.add(newClient);

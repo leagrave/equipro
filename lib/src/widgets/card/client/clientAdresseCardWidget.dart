@@ -9,13 +9,22 @@ class AddressCardWidget extends StatefulWidget {
   final List<Address>? addresses;
   final Function(List<Address>)? onAdresseChanged;
   final bool openWithCreateClientPage;
+  final bool openWithCreateHorsePage;
+  final bool openWithManagementHorsePage;
   final Function()? onSave;
   final Function(Map<String, dynamic>)? onChanged;
+  final String? userSelectedId;
+  final String? horseSelectedId;
+
 
   const AddressCardWidget({
     Key? key,
     required this.addresses,
+    this.userSelectedId,
+    this.horseSelectedId,
     required this.openWithCreateClientPage,
+    required this.openWithCreateHorsePage,
+    required this.openWithManagementHorsePage,
     this.onAdresseChanged,
     this.onSave,
     this.onChanged,
@@ -43,7 +52,7 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
   late TextEditingController _countryFacturationController;
   late TextEditingController _typeFacturationController;
 
-  bool _isEditing = false;
+  bool _isEditingAdresse = false;
 
   @override
   void initState() {
@@ -52,8 +61,15 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
     _addresses = List<Address>.filled(2, Address.empty(), growable: false);
 
     final adresses = widget.addresses ?? [];
-    final adressePrincipale = adresses.isNotEmpty ? adresses.first : Address.empty();
-    final adresseFacturation = adresses.length > 1 ? adresses[1] : Address.empty();
+    final adressePrincipale = adresses.firstWhere(
+      (a) => a.type == 'main' ,
+      orElse: () => Address.empty(),
+    );
+
+    final adresseFacturation = adresses.firstWhere(
+      (a) => a.type == 'billing',
+      orElse: () => Address.empty(),
+    );
 
     // Adresse principale
     _idController = TextEditingController(text: adressePrincipale.idAddress);
@@ -71,9 +87,17 @@ class _AddressCardWidgetState extends State<AddressCardWidget> {
     _countryFacturationController = TextEditingController(text: adresseFacturation.country);
     _typeFacturationController = TextEditingController(text: adresseFacturation.type);
 
-    if (adresses.isEmpty && widget.openWithCreateClientPage) {
-      _isEditing = true;
-    }
+  // Détermine le mode édition selon les conditions
+  // if (widget.openWithManagementHorsePage) {
+  //   _isEditingAdresse = false;
+  // } else 
+  if (widget.openWithCreateClientPage || widget.openWithCreateHorsePage) {
+    _isEditingAdresse = true;
+  } else {
+    _isEditingAdresse = false;
+  }
+
+
   }
 
   @override
@@ -132,45 +156,165 @@ Future<void> _validerEtMettreAJourAdressesUser() async {
       country: _countryFacturationController.text.trim(),
       type: _typeFacturationController.text.trim(),
     )
-    
   ];
 
   bool success = true;
 
   for (final address in addressesToUpdate) {
-    final url = Uri.parse("${Constants.apiBaseUrl}/adresses/${address.idAddress}");
-    final response = await http.put(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'address': address.address,
-        'postalCode': address.postalCode,
-        'city': address.city,
-        'country': address.country,
-        'type': address.type,
-      }),
-    );
 
-    if (response.statusCode != 200) {
+        // Vérifie que l'adresse a les champs requis
+    final hasMinimumFields = 
+        address.address.trim().isNotEmpty &&
+        address.city.trim().isNotEmpty &&
+        address.postalCode.trim().isNotEmpty;
+
+    // Si l'adresse est vide ou incomplète, on skip
+    if (!hasMinimumFields) {
+      debugPrint("Adresse de type ${address.type} ignorée car incomplète.");
+      continue;
+    }
+
+    final isNew = address.idAddress == '' || address.idAddress.trim().isEmpty;
+
+    final url = isNew
+        ? Uri.parse("${Constants.apiBaseUrl}/adresses")
+        : Uri.parse("${Constants.apiBaseUrl}/adresses/${address.idAddress}");
+
+    final method = isNew ? 'POST' : 'PUT';
+
+    final body = {
+      'address': address.address,
+      'postal_code': address.postalCode,
+      'city': address.city,
+      'country': address.country,
+      'latitude': null,
+      'longitude': null,
+      'type': address.type,
+      'user_id': widget.userSelectedId, 
+      'horse_id': null, 
+    };
+
+    try {
+      final request = http.Request(method, url)
+        ..headers['Content-Type'] = 'application/json'
+        ..body = jsonEncode(body);
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        success = false;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  "Erreur lors de la ${isNew ? 'création' : 'mise à jour'} de l'adresse : ${response.body}")),
+        );
+      }
+    } catch (e) {
       success = false;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erreur lors de la mise à jour de l'adresse ${address.idAddress} : ${response.body}")),
+        SnackBar(content: Text("Erreur réseau : $e")),
       );
     }
   }
 
   if (success) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Adresses mises à jour avec succès.")),
+      const SnackBar(content: Text("Adresses enregistrées avec succès.")),
+    );
+  }
+}
+
+Future<void> _validerEtMettreAJourAdressesHorse() async {
+  if (!await _validateForm()) return;
+
+  final addressesToUpdate = [
+    Address(
+      idAddress: _idController.text.trim(),
+      address: _adresseController.text.trim(),
+      postalCode: _postalController.text.trim(),
+      city: _cityController.text.trim(),
+      country: _countryController.text.trim(),
+      type: _typeController.text.trim(),
+    ),
+  ];
+
+  bool success = true;
+
+  for (final address in addressesToUpdate) {
+
+        // Vérifie que l'adresse a les champs requis
+    final hasMinimumFields = 
+        address.address.trim().isNotEmpty &&
+        address.city.trim().isNotEmpty &&
+        address.postalCode.trim().isNotEmpty;
+
+    // Si l'adresse est vide ou incomplète, on skip
+    if (!hasMinimumFields) {
+      debugPrint("Adresse de type ${address.type} ignorée car incomplète.");
+      continue;
+    }
+
+    final isNew = address.idAddress == '' || address.idAddress.trim().isEmpty;
+
+    final url = isNew
+        ? Uri.parse("${Constants.apiBaseUrl}/adresses")
+        : Uri.parse("${Constants.apiBaseUrl}/adresses/${address.idAddress}");
+
+    final method = isNew ? 'POST' : 'PUT';
+
+    final body = {
+      'address': address.address,
+      'postal_code': address.postalCode,
+      'city': address.city,
+      'country': address.country,
+      'latitude': null,
+      'longitude': null,
+      'type': address.type,
+      'user_id': null, 
+      'horse_id': widget.horseSelectedId,  
+    };
+
+    try {
+      final request = http.Request(method, url)
+        ..headers['Content-Type'] = 'application/json'
+        ..body = jsonEncode(body);
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        success = false;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  "Erreur lors de la ${isNew ? 'création' : 'mise à jour'} de l'adresse : ${response.body}")),
+        );
+      }
+    } catch (e) {
+      success = false;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erreur réseau : $e")),
+      );
+    }
+  }
+
+  if (success) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Adresses enregistrées avec succès.")),
     );
   }
 }
 
 
+
+
  void _handleSaveOrCancel({required bool isSave}) {
   if (isSave) {
-
-    _validerEtMettreAJourAdressesUser();
+    if(!(widget.openWithManagementHorsePage || widget.openWithCreateHorsePage))
+      _validerEtMettreAJourAdressesHorse();
+      // if((widget.openWithManagementHorsePage || widget.openWithCreateHorsePage))
+      // _validerEtMettreAJourAdressesUser();
     widget.onSave?.call();
   } else {
     // Restaure les données initiales à partir de widget.addresses
@@ -194,7 +338,7 @@ Future<void> _validerEtMettreAJourAdressesUser() async {
   }
 
   setState(() {
-    _isEditing = false;
+    _isEditingAdresse = false;
   });
 }
 
@@ -230,13 +374,6 @@ Future<void> _validerEtMettreAJourAdressesUser() async {
   }
 
 
-
-  void _cancel() {
-    setState(() {
-      _isEditing = false;
-    });
-  }
-
 Widget buildStyledTextField({
   required TextEditingController controller,
   required String label,
@@ -247,7 +384,7 @@ Widget buildStyledTextField({
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: TextField(
       controller: controller,
-      readOnly: !_isEditing,
+      readOnly: !_isEditingAdresse,
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(icon, color: Colors.white),
@@ -273,6 +410,7 @@ Widget buildStyledDisplayField({
 }) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
+    
     child: TextField(
       controller: TextEditingController(text: value),
       readOnly: true,
@@ -302,20 +440,24 @@ Widget buildStyledDisplayField({
 
 @override
 Widget build(BuildContext context) {
+  debugPrint("build triggered, _isEditingAdresse: $_isEditingAdresse");
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _isEditing ? _buildFieldsPrincipal() : _buildTextDisplayPrincipal(),
+        _isEditingAdresse ? _buildFieldsPrincipal() : _buildTextDisplayPrincipal(),
         const Divider(height: 16),
-        _isEditing ? _buildFieldsFacturation() : _buildTextDisplayFacturation(),
 
-              if(!widget.openWithCreateClientPage)
+        if (!(widget.openWithCreateHorsePage || widget.openWithManagementHorsePage))
+          _isEditingAdresse ? _buildFieldsFacturation() : _buildTextDisplayFacturation(),
+
+
+            if(!(widget.openWithCreateClientPage || widget.openWithCreateHorsePage))
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  if (_isEditing)
+                  if (_isEditingAdresse)
                     ElevatedButton(
                       onPressed: () => _handleSaveOrCancel(isSave: false),
                       child: const Text('Annuler', style: TextStyle(color: Constants.appBarBackgroundColor),),
@@ -323,15 +465,15 @@ Widget build(BuildContext context) {
                   const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
-                      if (_isEditing) {
+                      if (_isEditingAdresse) {
                         _handleSaveOrCancel(isSave: true);
                       } else {
                         setState(() {
-                          _isEditing = true;
+                          _isEditingAdresse = true;
                         });
                       }
                     },
-                    child: Text(_isEditing ? 'Enregistrer' : 'Modifier',style: TextStyle(color: Constants.appBarBackgroundColor),),
+                    child: Text(_isEditingAdresse ? 'Enregistrer' : 'Modifier',style: TextStyle(color: Constants.appBarBackgroundColor),),
                   ),
                 ],
               ),
@@ -358,7 +500,7 @@ Widget build(BuildContext context) {
         _buildField(_postalController, "Code Postal", Icons.local_post_office, onChanged: (value) => _updateAddress(index: 0,postalCode: value)),
         _buildField(_cityController, "Ville", Icons.location_city, onChanged: (value) => _updateAddress(index: 0,city: value)),
         _buildField(_countryController, "Pays", Icons.flag,  onChanged: (value) => _updateAddress(index: 0,country: value)),
-        //_buildField(_typeController, "Type", Icons.info_outline),
+        _buildField(_typeController, "Type", Icons.info_outline, onChanged: (value) => _updateAddress(index: 0,type: value)),
       ],
     );
   }
@@ -370,8 +512,8 @@ Widget build(BuildContext context) {
         _buildField(_adresseFacturationController, "Adresse Facturation", Icons.home_outlined,  onChanged: (value) => _updateAddress(index: 1,address: value)),
         _buildField(_postalFacturationController, "Code Postal Facturation", Icons.markunread_mailbox,  onChanged: (value) => _updateAddress(index: 1,postalCode: value)),
         _buildField(_cityFacturationController, "Ville Facturation", Icons.location_city_outlined,  onChanged: (value) => _updateAddress(index: 1,city: value)),
-        _buildField(_countryFacturationController, "Pays Facturation", Icons.flag_outlined,  onChanged: (value) => _updateAddress(index: 1,country: value)),
-       // _buildField(_typeFacturationController, "Type", Icons.info_outline),
+        _buildField(_countryFacturationController, "Pays Facturation", Icons.flag_outlined, onChanged: (value) => _updateAddress(index: 1,country: value)),
+        _buildField(_typeFacturationController, "Type", Icons.info_outline, onChanged: (value) => _updateAddress(index: 1,type: value)),
       ],
     );
   }
@@ -381,7 +523,7 @@ Widget build(BuildContext context) {
     final address = '${_adresseController.text} ${_postalController.text} ${_cityController.text} ${_countryController.text}';
     return buildStyledDisplayField(
       value: address,
-      label: "Adresse principale",
+      label: "Adresse",
       icon: Icons.home,
       onSuffixTap: () {
         final query = Uri.encodeComponent(address);

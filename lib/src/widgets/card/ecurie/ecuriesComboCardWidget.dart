@@ -7,12 +7,14 @@ class EcuriesComboCardWidget extends StatefulWidget {
   final Ecurie? selectedEcurie;
   final Function(Ecurie?) onEcurieChanged;
   final Function onAddEcuriePressed;  
+  final bool? isEditing ;
 
   const EcuriesComboCardWidget({
     required this.ecurieList,
     required this.selectedEcurie,
     required this.onEcurieChanged,
     required this.onAddEcuriePressed, 
+    required this.isEditing ,
     Key? key,
   }) : super(key: key);
 
@@ -27,13 +29,7 @@ class _EcuriesComboCardWidgetState extends State<EcuriesComboCardWidget> {
     return Center(
       child: Container(
         width: double.infinity, 
-        child: Card(
-          color: Colors.white.withOpacity(0.8),
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
+        child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,39 +39,64 @@ class _EcuriesComboCardWidgetState extends State<EcuriesComboCardWidget> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
-                    color: Constants.dark,
+                    color: Constants.white,
                   ),
                 ),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
-                      child: DropdownButton<Ecurie?>( 
-                        value: widget.selectedEcurie,
-                        hint: Text("Sélectionner une écurie"),
-                        isExpanded: true,
-                        items: widget.ecurieList.map((ecurie) {
-                          return DropdownMenuItem<Ecurie?>(
-                            value: ecurie,
-                            child: Text(ecurie.name),
-                          );
-                        }).toList(),
-                        onChanged: widget.onEcurieChanged,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<Ecurie?>(
+                            value: widget.selectedEcurie,
+                            hint: const Text(
+                              "Sélectionner une écurie",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            isExpanded: true,
+                            dropdownColor: Constants.appBarBackgroundColor,
+                            iconEnabledColor: Colors.white,
+                            style: const TextStyle(color: Colors.white,fontSize: 16),
+                            items: [
+                              // Option "Aucune"
+                              const DropdownMenuItem<Ecurie?>(
+                                value: null,
+                                child: Text("Aucune", style: TextStyle(color: Colors.white)),
+                              ),
+                              // Autres écuries
+                              ...widget.ecurieList.map((ecurie) {
+                                return DropdownMenuItem<Ecurie?>(
+                                  value: ecurie,
+                                  child: Text(ecurie.name, style: const TextStyle(color: Colors.white)),
+                                );
+                              }).toList(),
+                            ],
+                            onChanged: widget.isEditing  == false ? null : widget.onEcurieChanged,
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
+                    if (widget.isEditing  == true)
                     IconButton(
-                      icon: Icon(Icons.add),
+                      icon: const Icon(Icons.add, color: Colors.white),
                       onPressed: () {
                         widget.onAddEcuriePressed();  
                       },
                     ),
                   ],
                 ),
+
               ],
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

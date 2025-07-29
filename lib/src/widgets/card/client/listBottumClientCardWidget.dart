@@ -58,7 +58,7 @@ class ListbottumClientcardwidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ButtonHorseListWidget(idUser: idUserCustomer),
+                  ButtonHorseListWidget(userCustomID: idUserCustomer, proID: idUserPro,),
                   ButtonHistoVisitListWidget(idUser: idUserCustomer),
                   ButtonFactureListWidget(),
                 ],

@@ -33,8 +33,8 @@ class Address {
       country: '',
       latitude: null,
       longitude: null,
-      user_id: '',
-      horse_id: '',
+      user_id: null,
+      horse_id: null,
       type: null,
     );
   }
@@ -44,14 +44,14 @@ class Address {
     return Address(
       idAddress: json['id'] ?? '',
       address: json['address'] ?? '',
-      city: json['city'],
-      postalCode: json['postalCode'],
+      city: json['city'] ?? '',
+      postalCode: json['postal_code'] ?? '',
       country: json['country'] ?? '',
       latitude: json['latitude'] != null ? double.tryParse(json['latitude'].toString()) : null,
       longitude: json['longitude'] != null ? double.tryParse(json['longitude'].toString()) : null,
       user_id: json['user_id'] ?? null,
       horse_id: json['horse_id'] ?? null,
-      type: json['type'] ?? null,
+      type: json['type'] ?? '',
     );
   }
 

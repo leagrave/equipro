@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart'; 
 
 class ButtonHorseListWidget extends StatelessWidget {
-  final String idUser;
+  final String proID;
+  final String? userCustomID;
 
-  const ButtonHorseListWidget({Key? key, required this.idUser}) : super(key: key);
+  const ButtonHorseListWidget({Key? key, required this.proID, this.userCustomID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class ButtonHorseListWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), 
         ),
         onPressed: () {
-          context.push('/listHorse', extra: {'idUser': idUser});
+          context.push('/listHorse', extra: {'proID': proID, 'userCustomerID': userCustomID});
         },
         child: const Column(
           mainAxisSize: MainAxisSize.min,
@@ -32,7 +33,7 @@ class ButtonHorseListWidget extends StatelessWidget {
               size: 30,
             ),
             Text(
-              "Mes Chevaux",
+              "Chevaux",
               style: TextStyle(
                 color: Constants.gradientStartColor,
               ),
