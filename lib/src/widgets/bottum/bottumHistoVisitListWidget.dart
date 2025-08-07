@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart'; 
 
 class ButtonHistoVisitListWidget extends StatelessWidget {
-  final String idUser;
+  final String? idUser;
+  final String? horseId;
+  final String proID;
 
-  const ButtonHistoVisitListWidget({Key? key, required this.idUser}) : super(key: key);
+  const ButtonHistoVisitListWidget({Key? key, this.idUser, this.horseId, required this.proID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class ButtonHistoVisitListWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), 
         ),
         onPressed: () {
-          context.push('/listHistoVisit', extra: {'idUser': idUser});
+          context.push('/listIntervention', extra: {'userId': idUser, 'horseId': horseId, 'proID':proID});
         },
         child: const Column(
           mainAxisSize: MainAxisSize.min,

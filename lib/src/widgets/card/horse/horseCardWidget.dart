@@ -137,6 +137,8 @@ Future<bool> _validateForm() async {
   final lastVisitDateStr = _lastVisitDateController.text.trim();
   final nextVisitDateStr = _nextVisitDateController.text.trim();
 
+  // gérer que la next visite ne doit pas etre avant la date last 
+
   if (name.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Le nom du cheval doit être rempli")),
@@ -534,7 +536,7 @@ Widget build(BuildContext context) {
               const SizedBox(height: 8),
 
               // RACE
-              SelectedComboCardWidget<HorseBreed>(
+              SelectedMultipleComboCardWidget<HorseBreed>(
                 title: "Races",
                 itemList: _breedItems,
                 selectedItems: _selectedBreeds,
@@ -559,7 +561,7 @@ Widget build(BuildContext context) {
               const SizedBox(height: 8),
 
               // COULEUR
-              SelectedComboCardWidget<HorseColor>(
+              SelectedMultipleComboCardWidget<HorseColor>(
                 title: "Couleur",
                 itemList: _colorItems,
                 selectedItems: _selectedColors,
@@ -587,7 +589,7 @@ Widget build(BuildContext context) {
               const SizedBox(height: 8),
 
               // ALIMENTATION
-              SelectedComboCardWidget<FeedType>(
+              SelectedMultipleComboCardWidget<FeedType>(
                 title: "Type d'alimentation",
                 itemList: _feedItems,
                 selectedItems: _selectedFeedTypes,
@@ -615,7 +617,7 @@ Widget build(BuildContext context) {
               const SizedBox(height: 8),
 
               // ACTIVITÉ
-              SelectedComboCardWidget<ActivityType>(
+              SelectedMultipleComboCardWidget<ActivityType>(
                 title: "Type d'activité",
                 itemList: _activityItems,
                 selectedItems: _selectedActivityTypes,

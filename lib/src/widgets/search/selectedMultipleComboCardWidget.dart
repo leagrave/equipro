@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
-class SelectedComboCardWidget<T> extends StatelessWidget {
+class SelectedMultipleComboCardWidget<T> extends StatelessWidget {
   final String title;
   final List<T> itemList;
   final List<T> selectedItems;
@@ -14,7 +14,7 @@ class SelectedComboCardWidget<T> extends StatelessWidget {
   final VoidCallback onAddPressed;
   final bool? readOnly;
 
-  const SelectedComboCardWidget({
+  const SelectedMultipleComboCardWidget({
     required this.title,
     required this.itemList,
     required this.selectedItems,

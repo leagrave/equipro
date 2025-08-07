@@ -98,6 +98,31 @@ class Users {
     );
   }
 
+   factory Users.empty() {
+    return Users(
+      id: '',
+      customer_id: null,
+      firstName: '',
+      lastName: '',
+      email: '',
+      professional: false,
+      password: null,
+      typeProfessional: null,
+      isSociete: false,
+      isVerified: false,
+      societeName: null,
+      siretNumber: null,
+      phone: null,
+      phone2: null,
+      lastVisitDate: null,
+      nextVisitDate: null,
+      notes: null,
+      addresses: [],
+      horses: [],
+      ecuries: [],
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -170,4 +195,8 @@ class Users {
   }
 
   String get fullName => '$firstName $lastName';
+    @override
+  String toString() {
+    return 'Users(id: $id, name: $firstName $lastName)';
+  }
 }

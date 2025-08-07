@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Constants {
   // UPDATED COLOURS BASED ON NEW PALETTE
@@ -83,10 +84,11 @@ class Constants {
   static const String publish = "Publier";
 
 
-// CONNEXION BDD
-
-static const String apiBaseUrl = "http://192.168.1.8:3000/api";
-//static const String apiBaseUrl = "http://10.208.74.76:3000/api";
+//static String apiBaseUrl = dotenv.env['API_BASE_URL'] ?? "http://localhost:3000/api";
+//static const String apiBaseUrl = "https://equipro-api.onrender.com/api";
+ //String.fromEnvironment('API_BASE_URL');
+static String get apiBaseUrl => dotenv.env['API_BASE_URL'] ?? 'http://localhost:3000/api';
+//"http://10.208.74.76:3000/api";
 
 
    // ASSET ICONS
@@ -117,3 +119,4 @@ static const String apiBaseUrl = "http://192.168.1.8:3000/api";
 
 
 }
+

@@ -7,6 +7,8 @@ import 'package:equipro/src/pages/event/searchEvent.dart';
 import 'package:equipro/src/pages/facture/createFacture.dart';
 import 'package:equipro/src/pages/facture/managementInvoice.dart';
 import 'package:equipro/src/pages/horse/createHorse.dart';
+import 'package:equipro/src/pages/intervention/createIntervention.dart';
+import 'package:equipro/src/pages/intervention/listInterventionHorse.dart';
 import 'package:equipro/src/pages/invoice.dart';
 import 'package:equipro/src/pages/client/searchClient.dart';
 import 'package:equipro/src/pages/profile.dart';
@@ -198,17 +200,37 @@ final GoRouter go = GoRouter(
             return ListClientPage(userId: userId,);
           },
         ),
+        // GoRoute(
+        //   path: 'managementInvoice',
+        //   builder: (context, state) {
+        //     final invoice = state.extra as Invoice?;
+        //     return ManagementInvoicePage(invoice: invoice!);
+        //   },
+        // ),
+        // GoRoute(
+        //   path: 'createInvoice',
+        //   builder: (context, state) {
+        //     return CreateInvoicePage();
+        //   },
+        // ),
         GoRoute(
-          path: 'managementInvoice',
+          path: 'createIntervention',
           builder: (context, state) {
-            final invoice = state.extra as Invoice?;
-            return ManagementInvoicePage(invoice: invoice!);
+            final extra = state.extra as Map<String, dynamic>;
+            final userId = extra['userId'] as String?;
+            final horseId = extra['horseId']as String?;
+            final proID = extra['proID'] as String;
+            return CreateInterventionPage(userId: userId, horseId: horseId, proId: proID,);
           },
         ),
         GoRoute(
-          path: 'createInvoice',
+          path: 'listIntervention',
           builder: (context, state) {
-            return CreateInvoicePage();
+            final extra = state.extra as Map<String, dynamic>;
+            final userId = extra['userId'] as String?;
+            final horseId = extra['horseId']as String?;
+            final proID = extra['proID'] as String;
+            return HorseInterventionListWidget(userId: userId, horseId: horseId, proID: proID,);
           },
         ),
         GoRoute(
