@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/bottum/bottumAddFileWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 
 class UserFilesPage extends StatefulWidget {
   final String userId;
@@ -27,9 +29,10 @@ class _UserFilesPageState extends State<UserFilesPage> {
     fetchUserFiles();
   }
 
-  Future<void> fetchUserFiles() async {
-    final url = Uri.parse('${Constants.apiBaseUrl}/files/user/${widget.userId}');
-    final response = await http.get(url);
+Future<void> fetchUserFiles() async {
+  try {
+
+    final response = await ApiService.getWithAuth('/files/user/${widget.userId}');
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
@@ -41,7 +44,12 @@ class _UserFilesPageState extends State<UserFilesPage> {
       print('Erreur: ${response.body}');
       setState(() => isLoading = false);
     }
+  } catch (e) {
+    print('Erreur lors de la récupération des fichiers: $e');
+    setState(() => isLoading = false);
   }
+}
+
 
 
 

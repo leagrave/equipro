@@ -1,25 +1,17 @@
 
-import 'package:equipro/src/models/ecurie.dart';
 import 'package:equipro/src/models/intervention.dart';
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
-import 'package:equipro/src/widgets/card/client/clientAdresseCardWidget.dart';
-import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientsComboCardWidget.dart';
-import 'package:equipro/src/widgets/card/ecurie/ecurieCardWidget.dart';
-import 'package:equipro/src/widgets/card/ecurie/ecuriesComboCardWidget.dart';
-import 'package:equipro/src/widgets/card/client/clientAdresseCardWidget.dart';
 import 'package:equipro/src/widgets/card/intervention/horsesComboCardWidget.dart';
 import 'package:equipro/src/widgets/card/intervention/interventionCardWidget.dart';
-import 'package:equipro/src/widgets/card/noteCardWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/models/user.dart';
-import 'package:equipro/src/models/adresses.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:equipro/src/widgets/card/horse/horseCardWidget.dart';
-import 'package:equipro/src/models/customer.dart'; 
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateInterventionPage extends StatefulWidget {
   final String? userId;
@@ -39,6 +31,7 @@ class CreateInterventionPage extends StatefulWidget {
 
 class _CreateInterventionPageState extends State<CreateInterventionPage> {
   final _formKey = GlobalKey<FormState>();
+  final storage = const FlutterSecureStorage();
 
   List<Users> usersList = [];
   List<Users> filteredUsers = [];
@@ -50,6 +43,7 @@ class _CreateInterventionPageState extends State<CreateInterventionPage> {
   List<Horse> horseList = [];  
   Horse? selectedHorse; 
   List<Horse> horsesUsersList = [];
+  String? proId;
 
   bool showHorseCard = false; 
 
@@ -61,7 +55,7 @@ class _CreateInterventionPageState extends State<CreateInterventionPage> {
 
 Intervention newIntervention = Intervention(
   id: '', 
-  description: '',
+  description: 'Soin dentaire',
   careObservation: '',
   interventionDate: DateTime.now(),
   createdAt: DateTime.now(),
@@ -81,47 +75,59 @@ Intervention newIntervention = Intervention(
   otherObservations: [],
   invoice: null, 
 );
-  
- Future<bool> saveIntervention() async {
-    try {
-  
-      final response = await http.post(
-        Uri.parse("${Constants.apiBaseUrl}/intervention"),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "description": newIntervention.description,
-          "care_observation": newIntervention.careObservation,
-          "intervention_date": newIntervention.interventionDate,
-          "users": newIntervention.users,
-          "horse_id": newIntervention.horse!.id,
-          "professional_id": widget.proId,
-          "external_notes": newIntervention.externalNotes,
-          "incisive_notes": newIntervention.incisiveNotes,
-          "mucous_notes": newIntervention.mucousNotes,
-          "internal_notes": newIntervention.internalNotes,
-          "other_notes": newIntervention.otherNotes,
-          "external_observations": newIntervention.externalObservations?.map((b) => b.id).toList() ?? [],
-          "incisive_observations": newIntervention.incisiveObservations?.map((b) => b.id).toList() ?? [],
-          "mucous_observations": newIntervention.mucousObservations?.map((b) => b.id).toList() ?? [],
-          "internal_observations": newIntervention.internalObservations?.map((b) => b.id).toList() ?? [],
-          "other_observations": newIntervention.otherObservations?.map((b) => b.id).toList() ?? [],
-        }),
-      );
 
-      if (response.statusCode == 201) {
-        Navigator.pop(context, newIntervention);
-        return true;
-      } else {
-        print("Erreur lors de la création du l'intervention: ${response.body}");
-        return false;
-      }
-    } catch (e) {
-      print("Erreur globale dans saveIntervention: $e");
+  Future<void> _loadProId() async {
+    final storedProId = await storage.read(key: 'pro_id');
+    setState(() {
+      proId = storedProId;
+    });
+  }
+  
+Future<bool> saveIntervention() async {
+  try {
+    final response = await ApiService.postWithAuth(
+      '/intervention',
+      {
+        "description": newIntervention.description,
+        "care_observation": newIntervention.careObservation,
+        "intervention_date": newIntervention.interventionDate?.toIso8601String(),
+        "users": selectedUsers.map((u) => u.id).toList(),
+        "horse_id": selectedHorse!.id,
+        "pro_id": proId,
+        "external_notes": newIntervention.externalNotes,
+        "incisive_notes": newIntervention.incisiveNotes,
+        "mucous_notes": newIntervention.mucousNotes,
+        "internal_notes": newIntervention.internalNotes,
+        "other_notes": newIntervention.otherNotes,
+        "external_observations": newIntervention.externalObservations?.map((b) => b.id).toList() ?? [],
+        "incisive_observations": newIntervention.incisiveObservations?.map((b) => b.id).toList() ?? [],
+        "mucous_observations": newIntervention.mucousObservations?.map((b) => b.id).toList() ?? [],
+        "internal_observations": newIntervention.internalObservations?.map((b) => b.id).toList() ?? [],
+        "other_observations": newIntervention.otherObservations?.map((b) => b.id).toList() ?? [],
+      },
+    );
+
+    if (response.statusCode == 201) {
+      //Navigator.pop(context, newIntervention);
+      
+      final data = jsonDecode(response.body);
+      final newId = data['id']; 
+
+      newIntervention.id = newId;
+
+      return true;
+    } else {
+      print("Erreur lors de la création de l'intervention: ${response.body}");
       return false;
     }
+  } catch (e) {
+    print("Erreur globale dans saveIntervention: $e");
+    return false;
+  }
 }
 
-void _onClientSelected(Users? user) {
+
+void _onClientSelected(Users? user) async {
   if (user == null) return;
 
   final alreadyExists = selectedUsers.any((u) => u.id == user.id);
@@ -131,6 +137,19 @@ void _onClientSelected(Users? user) {
       newIntervention = newIntervention.copyWith(users: selectedUsers);
       showDropdown = false;
     });
+
+    // Récupérer les chevaux pour la nouvelle liste d'utilisateurs sélectionnés
+    final selectedIds = selectedUsers
+        .where((u) => u.id != null)
+        .map((u) => u.id!)
+        .toList();
+
+    final horses = await fetchHorses(selectedIds);
+
+    setState(() {
+      horseList = horses;
+    });
+
   } else {
     setState(() {
       showDropdown = false;
@@ -147,11 +166,25 @@ void _onClientSelected(Users? user) {
 
 
 
-  void _onRemoveUser(Users user) {
-    setState(() {
-      selectedUsers.removeWhere((u) => u.id == user.id);
-    });
-  }
+
+void _onRemoveUser(Users user) async {
+  setState(() {
+    selectedUsers.removeWhere((u) => u.id == user.id);
+  });
+
+  // Relancer le fetch des chevaux après la suppression
+  final selectedIds = selectedUsers
+      .where((u) => u.id != null)
+      .map((u) => u.id!)
+      .toList();
+
+  final horses = await fetchHorses(selectedIds);
+
+  setState(() {
+    horseList = horses;
+  });
+}
+
 
 
   void _onAddClientPressed(String? newClientId) async {
@@ -181,10 +214,11 @@ void _onClientSelected(Users? user) {
 
   Future<List<Users>> fetchClients() async {
     try {
-      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/agendaAll/${widget.proId}"));
+      final response = await ApiService.getWithAuth("/agendaAll/${widget.proId}");
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         final fetchedClients = jsonData.map((data) => Users.fromJson(data)).toList();
+        print(List<Users>.from(fetchedClients));
         return List<Users>.from(fetchedClients);
       } else {
         throw Exception("Échec du chargement des clients");
@@ -196,28 +230,28 @@ void _onClientSelected(Users? user) {
   }
 
 
-  Future<List<Horse>> fetchHorses(List<String> userIds) async {
-    print(userIds);
-    try {
-      final response = await http.post(
-        Uri.parse("${Constants.apiBaseUrl}/horses/users"),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "userIds": userIds,
-        }),
-      );
+Future<List<Horse>> fetchHorses(List<String> userIds) async {
+  //print(userIds);
+  try {
+    final response = await ApiService.postWithAuth(
+      '/horses/users',
+      {
+        "userIds": userIds,
+      },
+    );
 
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        return jsonData.map((data) => Horse.fromJson(data)).toList();
-      } else {
-        throw Exception("Échec du chargement des chevaux");
-      }
-    } catch (e) {
-      print("Erreur lors du fetch des chevaux : $e");
-      return [];
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      return jsonData.map((data) => Horse.fromJson(data)).toList();
+    } else {
+      throw Exception("Échec du chargement des chevaux");
     }
+  } catch (e) {
+    print("Erreur lors du fetch des chevaux : $e");
+    return [];
   }
+}
+
 
 
 Future<void> loadClientsAndHorses() async {
@@ -226,13 +260,14 @@ Future<void> loadClientsAndHorses() async {
       isLoading = true;
     });
 
-    // 1. Charger tous les clients liés au pro
+    // Charger tous les clients liés au pro
     final clients = await fetchClients();
+
     setState(() {
       usersList = clients;
     });
 
-    // 2. Pré-sélectionner un utilisateur si `widget.userId` est fourni
+    //Pré-sélectionner un utilisateur si `widget.userId` est fourni
     if (widget.userId != null) {
       final preselectedUser = clients.firstWhere(
         (user) => user.id == widget.userId,
@@ -241,12 +276,12 @@ Future<void> loadClientsAndHorses() async {
 
       if (preselectedUser.id != null) {
         setState(() {
-          selectedUsers = [preselectedUser]; // sélectionne un seul utilisateur
+          selectedUsers = [preselectedUser]; 
         });
       }
     }
 
-    // 3. Charger les chevaux associés aux utilisateurs sélectionnés
+    // Charger les chevaux associés aux utilisateurs sélectionnés
     if (selectedUsers.isNotEmpty) {
       final selectedIds = selectedUsers
           .where((u) => u.id != null)
@@ -254,7 +289,7 @@ Future<void> loadClientsAndHorses() async {
           .toList();
 
       final horses = await fetchHorses(selectedIds);
-      print("Chevaux chargés pour les utilisateurs sélectionnés : $horses");
+      //print("Chevaux chargés pour les utilisateurs sélectionnés : $horses");
 
       setState(() {
         horseList = horses;
@@ -275,6 +310,7 @@ Future<void> loadClientsAndHorses() async {
   @override
   void initState() {
     super.initState();
+    _loadProId();
     loadClientsAndHorses();
 
     //newHorse = Horse(id: '', name: '');
@@ -286,7 +322,7 @@ Future<void> loadClientsAndHorses() async {
   void _onHorseChanged(Horse? newHorse) async {
     setState(() {
       selectedHorse = newHorse;
-      newHorse = newHorse!.copyWith(
+      newHorse = newHorse?.copyWith(
         id: newHorse?.id,
         name: newHorse?.name,
       );
@@ -389,15 +425,51 @@ Future<void> loadClientsAndHorses() async {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
-            saveIntervention();
+
+            bool success = await saveIntervention();
+            if (success) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Intervention enregistrée'),
+                    content: const Text('Voulez-vous créer une facture ?'),
+                    actions: [
+                      TextButton(
+                        child: const Text('Non'),
+                        onPressed: () {
+                          Navigator.pop(context); 
+                          Navigator.pop(context, newIntervention); 
+                        },
+                      ),
+                      ElevatedButton(
+                        child: const Text('Oui'),
+                        onPressed: () {
+                          Navigator.pop(context); 
+                          context.push('/createInvoice', extra: {
+                            'intervention': newIntervention,
+                            'proID': proId,
+                          });
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Erreur lors de la sauvegarde de l\'intervention.')),
+              );
+            }
           }
         },
         child: const Icon(Icons.save, color: Constants.appBarBackgroundColor),
         backgroundColor: Constants.turquoiseDark,
       ),
+
     );
   }
 }

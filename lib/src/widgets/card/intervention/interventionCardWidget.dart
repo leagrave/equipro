@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:equipro/src/models/intervention.dart';
 import 'package:equipro/src/models/observation.dart';
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/search/selectedMultipleComboCardWidget.dart';
 import 'package:equipro/src/widgets/search/selectedDateField.dart';
@@ -200,43 +201,50 @@ Future<bool> _validateForm() async {
       final data = await fetchInterventionDropdownData();
 
       setState(() {
-        _externalObservationsItems = (data['external_observations'] as List).map((e) {
+        final observationsData = data['data']; 
+
+        _externalObservationsItems = (observationsData['external_observations'] as List).map((e) {
           return Observation(
             id: e['id'].toString(),
             observationName: e['observation_name'],
           );
         }).toList();
 
-        _incisiveObservationsItems = (data['incisive_observations'] as List).map((e) {
+        _incisiveObservationsItems = (observationsData['incisive_observations'] as List).map((e) {
           return Observation(
             id: e['id'].toString(),
             observationName: e['observation_name'],
           );
         }).toList();
 
-        _mucousObservationsItems = (data['mucous_observations'] as List).map((e) {
+        _mucousObservationsItems = (observationsData['mucous_observations'] as List).map((e) {
           return Observation(
             id: e['id'].toString(),
             observationName: e['observation_name'],
           );
         }).toList();
 
-        _internalObservationsItems = (data['internal_observations'] as List).map((e) {
+        _internalObservationsItems = (observationsData['internal_observations'] as List).map((e) {
           return Observation(
             id: e['id'].toString(),
             observationName: e['observation_name'],
           );
         }).toList();
 
-        _otherObservationsItems = (data['other_observations'] as List).map((e) {
-          return Observation(
-            id: e['id'].toString(),
-            observationName: e['observation_name'],
-          );
-        }).toList();
+        // Vérifie que other_observations n'est pas null avant de mapper
+        _otherObservationsItems = observationsData['other_observations'] != null
+          ? (observationsData['other_observations'] as List).map((e) {
+              return Observation(
+                id: e['id'].toString(),
+                observationName: e['observation_name'],
+              );
+            }).toList()
+          : [];
 
         _loadingDropdowns = false;
       });
+
+      print(_internalObservationsItems);
 
     } catch (e) {
       debugPrint("Erreur lors du chargement des données dropdown: $e");
@@ -244,20 +252,20 @@ Future<bool> _validateForm() async {
   }
 
 
-  Future<void> _validerEtMettreAJourIntervention() async {
-    if (!await _validateForm()) return;
+Future<void> _validerEtMettreAJourIntervention() async {
+  if (!await _validateForm()) return;
 
-    final id = _idController.text.trim();
-      if (id.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("L'identifiant de l'intervention est vide.")),
-        );
-        return;
-      }
-    final url = Uri.parse("${Constants.apiBaseUrl}/intervention/$id");
+  final id = _idController.text.trim();
+  if (id.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("L'identifiant de l'intervention est vide.")),
+    );
+    return;
+  }
 
-    // Construis le body JSON avec les champs à mettre à jour
-    final body = jsonEncode({
+  final response = await ApiService.putWithAuth(
+    "/intervention/$id",
+    {
       'users': _userController.text.trim(),
       'horse': _horseController.text.trim(),
       'pro_id': widget.proID,
@@ -269,43 +277,31 @@ Future<bool> _validateForm() async {
       'mucous_notes': _mucousNotesDateController.text.trim(),
       'internal_notes': _internalNotesController.text.trim(),
       'other_notes': _otherNotesDateController.text.trim(),
-      'external_observations': _externalObservationsController,
-      'incisive_observations': _incisiveObservationsController,
-      'mucous_observations': _mucousObservationsController,
-      'internal_observations': _internalObservationsController,
-      'other_observations': _otherObservationsController,
+      'external_observations': _externalObservationsController.text.trim(),
+      'incisive_observations': _incisiveObservationsController.text.trim(),
+      'mucous_observations': _mucousObservationsController.text.trim(),
+      'internal_observations': _internalObservationsController.text.trim(),
+      'other_observations': _otherObservationsController.text.trim(),
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final responseData = jsonDecode(response.body);
+
+    setState(() {
+      _intervention = Intervention.fromJson(responseData);
+      widget.onEditingChanged?.call(false);
     });
 
-  try {
-    final response = await http.put(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: body,
+    widget.onInterventionUpdated?.call(_intervention);
+    widget.onSave?.call();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Profil mis à jour avec succès.")),
     );
-
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-
-      setState(() {
-        _intervention = Intervention.fromJson(responseData);
-        widget.onEditingChanged?.call(false);
-
-      });
-
-      widget.onInterventionUpdated?.call(_intervention);
-      widget.onSave?.call();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Profil mis à jour avec succès.")),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erreur lors de la mise à jour : ${response.body}")),
-      );
-    }
-  } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Erreur réseau : $e")),
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Erreur lors de la mise à jour : ${response.body}")),
     );
   }
 }
@@ -314,9 +310,10 @@ Future<bool> _validateForm() async {
 
 
     Future<Map<String, dynamic>> fetchInterventionDropdownData() async {
-      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/infosIntervention"));
+      final response = await ApiService.getWithAuth("/infosIntervention");
 
       if (response.statusCode == 200) {
+        print(response.body);
         return jsonDecode(response.body);
       } else {
         throw Exception('Erreur lors du chargement des données dropdown');

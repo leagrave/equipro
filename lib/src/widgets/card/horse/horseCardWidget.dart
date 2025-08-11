@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/search/selectedMultipleComboCardWidget.dart';
 import 'package:equipro/src/widgets/search/selectedDateField.dart';
@@ -208,20 +209,20 @@ Future<bool> _validateForm() async {
   }
 
 
-  Future<void> _validerEtMettreAJourCheval() async {
-    if (!await _validateForm()) return;
+Future<void> _validerEtMettreAJourCheval() async {
+  if (!await _validateForm()) return;
 
-    final id = _idController.text.trim();
-      if (id.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("L'identifiant du cheval est vide.")),
-        );
-        return;
-      }
-    final url = Uri.parse("${Constants.apiBaseUrl}/horse/$id");
+  final id = _idController.text.trim();
+  if (id.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("L'identifiant du cheval est vide.")),
+    );
+    return;
+  }
 
-    // Construis le body JSON avec les champs à mettre à jour
-    final body = jsonEncode({
+  final response = await ApiService.putWithAuth(
+    "/horse/$id",
+    {
       'name': _nameController.text.trim(),
       'age': int.tryParse(_ageController.text.trim()) ?? 0,
       'breed_ids': _selectedBreeds.map((e) => e.id).toList(),
@@ -229,44 +230,31 @@ Future<bool> _validateForm() async {
       'feed_type_ids': _selectedFeedTypes.map((e) => e.id).toList(),
       'activity_type_ids': _selectedActivityTypes.map((e) => e.id).toList(),
       'last_visit_date': _lastVisitDateController.text.isNotEmpty
-      ? DateFormat('dd/MM/yyyy').parseStrict(_lastVisitDateController.text).toIso8601String()
-      : null,
+          ? DateFormat('dd/MM/yyyy').parseStrict(_lastVisitDateController.text).toIso8601String()
+          : null,
       'next_visit_date': _nextVisitDateController.text.isNotEmpty
-      ? DateFormat('dd/MM/yyyy').parseStrict(_nextVisitDateController.text).toIso8601String()
-      : null,
+          ? DateFormat('dd/MM/yyyy').parseStrict(_nextVisitDateController.text).toIso8601String()
+          : null,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final responseData = jsonDecode(response.body);
+
+    setState(() {
+      _horse = Horse.fromJson(responseData);
+      widget.onEditingChanged?.call(false);
     });
 
-  try {
-    final response = await http.put(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: body,
+    widget.onHorseUpdated?.call(_horse);
+    widget.onSave?.call();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Profil mis à jour avec succès.")),
     );
-
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-
-      setState(() {
-        _horse = Horse.fromJson(responseData);
-        //widget.isEditing = false;
-        widget.onEditingChanged?.call(false);
-
-      });
-
-      widget.onHorseUpdated?.call(_horse);
-      widget.onSave?.call();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Profil mis à jour avec succès.")),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erreur lors de la mise à jour : ${response.body}")),
-      );
-    }
-  } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Erreur réseau : $e")),
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Erreur lors de la mise à jour : ${response.body}")),
     );
   }
 }
@@ -274,8 +262,9 @@ Future<bool> _validateForm() async {
 
 
 
+
     Future<Map<String, dynamic>> fetchHorseDropdownData() async {
-      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/infosHorse"));
+      final response = await ApiService.getWithAuth("/infosHorse");
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

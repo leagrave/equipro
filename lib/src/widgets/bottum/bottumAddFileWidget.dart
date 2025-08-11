@@ -3,6 +3,8 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 
 class AddFileWidget extends StatefulWidget {
   final String userId;
@@ -19,6 +21,8 @@ class _AddFileWidgetState extends State<AddFileWidget> {
   bool _isUploading = false;
   String? _uploadMessage;
 
+  final _storage = FlutterSecureStorage();
+
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles();
 
@@ -30,60 +34,73 @@ class _AddFileWidgetState extends State<AddFileWidget> {
     }
   }
 
-  Future<void> _uploadFile() async {
-    if (_selectedFile == null) {
+Future<void> _uploadFile() async {
+  if (_selectedFile == null) {
+    setState(() {
+      _uploadMessage = 'Veuillez sélectionner un fichier d\'abord.';
+    });
+    return;
+  }
+
+  setState(() {
+    _isUploading = true;
+    _uploadMessage = null;
+  });
+
+  try {
+    // Récupération du token
+    final token = await _storage.read(key: 'authToken');
+    if (token == null) {
       setState(() {
-        _uploadMessage = 'Veuillez sélectionner un fichier d\'abord.';
+        _uploadMessage = 'Token d\'authentification introuvable.';
+        _isUploading = false;
       });
       return;
     }
 
-    setState(() {
-      _isUploading = true;
-      _uploadMessage = null;
+    String fileName = _selectedFile!.path.split('/').last;
+
+    FormData formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(_selectedFile!.path, filename: fileName),
+      'userId': widget.userId,
     });
 
-    try {
-      String fileName = _selectedFile!.path.split('/').last;
+    final dio = Dio();
 
-      FormData formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(_selectedFile!.path, filename: fileName),
-        'userId': widget.userId,
+    final response = await dio.post(
+      '${Constants.apiBaseUrl}/upload',
+      data: formData,
+      options: Options(
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+
+    if (response.statusCode == 201) {
+      setState(() {
+        _uploadMessage = 'Fichier uploadé avec succès !';
+        _selectedFile = null;
       });
-
-      final response = await Dio().post(
-        '${Constants.apiBaseUrl}/upload', 
-        data: formData,
-        options: Options(
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        ),
-      );
-
-      if (response.statusCode == 201) {
-        setState(() {
-          _uploadMessage = 'Fichier uploadé avec succès !';
-          _selectedFile = null;
-        });
-        if (widget.onUploadSuccess != null) {
-          widget.onUploadSuccess!();
-        }
-      } else {
-        setState(() {
-          _uploadMessage = 'Erreur lors de l\'upload: ${response.statusCode}';
-        });
+      if (widget.onUploadSuccess != null) {
+        widget.onUploadSuccess!();
       }
-    } catch (e) {
+    } else {
       setState(() {
-        _uploadMessage = 'Exception: $e';
-      });
-    } finally {
-      setState(() {
-        _isUploading = false;
+        _uploadMessage = 'Erreur lors de l\'upload: ${response.statusCode}';
       });
     }
+  } catch (e) {
+    setState(() {
+      _uploadMessage = 'Exception: $e';
+    });
+  } finally {
+    setState(() {
+      _isUploading = false;
+    });
   }
+}
 
   @override
   Widget build(BuildContext context) {

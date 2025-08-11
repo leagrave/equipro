@@ -1,4 +1,5 @@
 import 'package:equipro/src/models/adresses.dart';
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -161,26 +162,17 @@ Future<void> _validerEtMettreAJourAdressesUser() async {
   bool success = true;
 
   for (final address in addressesToUpdate) {
-
-        // Vérifie que l'adresse a les champs requis
-    final hasMinimumFields = 
+    final hasMinimumFields =
         address.address.trim().isNotEmpty &&
         address.city.trim().isNotEmpty &&
         address.postalCode.trim().isNotEmpty;
 
-    // Si l'adresse est vide ou incomplète, on skip
     if (!hasMinimumFields) {
       debugPrint("Adresse de type ${address.type} ignorée car incomplète.");
       continue;
     }
 
-    final isNew = address.idAddress == '' || address.idAddress.trim().isEmpty;
-
-    final url = isNew
-        ? Uri.parse("${Constants.apiBaseUrl}/adresses")
-        : Uri.parse("${Constants.apiBaseUrl}/adresses/${address.idAddress}");
-
-    final method = isNew ? 'POST' : 'PUT';
+    final isNew = address.idAddress.isEmpty;
 
     final body = {
       'address': address.address,
@@ -190,24 +182,23 @@ Future<void> _validerEtMettreAJourAdressesUser() async {
       'latitude': null,
       'longitude': null,
       'type': address.type,
-      'user_id': widget.userSelectedId, 
-      'horse_id': null, 
+      'user_id': widget.userSelectedId,
+      'horse_id': null,
     };
 
     try {
-      final request = http.Request(method, url)
-        ..headers['Content-Type'] = 'application/json'
-        ..body = jsonEncode(body);
-
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
+      final response = isNew
+          ? await ApiService.postWithAuth('/adresses', body)
+          : await ApiService.putWithAuth('/adresses/${address.idAddress}', body);
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         success = false;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(
-                  "Erreur lors de la ${isNew ? 'création' : 'mise à jour'} de l'adresse : ${response.body}")),
+            content: Text(
+              "Erreur lors de la ${isNew ? 'création' : 'mise à jour'} de l'adresse : ${response.body}",
+            ),
+          ),
         );
       }
     } catch (e) {
@@ -224,6 +215,7 @@ Future<void> _validerEtMettreAJourAdressesUser() async {
     );
   }
 }
+
 
 Future<void> _validerEtMettreAJourAdressesHorse() async {
   if (!await _validateForm()) return;
@@ -242,26 +234,17 @@ Future<void> _validerEtMettreAJourAdressesHorse() async {
   bool success = true;
 
   for (final address in addressesToUpdate) {
-
-        // Vérifie que l'adresse a les champs requis
-    final hasMinimumFields = 
+    final hasMinimumFields =
         address.address.trim().isNotEmpty &&
         address.city.trim().isNotEmpty &&
         address.postalCode.trim().isNotEmpty;
 
-    // Si l'adresse est vide ou incomplète, on skip
     if (!hasMinimumFields) {
       debugPrint("Adresse de type ${address.type} ignorée car incomplète.");
       continue;
     }
 
-    final isNew = address.idAddress == '' || address.idAddress.trim().isEmpty;
-
-    final url = isNew
-        ? Uri.parse("${Constants.apiBaseUrl}/adresses")
-        : Uri.parse("${Constants.apiBaseUrl}/adresses/${address.idAddress}");
-
-    final method = isNew ? 'POST' : 'PUT';
+    final isNew = address.idAddress.isEmpty;
 
     final body = {
       'address': address.address,
@@ -271,24 +254,23 @@ Future<void> _validerEtMettreAJourAdressesHorse() async {
       'latitude': null,
       'longitude': null,
       'type': address.type,
-      'user_id': null, 
-      'horse_id': widget.horseSelectedId,  
+      'user_id': null,
+      'horse_id': widget.horseSelectedId,
     };
 
     try {
-      final request = http.Request(method, url)
-        ..headers['Content-Type'] = 'application/json'
-        ..body = jsonEncode(body);
-
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
+      final response = isNew
+          ? await ApiService.postWithAuth('/adresses', body)
+          : await ApiService.putWithAuth('/adresses/${address.idAddress}', body);
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         success = false;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(
-                  "Erreur lors de la ${isNew ? 'création' : 'mise à jour'} de l'adresse : ${response.body}")),
+            content: Text(
+              "Erreur lors de la ${isNew ? 'création' : 'mise à jour'} de l'adresse : ${response.body}",
+            ),
+          ),
         );
       }
     } catch (e) {

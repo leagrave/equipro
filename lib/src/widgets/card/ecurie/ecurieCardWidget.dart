@@ -1,3 +1,4 @@
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/ecurie.dart';
@@ -101,11 +102,7 @@ class _EcurieCardWidgetState extends State<EcurieCardWidget> {
     };
 
     try {
-      final response = await http.post(
-        Uri.parse("${Constants.apiBaseUrl}/stables/by-owner/${widget.proID}"),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(data),
-      );
+      final response = await ApiService.postWithAuth("/stables/by-owner/${widget.proID}", data,);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final jsonResponse = jsonDecode(response.body);

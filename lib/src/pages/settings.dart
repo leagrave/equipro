@@ -1,5 +1,6 @@
+import 'package:equipro/src/services/apiService.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; 
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -18,6 +19,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  final _storage = const FlutterSecureStorage(); 
+
   String? currentIdUser;
   String? currentToken;
   bool professional = false;
@@ -29,48 +32,39 @@ class _SettingsPageState extends State<SettingsPage> {
     _loadUserData();
   }
 
-  Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-    final userJson = prefs.getString('user');
+ Future<void> _loadUserData() async {
+  final token = await _storage.read(key: 'authToken');
+  final userJson = await _storage.read(key: 'userData');
 
-    if (userJson != null && token != null) {
-      final userMap = jsonDecode(userJson);
-      final userId = userMap['id']?.toString();
+  if (userJson != null) {
+    final userMap = jsonDecode(userJson);
+    final userId = userMap['id']?.toString();
 
-      setState(() {
-        currentIdUser = userId;
-        currentToken = token;
-        professional = userMap['professional'] ?? false;
-      });
+    setState(() {
+      currentIdUser = userId;
+      currentToken = token;
+      professional = userMap['professional'] ?? false;
+      currentUser = Users.fromJson(userMap); // on affiche déjà les infos locales
+    });
 
-      if (userId != null && token != null) {
-        // Ensuite on charge le vrai user depuis l'API
-        final user = await fetchCurrentUser(userId, token);
+    // Tentative de mise à jour des infos depuis l'API (non bloquante)
+    if (userId != null && token != null) {
+      fetchCurrentUser(userId, token).then((user) {
         if (user != null) {
           setState(() {
             currentUser = user;
           });
-          debugPrint("User chargé : ${user.firstName}");
         }
-      } else {
-        setState(() {
-          currentIdUser = null;
-          currentToken = null;
-          professional = false;
-        });
-      }
+      }).catchError((error) {
+        debugPrint('Erreur fetch user : $error');
+        // Option : logout() si 401
+      });
     }
   }
+}
 
   Future<Users?> fetchCurrentUser(String userId, String token) async {
-    final response = await http.get(
-      Uri.parse('${Constants.apiBaseUrl}/user/pro/$userId'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-    );
+    final response = await ApiService.getWithAuth('/user/pro/$userId');
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> json = jsonDecode(response.body);
@@ -82,9 +76,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    await prefs.remove('user');
+    await _storage.delete(key: 'authToken');
+    await _storage.delete(key: 'userData');
 
     if (!mounted) return;
     context.go('/login');
@@ -92,12 +85,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (currentUser == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
     return Scaffold(
       appBar: const MyWidgetAppBar(
         title: 'Settings',
@@ -115,23 +102,25 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         child: Column(
           children: [
-            UserCard(
-              profileImageUrl: Constants.avatar, // ou currentUser!.avatarUrl ?? Constants.avatar
-              firstName: currentUser!.firstName,
-              lastName: currentUser!.lastName,
-              isProfessional: currentUser!.professional ?? false,
-              isVerified: currentUser!.isVerified ?? false,
-              onEditProfile: () {
-                context.push('/profile', extra: {
-                  'currentUser': currentUser,
-                });
-              },
-              onUserTap: () {
-                context.push('/profile', extra: {
-                  'currentUser': currentUser,
-                });
-              },
-            ),
+            if (currentUser != null)
+              UserCard(
+                profileImageUrl: Constants.avatar,
+                firstName: currentUser!.firstName,
+                lastName: currentUser!.lastName,
+                isProfessional: currentUser!.professional ?? false,
+                isVerified: currentUser!.isVerified ?? false,
+                onEditProfile: () {
+                  context.push('/profile', extra: {'currentUser': currentUser});
+                },
+                onUserTap: () {
+                  context.push('/profile', extra: {'currentUser': currentUser});
+                },
+              )
+            else
+              const Padding(
+                padding: EdgeInsets.all(20),
+                child: CircularProgressIndicator(),
+              ),
             Expanded(child: SettingsScreen()),
             ElevatedButton(
               onPressed: logout,

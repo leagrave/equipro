@@ -1,3 +1,4 @@
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/card/client/clientAdresseCardWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';
@@ -112,7 +113,7 @@ void _onClientSelected(Users? user) {
 
   Future<List<Users>> fetchClients() async {
     try {
-      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/agendaAll/${widget.proID}"));
+      final response = await ApiService.getWithAuth("/agendaAll/${widget.proID}");
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         final fetchedClients = jsonData.map((data) => Users.fromJson(data)).toList();
@@ -128,7 +129,7 @@ void _onClientSelected(Users? user) {
 
 Future<List<Ecurie>> fetchEcuries() async {
   try {
-    final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/stables/owner/${widget.proID}"));
+    final response = await ApiService.getWithAuth("/stables/owner/${widget.proID}");
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
@@ -149,16 +150,12 @@ Future<List<Ecurie>> fetchEcuries() async {
 }
 
 Future<bool> updateHorseStableId(String horseId, String newStableId) async {
-  final url = Uri.parse("${Constants.apiBaseUrl}/horse/$horseId/stable");
-  final body = jsonEncode({
-    "stableId": newStableId,
-  });
-
   try {
-    final response = await http.put(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: body,
+    final response = await ApiService.putWithAuth(
+      '/horse/$horseId/stable',
+      {
+        "stableId": newStableId,
+      },
     );
 
     if (response.statusCode == 200) {
@@ -177,7 +174,7 @@ Future<bool> updateHorseStableId(String horseId, String newStableId) async {
 
 Future<Horse?> fetchHorseById(String horseId) async {
   try {
-    final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/horse/by-id/$horseId"));
+    final response = await ApiService.getWithAuth("/horse/by-id/$horseId");
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
@@ -195,20 +192,25 @@ Future<Horse?> fetchHorseById(String horseId) async {
 Future<bool> updateHorseUsers(String horseId, List<Users> selectedUsers) async {
   final userIds = selectedUsers.map((u) => u.id).toList();
 
-  final response = await http.put(
-    Uri.parse('${Constants.apiBaseUrl}/horse/$horseId/users'),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'userIds': userIds}),
-  );
+  try {
+    final response = await ApiService.putWithAuth(
+      '/horse/$horseId/users',
+      {'userIds': userIds},
+    );
 
-  if (response.statusCode == 200) {
-    print('Mise à jour réussie');
-    return true;
-  } else {
-    print('Erreur mise à jour users: ${response.body}');
+    if (response.statusCode == 200) {
+      print('Mise à jour réussie');
+      return true;
+    } else {
+      print('Erreur mise à jour users: ${response.body}');
+      return false;
+    }
+  } catch (e) {
+    print('Exception lors de la mise à jour users: $e');
     return false;
   }
 }
+
 
 
 
@@ -275,7 +277,7 @@ void _loadClients() async {
 
 Future<List<Address>> fetchAddressById(String id) async {
   try {
-    final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/address/$id"));
+    final response = await ApiService.getWithAuth("/address/$id");
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
       if (jsonData is List && jsonData.isNotEmpty) {

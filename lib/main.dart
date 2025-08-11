@@ -21,9 +21,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-    await dotenv.load(fileName: ".env"); // charge .env ou autre selon build
+    await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform, // <- utilisation ici
+    options: DefaultFirebaseOptions.currentPlatform, 
   );
 
   tz.initializeTimeZones(); // Charge les fuseaux horaires

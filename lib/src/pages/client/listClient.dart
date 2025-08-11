@@ -1,3 +1,4 @@
+import 'package:equipro/src/services/apiService.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/user.dart';
 import 'package:equipro/src/models/adresses.dart';
@@ -8,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:diacritic/diacritic.dart';
-
 
 class ListClientPage extends StatefulWidget {
   final String? userId;
@@ -32,30 +32,37 @@ class _ListClientPageState extends State<ListClientPage> {
     fetchClients();
   }
 
-  Future<void> fetchClients() async {
-    try {
-      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/agendaAll/${widget.userId}"));
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        final fetchedClients = jsonData.map((data) => Users.fromJson(data)).toList();
+Future<void> fetchClients() async {
+  try {
 
-        setState(() {
-          users = List<Users>.from(fetchedClients);
-          // On met filteredUsers égal à tous les clients récupérés (contacts du user)
-          filteredUsers = users;
-          isLoading = false;
-        });
+    // Effectuer la requête avec Authorization: Bearer <token>
+    final response = await ApiService.getWithAuth("/agendaAll/${widget.userId}");
 
-      } else {
-        throw Exception("Échec du chargement des clients");
-      }
-    } catch (e) {
-      print("Erreur lors du fetch des clients : $e");
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      final fetchedClients = jsonData.map((data) => Users.fromJson(data)).toList();
+
       setState(() {
+        users = List<Users>.from(fetchedClients);
+        filteredUsers = users;
         isLoading = false;
       });
+    } 
+    else if (response.statusCode == 401) {
+      // Token invalide ou expiré
+      throw Exception("Session expirée. Veuillez vous reconnecter.");
     }
+    else {
+      throw Exception("Échec du chargement des clients (code ${response.statusCode})");
+    }
+  } catch (e) {
+    print("Erreur lors du fetch des clients : $e");
+    setState(() {
+      isLoading = false;
+    });
   }
+}
+
 
 
 void filterClients(String query) {

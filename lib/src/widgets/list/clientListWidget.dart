@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:equipro/src/models/user.dart';
 import 'package:equipro/src/models/horse.dart';
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -52,7 +53,7 @@ String getMainOrBillingCity(Users user) {
 
   Future<List<Horse>> _fetchClientHorses(String userId) async {
     try {
-      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/horses/user/$userId"));
+      final response = await ApiService.getWithAuth("/horses/user/$userId");
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);

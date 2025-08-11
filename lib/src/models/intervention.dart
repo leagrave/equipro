@@ -4,7 +4,7 @@ import 'invoice.dart';
 import 'observation.dart';
 
 class Intervention {
-  final String id;
+  String id;
   final String? description;
   final String? careObservation;
 
@@ -14,7 +14,7 @@ class Intervention {
 
   final List<Users> users;
   final Horse? horse;
-  final Users pro;
+  final Users? pro;
 
   final Invoice? invoice;
 
@@ -40,7 +40,7 @@ class Intervention {
     this.updatedAt,
     required this.users,
     this.horse,
-    required this.pro,
+    this.pro,
     this.invoice,
     this.externalNotes,
     this.incisiveNotes,
@@ -72,7 +72,7 @@ class Intervention {
           .map((e) => Users.fromJson(e))
           .toList(),
       horse: json['horse'] != null ? Horse.fromJson(json['horse']) : null,
-      pro: Users.fromJson(json['professional']),
+      pro: json['pro'] != null ? Users.fromJson(json['pro']) : null,
       invoice:
           json['invoice'] != null ? Invoice.fromJson(json['invoice']) : null,
       externalNotes: json['external_notes'] as String?,
@@ -109,7 +109,7 @@ class Intervention {
       'updated_at': updatedAt?.toIso8601String(),
       'users': users.map((u) => u.toJson()).toList(),
       'horse': horse?.toJson(),
-      'professional': pro.toJson(),
+      'professional': pro?.toJson(),
       'invoice': invoice?.toJson(),
       'external_notes': externalNotes,
       'incisive_notes': incisiveNotes,
@@ -133,7 +133,7 @@ Intervention(
   date: $interventionDate,
   horse: ${horse?.name},
   users: ${users.map((u) => u.fullName).join(', ')},
-  pro: ${pro.fullName}
+  pro: ${pro?.fullName}
 )''';
   }
 

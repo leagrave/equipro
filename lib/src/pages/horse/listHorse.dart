@@ -1,3 +1,4 @@
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/horse.dart';
@@ -28,7 +29,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
 
   Future<void> fetchHorses() async {
     try {
-      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/horses/user/${widget.userCustomerID}"));
+      final response = await ApiService.getWithAuth("/horses/user/${widget.userCustomerID}");
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         final fetchedHorses = jsonData.map((data) => Horse.fromJson(data)).toList();
@@ -53,7 +54,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
 
   Future<void> fetchAllHorses() async {
     try {
-      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/horses"));
+      final response = await ApiService.getWithAuth("/horses");
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         final fetchedHorses = jsonData.map((data) => Horse.fromJson(data)).toList();

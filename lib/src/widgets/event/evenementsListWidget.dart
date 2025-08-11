@@ -1,5 +1,6 @@
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:go_router/go_router.dart';
 
 class MyWidgetAppointments extends StatelessWidget {
@@ -85,15 +86,19 @@ class MyWidgetAppointments extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Constants.white,
-                  foregroundColor: Constants.appBarBackgroundColor,
+                  foregroundColor: Constants.appBarBackgroundColor, 
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('Voir tous les rendez-vous'),
+                child: const Text(
+                  'Voir tous les rendez-vous',
+                  style: TextStyle(color: Constants.appBarBackgroundColor), 
+                ),
               ),
             ),
+
           ],
         ),
       ),

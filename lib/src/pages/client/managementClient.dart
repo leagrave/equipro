@@ -1,3 +1,4 @@
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/user.dart';
@@ -35,30 +36,33 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
   }
 
 
-  Future<void> _loadAddresses() async {
-    try {
-      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/adresses/user/${user.id}"));
+Future<void> _loadAddresses() async {
+  try {
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        final List<Address> addresses = data.map((item) => Address.fromJson(item)).toList();
+    final response = await ApiService.getWithAuth("/adresses/user/${user.id}"
+    );
 
-        setState(() {
-          user = user.copyWith(addresses: addresses);
-        });
-      } else if (response.statusCode == 404) {
-        // Pas d'adresse pour cet utilisateur
-        setState(() {
-          user = user.copyWith(addresses: []);
-        });
-        print("Aucune adresse trouvée pour cet utilisateur.");
-      } else {
-        print('Erreur API : statut ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Erreur lors du chargement des adresses : $e');
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      final List<Address> addresses =
+          data.map((item) => Address.fromJson(item)).toList();
+
+      setState(() {
+        user = user.copyWith(addresses: addresses);
+      });
+    } else if (response.statusCode == 404) {
+      setState(() {
+        user = user.copyWith(addresses: []);
+      });
+      print("Aucune adresse trouvée pour cet utilisateur.");
+    } else {
+      print('Erreur API : statut ${response.statusCode}');
     }
+  } catch (e) {
+    print('Erreur lors du chargement des adresses : $e');
   }
+}
+
 
 
 
@@ -69,79 +73,77 @@ class _ManagementClientPageState extends State<ManagementClientPage> {
     });
   }
 
-  Future<void> _fetchLastAppointmentBetweenProAndCustomer() async {
-    try {
-      final response = await http.get(Uri.parse(
-          "${Constants.apiBaseUrl}/lastVisit/pro/${widget.currentUserId}/customer/${widget.userSelected.id}"));
+Future<void> _fetchLastAppointmentBetweenProAndCustomer() async {
+  try {
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+    final response = await ApiService.getWithAuth("/lastVisit/pro/${widget.currentUserId}/customer/${widget.userSelected.id}");
 
-        if (data == null || data.isEmpty || data['id'] == null) {
-          setState(() {
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      if (data == null || data.isEmpty || data['id'] == null) {
+        setState(() {
           user = user.copyWith(
             lastVisitDate: null,
             nextVisitDate: null,
           );
         });
       } else {
-          final lastVisit = data['last_visit_date'] != null
-              ? DateTime.parse(data['last_visit_date'])
-              : null;
+        final lastVisit = data['last_visit_date'] != null
+            ? DateTime.parse(data['last_visit_date'])
+            : null;
 
-          final nextVisit = data['next_visit_date'] != null
-              ? DateTime.parse(data['next_visit_date'])
-              : null;
+        final nextVisit = data['next_visit_date'] != null
+            ? DateTime.parse(data['next_visit_date'])
+            : null;
 
-          setState(() {
-            user = user.copyWith(
-              lastVisitDate: lastVisit,
-              nextVisitDate: nextVisit,
-            );
-          });
-        }
-      } else {
-        print("Erreur fetch rendez-vous ici: ${response.statusCode}");
-      }
-    } catch (e) {
-      print("Erreur lors du fetch du dernier rendez-vous: $e");
-    }
-  }
-
-  Future<void> _fetchNoteBetweenProAndCustomer() async {
-    try {
-      final response = await http.get(Uri.parse(
-          "${Constants.apiBaseUrl}/note/by-user/${user.id}/${widget.currentUserId}"));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-
-        if (data == null || data.isEmpty || data['id'] == null) {
-          setState(() {
+        setState(() {
           user = user.copyWith(
-            notes: null,
+            lastVisitDate: lastVisit,
+            nextVisitDate: nextVisit,
           );
+        });
+      }
+    } else {
+      print("Erreur fetch rendez-vous ici: ${response.statusCode}");
+    }
+  } catch (e) {
+    print("Erreur lors du fetch du dernier rendez-vous: $e");
+  }
+}
+
+
+Future<void> _fetchNoteBetweenProAndCustomer() async {
+  try {
+
+    final response = await ApiService.getWithAuth("/note/by-user/${user.id}/${widget.currentUserId}");
+
+    // 3. Traitement de la réponse
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      if (data == null || data.isEmpty || data['id'] == null) {
+        setState(() {
+          user = user.copyWith(notes: null);
           visitId = null;
         });
       } else {
+        final notes = data['notes'] as String?;
+        final id = data['id'] as String?;
 
-          final notes = data['notes'] as String?;
-          final id = data['id'] as String?;
-
-          setState(() {
-            user = user.copyWith(
-              notes: notes,
-            );
-            visitId = id;
-          });
-        }
-      } else {
-        print("Erreur fetch rendez-vous: ${response.statusCode}");
+        setState(() {
+          user = user.copyWith(notes: notes);
+          visitId = id;
+        });
       }
-    } catch (e) {
-      print("Erreur lors du fetch du dernier rendez-vous: $e");
+    } else {
+      print("Erreur fetch note: ${response.statusCode}");
     }
+  } catch (e) {
+    print("Erreur lors du fetch des notes: $e");
   }
+}
+
 
 
   @override

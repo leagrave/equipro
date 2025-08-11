@@ -1,6 +1,7 @@
 
 import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/models/user.dart';
+import 'package:equipro/src/services/apiService.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +10,7 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class HorseInterventionListWidget extends StatefulWidget {
   final String? userId;
@@ -29,20 +31,30 @@ class HorseInterventionListWidget extends StatefulWidget {
 
 class _HorseInterventionListWidgetState extends State<HorseInterventionListWidget> {
   List<Intervention> interventions = [];
+  final storage = const FlutterSecureStorage();
   bool isLoading = true;
   String _searchQuery = '';
   final TextEditingController _controller = TextEditingController();
-
+  String? proId;
   Horse? currentHorse;
   List<Users> users = [];
 
 
-  @override
-  void initState() {
-    super.initState();
-      loadAllData();
-    fetchInterventions();
-  }
+@override
+void initState() {
+  super.initState();
+  _initData();
+}
+
+Future<void> _initData() async {
+  setState(() => isLoading = true);
+
+  await _loadProId();
+
+  await fetchInterventions();
+
+  setState(() => isLoading = false);
+}
 
   Future<void> loadAllData() async {
   setState(() => isLoading = true);
@@ -53,43 +65,60 @@ class _HorseInterventionListWidgetState extends State<HorseInterventionListWidge
   setState(() => isLoading = false);
 }
 
+  Future<void> _loadProId() async {
+    final storedProId = await storage.read(key: 'pro_id');
+    setState(() {
+      proId = storedProId;
+    });
+  }
 
 
-  Future<void> fetchInterventions() async {
-    if (widget.horseId == null && widget.userId == null) {
+
+
+Future<void> fetchInterventions() async {
+  if (widget.horseId == null && widget.userId == null) {
+    setState(() {
+      isLoading = false;
+    });
+    return;
+  }
+
+  try {
+    final endpoint = widget.horseId != null
+        ? '/interventions/horse/${widget.horseId}'
+        : '/interventions/user/${widget.userId}';
+
+    final response = await ApiService.getWithAuth(endpoint);
+
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body);
       setState(() {
+        interventions = data
+            .map((json) => Intervention.fromJson(json))
+            .where((i) => i.interventionDate != null)
+            .toList()
+          ..sort((a, b) => b.interventionDate!.compareTo(a.interventionDate!));
         isLoading = false;
       });
-      return;
-    }
-
-    try {
-      final url = widget.horseId != null
-          ? "${Constants.apiBaseUrl}/interventions/horse/${widget.horseId}"
-          : "${Constants.apiBaseUrl}/interventions/user/${widget.userId}";
-
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        final List data = json.decode(response.body);
-        setState(() {
-          interventions = data
-              .map((json) => Intervention.fromJson(json))
-              .where((i) => i.interventionDate != null)
-              .toList()
-            ..sort((a, b) => b.interventionDate!.compareTo(a.interventionDate!));
-          isLoading = false;
-        });
       } else {
+        debugPrint('Erreur serveur: ${response.statusCode} - ${response.body}');
         throw Exception('Erreur serveur');
       }
-    } catch (e) {
-      setState(() => isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Erreur lors du chargement des interventions")),
-      );
-    }
+        } catch (e, stackTrace) {
+    debugPrint('Erreur: $e');
+    debugPrint('Stack: $stackTrace');
+    setState(() => isLoading = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Erreur : $e")),
+    );
   }
+  // } catch (e) {
+  //   setState(() => isLoading = false);
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(content: Text("Erreur lors du chargement des interventions")),
+  //   );
+  // }
+}
 
 
 

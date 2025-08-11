@@ -1,3 +1,4 @@
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/user.dart';
@@ -61,8 +62,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
 
   // Fetch les types de professionnels
   Future<List<ProfessionalType>> fetchProfessionalTypes() async {
-    final url = Uri.parse('${Constants.apiBaseUrl}/professionalType');
-    final response = await http.get(url);
+    final response = await ApiService.getWithAuth('/professionalType');
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
@@ -75,7 +75,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
   }
 
   Future<bool> _checkEmailExists(String email) async {
-    final response = await http.get(Uri.parse('${Constants.apiBaseUrl}/user/email/checkEmail?email=$email'));
+    final response = await ApiService.getWithAuth('/user/email/checkEmail?email=$email');
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -154,58 +154,55 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
 }
 
 
-  void _validerFormulaire() async {
-    if (!await _validateForm()) return;
+Future<void> _validerFormulaire() async {
+  if (!await _validateForm()) return;
 
-  final url = Uri.parse("${Constants.apiBaseUrl}/user/all/${widget.currentUser?.id}"); 
-  final response = await http.put(
-    url,
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({
-      'lastName': _nomController.text,
-      'firstName': _prenomController.text,
-      'email': _emailController.text,
-      'password': _passwordController.text,
-      'phone': _telController.text,
-      'phone2': _tel2Controller.text,
-      'siretNumber': _sirenController.text,
-      'societeName': _societeController.text,
+  final response = await ApiService.putWithAuth(
+    "/user/all/${widget.currentUser?.id}",
+    {
+      'lastName': _nomController.text.trim(),
+      'firstName': _prenomController.text.trim(),
+      'email': _emailController.text.trim(),
+      'password': _passwordController.text.trim(),
+      'phone': _telController.text.trim(),
+      'phone2': _tel2Controller.text.trim(),
+      'siretNumber': _sirenController.text.trim(),
+      'societeName': _societeController.text.trim(),
       'isSociete': _isSociete,
       'role': _selectedRole == true ? 'professionnel' : 'particulier',
       'idProfessionalType': _selectedProfession?.idProfessional,
       'addresses': [
         {
-          'idAddress': _idAdresseController.text.isEmpty ? null : _idAdresseController.text,
-          'address': _adresseController.text,
-          'city': _adresseCityController.text,
-          'postalCode': _adressePostalCodeController.text,
-          'country': _adresseCountryController.text,
+          'idAddress': _idAdresseController.text.isEmpty ? null : _idAdresseController.text.trim(),
+          'address': _adresseController.text.trim(),
+          'city': _adresseCityController.text.trim(),
+          'postalCode': _adressePostalCodeController.text.trim(),
+          'country': _adresseCountryController.text.trim(),
           'type': "main",
         },
         {
-          'idAdress': _idAdresseFacturationController.text.isNotEmpty ? null : _idAdresseFacturationController.text,
-          'address': _adresseFacturationController.text,
-          'city': _adresseFacturationCityController.text,
-          'postalCode': _adresseFacturationPostalCodeController.text,
-          'country': _adresseFacturationCountryController.text,
+          'idAddress': _idAdresseFacturationController.text.isEmpty ? null : _idAdresseFacturationController.text.trim(),
+          'address': _adresseFacturationController.text.trim(),
+          'city': _adresseFacturationCityController.text.trim(),
+          'postalCode': _adresseFacturationPostalCodeController.text.trim(),
+          'country': _adresseFacturationCountryController.text.trim(),
           'type': "billing",
         },
       ],
-
-    }),
+    },
   );
 
   if (response.statusCode == 200) {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("Modifications enregistrées."),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Modifications enregistrées.")),
+    );
     if (widget.onCancel != null) {
       widget.onCancel!();
     }
   } else {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("Erreur : ${response.statusCode}"),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Erreur : ${response.statusCode}")),
+    );
   }
 }
 

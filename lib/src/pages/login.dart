@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
 import 'package:equipro/src/utils/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 
 class MyLoginPage extends StatefulWidget {
   @override
@@ -23,6 +25,8 @@ Future<void> _login() async {
     _errorMessage = null;
   });
 
+  final storage = const FlutterSecureStorage();
+
   final email = _emailController.text.trim();
   final password = _passwordController.text;
 
@@ -34,20 +38,6 @@ Future<void> _login() async {
     return;
   }
 
-  // // Nouvelle condition spéciale
-  // if (email == "test@test.com" && password == "test") {
-  //   // Naviguer directement sans requête http
-  //         context.go('/', extra: {
-  //       'initialPageIndex': 2,
-  //     });  // <-- adapte ici la route souhaitée
-
-  //   setState(() {
-  //     _isLoading = false;
-  //   });
-  //   return;
-  // }
-
-  // Sinon, on fait la requête HTTP POST
   try {
     final response = await http.post(
       Uri.parse('${Constants.apiBaseUrl}/login'), 
@@ -60,9 +50,21 @@ Future<void> _login() async {
       final token = data['token'];
       final user = data['user'];
 
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
-      await prefs.setString('user', jsonEncode(user));
+      await storage.write(key: 'authToken', value: token);
+      await storage.write(key: 'userData', value: jsonEncode(user));
+
+      if (user['pro_id'] != null) {
+        await storage.write(key: 'pro_id', value: user['pro_id']);
+      }
+      if (user['id'] != null) {
+        await storage.write(key: 'user_id', value: user['id'].toString());
+      }
+      if (user['first_name'] != null) {
+        await storage.write(key: 'first_name', value: user['first_name'].toString());
+      }
+      if (user['last_name'] != null) {
+        await storage.write(key: 'last_name', value: user['last_name'].toString());
+      }
 
       context.go('/', extra: {
         'initialPageIndex': 2,
@@ -84,64 +86,6 @@ Future<void> _login() async {
   }
 }
 
-
-
-  // Future<void> _login() async {
-  //   setState(() {
-  //     _isLoading = true;
-  //     _errorMessage = null;
-  //   });
-
-  //   final email = _emailController.text.trim();
-  //   final password = _passwordController.text;
-
-  //   if (email.isEmpty || password.isEmpty) {
-  //     setState(() {
-  //       _errorMessage = "Email et mot de passe requis";
-  //       _isLoading = false;
-  //     });
-  //     return;
-  //   }
-
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse('http://localhost:3000/api/login'), 
-  //       headers: {'Content-Type': 'application/json'},
-  //       body: jsonEncode({'email': email, 'password': password}),
-  //     );
-
-  //     if (response.statusCode == 200) {
-  //       final data = jsonDecode(response.body);
-  //       final token = data['token'];
-  //       final user = data['user'];
-
-  //       // Stocker token + user si besoin (SharedPreferences)
-  //       final prefs = await SharedPreferences.getInstance();
-  //       await prefs.setString('token', token);
-  //       // Stocke aussi les infos utilisateur en JSON string
-  //       await prefs.setString('user', jsonEncode(user));
-
-  //       // Navigue vers la page principale avec les infos
-  //       context.go('/', extra: {
-  //         'initialPageIndex': 2,
-  //       });
-  //     } else {
-  //       // Gère l’erreur renvoyée par l’API
-  //       final errorData = jsonDecode(response.body);
-  //       setState(() {
-  //         _errorMessage = errorData['error'] ?? "Erreur lors de la connexion";
-  //       });
-  //     }
-  //   } catch (e) {
-  //     setState(() {
-  //       _errorMessage = "Erreur réseau ou serveur";
-  //     });
-  //   } finally {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

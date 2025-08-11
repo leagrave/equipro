@@ -1,4 +1,5 @@
 import 'package:equipro/src/models/ecurie.dart';
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/card/client/clientAdresseCardWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';
@@ -61,54 +62,53 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
     address: [],
   );
   
- Future<bool> saveHorse() async {
-    try {
-  
-      final response = await http.post(
-        Uri.parse("${Constants.apiBaseUrl}/horse"),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
+Future<bool> saveHorse() async {
+  try {
+    final response = await ApiService.postWithAuth(
+      '/horse',
+      {
         "horse": {
           'name': newHorse.name,
           'age': newHorse.age,
-          'stable_id': newHorse.stableId,   
+          'stable_id': newHorse.stableId,
           'last_visit_date': null,
           'next_visit_date': null,
           'notes': newHorse.notes,
           'breed_ids': newHorse.breeds?.map((b) => b.id).toList() ?? [],
           'color_ids': newHorse.colors?.map((c) => c.id).toList() ?? [],
           'feed_type_ids': newHorse.feedTypes?.map((f) => f.id).toList() ?? [],
-          'activity_type_ids': newHorse.activityTypes?.map((a) => a.id).toList() ?? [],      
-          },
-          "address": newHorse.address != null && newHorse.address!.isNotEmpty
-              ? {
-                  "address": newHorse.address!.first.address,
-                  "city": newHorse.address!.first.city,
-                  "postal_code": newHorse.address!.first.postalCode,
-                  "country": newHorse.address!.first.country,
-                  "latitude": newHorse.address!.first.latitude,
-                  "longitude": newHorse.address!.first.longitude,
-                  "user_id": null,
-                  "horse_id": null,
-                  "type": "main",
-                }
-              : null,           
-          'users': selectedUsers.map((u) => u.id).toList(),
-        }),
-      );
+          'activity_type_ids': newHorse.activityTypes?.map((a) => a.id).toList() ?? [],
+        },
+        "address": (newHorse.address != null && newHorse.address!.isNotEmpty)
+            ? {
+                "address": newHorse.address!.first.address,
+                "city": newHorse.address!.first.city,
+                "postal_code": newHorse.address!.first.postalCode,
+                "country": newHorse.address!.first.country,
+                "latitude": newHorse.address!.first.latitude,
+                "longitude": newHorse.address!.first.longitude,
+                "user_id": null,
+                "horse_id": null,
+                "type": "main",
+              }
+            : null,
+        'users': selectedUsers.map((u) => u.id).toList(),
+      },
+    );
 
-      if (response.statusCode == 201) {
-        Navigator.pop(context, newHorse);
-        return true;
-      } else {
-        print("Erreur lors de la création du client: ${response.body}");
-        return false;
-      }
-    } catch (e) {
-      print("Erreur globale dans saveClient: $e");
+    if (response.statusCode == 201) {
+      Navigator.pop(context, newHorse);
+      return true;
+    } else {
+      print("Erreur lors de la création du client: ${response.body}");
       return false;
     }
+  } catch (e) {
+    print("Erreur globale dans saveClient: $e");
+    return false;
+  }
 }
+
 
 void _onClientSelected(Users? user) {
   if (user == null) return;
@@ -170,7 +170,7 @@ void _onClientSelected(Users? user) {
 
   Future<List<Users>> fetchClients() async {
     try {
-      final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/agendaAll/${widget.proID}"));
+      final response = await ApiService.getWithAuth("/agendaAll/${widget.proID}");
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         final fetchedClients = jsonData.map((data) => Users.fromJson(data)).toList();
@@ -186,7 +186,7 @@ void _onClientSelected(Users? user) {
 
 Future<List<Ecurie>> fetchEcuries() async {
   try {
-    final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/stables/owner/${widget.proID}"));
+    final response = await ApiService.getWithAuth("/stables/owner/${widget.proID}");
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
@@ -208,7 +208,7 @@ Future<List<Ecurie>> fetchEcuries() async {
 
 Future<List<Address>> fetchAddressById(String id) async {
   try {
-    final response = await http.get(Uri.parse("${Constants.apiBaseUrl}/address/$id"));
+    final response = await ApiService.getWithAuth("/address/$id");
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
       if (jsonData is List && jsonData.isNotEmpty) {

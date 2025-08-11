@@ -1,3 +1,4 @@
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/user.dart';
@@ -121,12 +122,10 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
 
   Future<void> _validerEtMettreAJourUtilisateur() async {
     if (!await _validateForm()) return;
-    final url = Uri.parse("${Constants.apiBaseUrl}/customer/${_idController.text.trim()}");
 
-    final response = await http.put(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
+    final response = await ApiService.putWithAuth(
+      "/customer/${_idController.text.trim()}",
+      {
         'last_Name': _nomController.text.trim(),
         'first_Name': _prenomController.text.trim(),
         'email': _emailController.text.trim(),
@@ -135,7 +134,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
         'isSociete': _tempIsSociete,
         'IsProfessional': _tempIsProfessional,
         'societeName': _societeNameController.text.trim(),
-      }),
+      },
     );
 
     if (response.statusCode == 200) {

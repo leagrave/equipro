@@ -1,3 +1,4 @@
+import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -98,15 +99,12 @@ void didUpdateWidget(covariant NotesCardWidget oldWidget) {
 Future<void> updateNotesHorse({
   required String notes,
 }) async {
-  final url = '${Constants.apiBaseUrl}/horse/${widget.horseId}/notes';
+  final endpoint = '/horse/${widget.horseId}/notes';
+
   try {
-    final response = await http.put(
-      Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'notes': notes,
-      }),
-    );
+    final response = await ApiService.putWithAuth(endpoint, {
+      'notes': notes,
+    });
 
     if (response.statusCode == 200) {
       print('Notes cheval mises à jour avec succès.');
@@ -121,42 +119,39 @@ Future<void> updateNotesHorse({
 
   
 Future<void> updateNotes({
-    required String? visitId,
-    required String notes,
-  }) async {
-    final url = visitId == null
-        ? '${Constants.apiBaseUrl}/note' // création
-        : '${Constants.apiBaseUrl}/note/$visitId'; // mise à jour
+  required String? visitId,
+  required String notes,
+}) async {
+  try {
+    if (visitId == null) {
+      // Création avec POST
+      final response = await ApiService.postWithAuth('/note', {
+        'customer_id': widget.customId,
+        'professionals_id': widget.proID,
+        'notes': notes,
+      });
 
-    final method = visitId == null ? 'POST' : 'PUT';
-
-    final body = visitId == null
-        ? jsonEncode({
-            'customer_id': widget.customId,
-            'professionals_id': widget.proID,
-            'notes': notes,
-          })
-        : jsonEncode({'notes': notes});
-
-    try {
-      final response = await http.Request(method, Uri.parse(url))
-        ..headers['Content-Type'] = 'application/json'
-        ..body = body;
-
-      final streamedResponse = await response.send();
-      final res = await http.Response.fromStream(streamedResponse);
-
-      if (res.statusCode == 200 || res.statusCode == 201) {
-        print('Notes mises à jour avec succès.');
-        // Optionnel : fetch des données mises à jour
-        //await _fetchLastAppointmentBetweenProAndCustomer();
+      if (response.statusCode == 201) {
+        print('Note créée avec succès.');
       } else {
-        print('Erreur lors de la mise à jour des notes : ${res.statusCode} - ${res.body}');
+        print('Erreur création note : ${response.statusCode} - ${response.body}');
       }
-    } catch (e) {
-      print('Erreur réseau lors de la mise à jour des notes : $e');
+    } else {
+      // Mise à jour avec PUT
+      final response = await ApiService.putWithAuth('/note/$visitId', {
+        'notes': notes,
+      });
+
+      if (response.statusCode == 200) {
+        print('Note mise à jour avec succès.');
+      } else {
+        print('Erreur mise à jour note : ${response.statusCode} - ${response.body}');
+      }
     }
+  } catch (e) {
+    print('Erreur réseau lors de la mise à jour des notes : $e');
   }
+}
 
 
   @override
