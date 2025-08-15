@@ -1,16 +1,30 @@
-# equipro
+### Application Mobile Flutter - Equipro
 
-A new Flutter project.
+## Prérequis
 
-## Getting Started
+- Flutter SDK (version 3.22 ou supérieure)
+- Android Studio (pour Android) / Xcode (pour iOS)
+- Compte Google Play Console (Android)
+- Compte Apple Developer (iOS)
+- Firebase CLI avec accès au projet Firebase
 
-This project is a starting point for a Flutter application.
+## Lancement du projet
 
-A few resources to get you started if this is your first Flutter project:
+1. Nettoyez et récupérez les dépendances :  
+   ```bash
+   flutter clean
+   flutter pub get
+   flutter docker
+    
+2. Lancer le projet sur window :
+   ```bash
+   flutter run
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+2. Lancer le projet mobile sur (android studio) :
+   ```bash
+   flutter run
+
+## Déploiement du projet
+   ```bash
+   flutter build apk --release

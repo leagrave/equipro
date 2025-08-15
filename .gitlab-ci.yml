@@ -1,0 +1,44 @@
+image: cirrusci/flutter:latest
+
+stages:
+  - analyze
+  - test
+  - build
+  - deploy
+
+
+before_script:
+  - flutter --version  
+  - git clone https://github.com/flutter/flutter.git -b stable /flutter
+  - export PATH="/flutter/bin:$PATH"
+  - flutter doctor
+  - flutter pub get
+
+cache:
+  paths:
+    - .pub-cache/
+
+# analyze:
+#   stage: analyze
+#   script:
+#     - flutter analyze
+
+test:
+  stage: test
+  script:
+    - flutter test
+
+# build:
+#   stage: build
+#   script:
+#     - flutter build apk --release
+#   artifacts:
+#     paths:
+#       - build/app/outputs/flutter-apk/app-release.apk$
+
+# deploy:
+#   stage: deploy
+#   only:
+#     - main
+#   script:
+#     - echo "Déploiement en cours..."
