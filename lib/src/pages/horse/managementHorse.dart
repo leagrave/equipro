@@ -1,22 +1,17 @@
 import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/card/client/clientAdresseCardWidget.dart';
-import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientsComboCardWidget.dart';
 import 'package:equipro/src/widgets/card/ecurie/ecurieCardWidget.dart';
 import 'package:equipro/src/widgets/card/ecurie/ecuriesComboCardWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/horse.dart';
-import 'package:equipro/src/models/customer.dart';
 import 'package:equipro/src/models/adresses.dart';
 import 'package:equipro/src/models/ecurie.dart';
 import 'package:equipro/src/models/user.dart';
-import 'package:equipro/src/widgets/card/horse/horseAdresseCardWidget.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:equipro/src/widgets/card/horse/horseCardWidget.dart';
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
-import 'package:equipro/src/widgets/card/horse/listBottumHorseCardWidget.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 

@@ -2,8 +2,7 @@ import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/user.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 
 class ClientCardWidget extends StatefulWidget {
   final Users user;
@@ -203,7 +202,7 @@ Future<void> _handleSaveOrCancel({required bool isSave}) async {
       _prenomController.text = _user.firstName;
       _telController.text = _user.phone ?? "";
       _tel2Controller.text = _user.phone2 ?? "";
-      _emailController.text = _user.email ?? "";
+      _emailController.text = _user.email;
       _societeNameController.text = _user.societeName ?? "";
       _tempIsSociete = _user.isSociete;
       _tempIsProfessional = _user.professional;

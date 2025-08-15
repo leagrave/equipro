@@ -1,11 +1,9 @@
 import 'package:equipro/src/services/apiService.dart';
-import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/user.dart';
 import 'package:equipro/src/models/professionalType.dart';
 import 'package:go_router/go_router.dart'; 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SignUpFormWidget extends StatefulWidget {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:go_router/go_router.dart';
 import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/pages/horse/createHorse.dart';

@@ -4,9 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 class MyLoginPage extends StatefulWidget {
   final http.Client? httpClient;
 

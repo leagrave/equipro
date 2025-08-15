@@ -1,11 +1,7 @@
-import 'package:integration_test/integration_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:mockito/mockito.dart'; 
 import 'package:equipro/router/splash.dart'; 
-import 'package:equipro/src/widgets/bar/navBarWidget.dart'; 
-import '../mocks.dart';
 import 'package:flutter/services.dart';
 
 

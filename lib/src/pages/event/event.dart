@@ -2,7 +2,7 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:equipro/src/widgets/event/eventCardWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:equipro/src/models/event.dart';  
 
 class EventPage extends StatelessWidget {
@@ -13,8 +13,8 @@ class EventPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Formatage des heures en français
-    String heureDebut = DateFormat.Hm('fr_FR').format(event.heureDebut);
-    String heureFin = DateFormat.Hm('fr_FR').format(event.heureFin);
+    // String heureDebut = DateFormat.Hm('fr_FR').format(event.heureDebut);
+    // String heureFin = DateFormat.Hm('fr_FR').format(event.heureFin);
 
     return Scaffold(
       appBar: const MyWidgetAppBar(

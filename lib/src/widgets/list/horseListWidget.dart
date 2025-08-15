@@ -1,8 +1,7 @@
-import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/horse.dart';
 import 'package:intl/intl.dart'; 
-import 'package:equipro/src/models/customer.dart'; 
+
 
 class HorseListWidget extends StatefulWidget {
   final List<Horse> horses;

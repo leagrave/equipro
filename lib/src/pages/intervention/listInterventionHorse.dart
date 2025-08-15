@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:equipro/src/models/intervention.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -49,7 +48,7 @@ void initState() {
 Future<void> _initData() async {
   setState(() => isLoading = true);
 
-  //await _loadProId();
+  await _loadProId();
 
   await fetchInterventions();
 
@@ -65,12 +64,12 @@ Future<void> _initData() async {
 //   setState(() => isLoading = false);
 // }
 
-  // Future<void> _loadProId() async {
-  //   final storedProId = await storage.read(key: 'pro_id');
-  //   setState(() {
-  //     proId = storedProId;
-  //   });
-  // }
+  Future<void> _loadProId() async {
+    final storedProId = await storage.read(key: 'pro_id');
+    setState(() {
+      proId = storedProId;
+    });
+  }
 
 
 
@@ -109,7 +108,7 @@ Future<void> fetchInterventions() async {
     debugPrint('Stack: $stackTrace');
     setState(() => isLoading = false);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Erreur : $e")),
+      const SnackBar(content: Text("Erreur lors du chargement des interventions")),
     );
   }
   // } catch (e) {
@@ -124,7 +123,7 @@ Future<void> fetchInterventions() async {
 
   void navigateToCreateInterventionPage() async {
     await context.push('/createIntervention', extra: {
-      'proID': widget.proID,
+      'proId': widget.proID,
       'userId': widget.userId,
       'horseId': widget.horseId,
     });

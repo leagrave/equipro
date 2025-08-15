@@ -7,7 +7,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:equipro/src/widgets/list/horseListWidget.dart';
-import 'package:equipro/src/models/horse.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {

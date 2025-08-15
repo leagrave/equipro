@@ -3,8 +3,7 @@ import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 
 class AddressCardWidget extends StatefulWidget {
   final List<Address>? addresses;
@@ -296,7 +295,7 @@ Future<void> _validerEtMettreAJourAdressesHorse() async {
     if(!(widget.openWithManagementHorsePage || widget.openWithCreateHorsePage))
       _validerEtMettreAJourAdressesHorse();
       // if((widget.openWithManagementHorsePage || widget.openWithCreateHorsePage))
-      // _validerEtMettreAJourAdressesUser();
+       //_validerEtMettreAJourAdressesUser();
     widget.onSave?.call();
   } else {
     // Restaure les données initiales à partir de widget.addresses

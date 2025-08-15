@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:equipro/src/utils/constants.dart';
-import 'package:equipro/src/widgets/bar/horizontalScrollWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/widgets/event/evenementsListWidget.dart';
 import 'package:go_router/go_router.dart';
@@ -82,7 +80,7 @@ class MyHomePage extends StatelessWidget {
                       return ElevatedButton.icon(
                         onPressed: () {
                           context.push('/createIntervention', extra: {
-                            'proID': proID,
+                            'proId': proID,
                           });
                         },
                         icon: const Icon(Icons.add, color: Constants.appBarBackgroundColor),

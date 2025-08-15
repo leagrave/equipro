@@ -44,7 +44,8 @@ class _CreateInterventionPageState extends State<CreateInterventionPage> {
   List<Horse> horseList = [];  
   Horse? selectedHorse; 
   List<Horse> horsesUsersList = [];
-  String? proId;
+  String? proID;
+  String? token;
 
   bool showHorseCard = false; 
 
@@ -78,9 +79,11 @@ Intervention newIntervention = Intervention(
 );
 
   Future<void> _loadProId() async {
-    final storedProId = await storage.read(key: 'pro_id');
+    final storedProId = await storage.read(key: 'user_id');
+    final storedToken = await storage.read(key: 'authToken');
     setState(() {
-      proId = storedProId;
+      proID = storedProId;
+      token =storedToken;
     });
   }
   
@@ -94,7 +97,7 @@ Future<bool> saveIntervention() async {
         "intervention_date": newIntervention.interventionDate?.toIso8601String(),
         "users": selectedUsers.map((u) => u.id).toList(),
         "horse_id": selectedHorse!.id,
-        "pro_id": proId,
+        "pro_id": proID,
         "external_notes": newIntervention.externalNotes,
         "incisive_notes": newIntervention.incisiveNotes,
         "mucous_notes": newIntervention.mucousNotes,
@@ -214,8 +217,9 @@ void _onRemoveUser(Users user) async {
 
 
   Future<List<Users>> fetchClients() async {
+
     try {
-      final response = await ApiService.getWithAuth("/agendaAll/${widget.proId}");
+      final response = await ApiService.getWithAuth("/agendaAll/$proID");
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         final fetchedClients = jsonData.map((data) => Users.fromJson(data)).toList();
@@ -307,15 +311,16 @@ Future<void> loadClientsAndHorses() async {
 
 
 
-  @override
-  void initState() {
-    super.initState();
-    _loadProId();
-    loadClientsAndHorses();
+@override
+void initState() {
+  super.initState();
+  _init();
+}
 
-    //newHorse = Horse(id: '', name: '');
-
-  }
+Future<void> _init() async {
+  await _loadProId();
+  await loadClientsAndHorses();
+}
 
 
 
@@ -336,11 +341,11 @@ Future<void> loadClientsAndHorses() async {
     });
   }
 
-  void _onSaveEcurieCard() {
-    setState(() {
-      showHorseCard = false;  
-    });
-  }
+  // void _onSaveEcurieCard() {
+  //   setState(() {
+  //     showHorseCard = false;  
+  //   });
+  // }
 
 
 
@@ -455,7 +460,7 @@ Future<void> loadClientsAndHorses() async {
                           Navigator.pop(context); 
                           context.push('/createInvoice', extra: {
                             'intervention': newIntervention,
-                            'proID': proId,
+                            'proID': proID,
                           });
                         },
                       ),
