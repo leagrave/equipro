@@ -5,7 +5,6 @@ import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/widgets/list/horseListWidget.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ListHorsePage extends StatefulWidget {

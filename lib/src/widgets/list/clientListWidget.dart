@@ -5,7 +5,6 @@ import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:equipro/src/widgets/list/horseListWidget.dart';
 import 'package:collection/collection.dart';

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:equipro/router/splash.dart';
 import 'package:equipro/src/pages/login.dart';
 import 'package:equipro/src/pages/settings.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:equipro/src/services/apiService.dart';
-import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 
 void main() {

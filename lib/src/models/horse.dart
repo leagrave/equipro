@@ -4,7 +4,7 @@ import 'horseBreed.dart';
 import 'horseActivityType.dart';
 import 'horseColor.dart';
 import 'horseFeedType.dart';
-import 'adresses.dart';
+
 class Horse {
   final String id;
   final String name;

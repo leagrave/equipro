@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:equipro/src/models/intervention.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -109,7 +108,7 @@ Future<void> fetchInterventions() async {
     debugPrint('Stack: $stackTrace');
     setState(() => isLoading = false);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Erreur : $e")),
+      const SnackBar(content: Text("Erreur lors du chargement des interventions")),
     );
   }
   // } catch (e) {

@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equipro/src/models/ecurie.dart';
-
 import 'adresses.dart';
 import 'horse.dart';
 import 'professionalType.dart';
-import 'ecurie.dart';
+
 class Users {
   final String id;
   final String? customer_id;

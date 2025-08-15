@@ -2,7 +2,6 @@ import 'package:equipro/src/services/apiService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'; 
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:equipro/src/widgets/bar/appBarWidget.dart';
@@ -106,7 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   profileImageUrl: Constants.avatar,
                   firstName: currentUser!.firstName,
                   lastName: currentUser!.lastName,
-                  isProfessional: currentUser!.professional ?? false,
+                  isProfessional: currentUser!.professional,
                   isVerified: currentUser!.isVerified ?? false,
                   onEditProfile: () {
                     context.push('/profile', extra: {'currentUser': currentUser});

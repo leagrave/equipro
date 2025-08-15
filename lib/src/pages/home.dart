@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:equipro/src/utils/constants.dart';
-import 'package:equipro/src/widgets/bar/horizontalScrollWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/widgets/event/evenementsListWidget.dart';
 import 'package:go_router/go_router.dart';

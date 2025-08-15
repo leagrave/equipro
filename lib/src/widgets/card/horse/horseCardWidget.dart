@@ -11,7 +11,7 @@ import 'package:equipro/src/models/horseFeedType.dart';
 import 'package:equipro/src/models/horseActivityType.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 
 class HorseCardWidget extends StatefulWidget {
   final Horse horse;

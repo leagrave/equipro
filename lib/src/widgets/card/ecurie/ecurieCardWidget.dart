@@ -3,7 +3,7 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/ecurie.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 
 class EcurieCardWidget extends StatefulWidget {
   final String proID;

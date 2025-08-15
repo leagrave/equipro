@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:equipro/src/pages/client/createClient.dart'; 
-import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';  
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientAdresseCardWidget.dart';

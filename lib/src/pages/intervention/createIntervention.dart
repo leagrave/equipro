@@ -341,11 +341,11 @@ Future<void> _init() async {
     });
   }
 
-  void _onSaveEcurieCard() {
-    setState(() {
-      showHorseCard = false;  
-    });
-  }
+  // void _onSaveEcurieCard() {
+  //   setState(() {
+  //     showHorseCard = false;  
+  //   });
+  // }
 
 
 
