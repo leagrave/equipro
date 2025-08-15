@@ -82,9 +82,19 @@ jobs:
           channel: 'stable'
 
       - run: flutter pub get
-      - run: flutter build apk --release
-      - if: runner.os == 'macOS'
-        run: flutter build ios --release
+
+      # Build Windows executable
+      - name: Build Windows
+        if: runner.os == 'Windows' || runner.os == 'ubuntu-latest'
+        run: flutter build windows --release
+
+      # Build Android APK
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      # Build Android App Bundle (pour Google Play)
+      - name: Build Android App Bundle
+        run: flutter build appbundle --release
 
   bump_version:
     name: Bump Flutter version
