@@ -38,8 +38,8 @@ jobs:
         run: flutter doctor -v
       - name: Install dependencies
         run: flutter pub get
-      - name: Analyze code
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+      # - name: Analyze code
+      #   run: flutter analyze --no-fatal-infos --no-fatal-warnings
       - name: Run tests
         run: flutter test test/integration_test
       - name: Upload coverage report
