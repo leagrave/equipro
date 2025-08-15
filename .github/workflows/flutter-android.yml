@@ -37,12 +37,6 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
       - run: flutter pub get
-      - run: flutter analyze
-      - run: flutter test --coverage
-      - uses: actions/upload-artifact@v4
-        with:
-          name: coverage
-          path: coverage/
 
 
   flutter_analyze_test:
