@@ -49,7 +49,7 @@ void initState() {
 Future<void> _initData() async {
   setState(() => isLoading = true);
 
-  //await _loadProId();
+  await _loadProId();
 
   await fetchInterventions();
 
@@ -65,12 +65,12 @@ Future<void> _initData() async {
 //   setState(() => isLoading = false);
 // }
 
-  // Future<void> _loadProId() async {
-  //   final storedProId = await storage.read(key: 'pro_id');
-  //   setState(() {
-  //     proId = storedProId;
-  //   });
-  // }
+  Future<void> _loadProId() async {
+    final storedProId = await storage.read(key: 'pro_id');
+    setState(() {
+      proId = storedProId;
+    });
+  }
 
 
 
@@ -124,7 +124,7 @@ Future<void> fetchInterventions() async {
 
   void navigateToCreateInterventionPage() async {
     await context.push('/createIntervention', extra: {
-      'proID': widget.proID,
+      'proId': widget.proID,
       'userId': widget.userId,
       'horseId': widget.horseId,
     });

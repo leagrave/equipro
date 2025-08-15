@@ -82,7 +82,7 @@ class MyHomePage extends StatelessWidget {
                       return ElevatedButton.icon(
                         onPressed: () {
                           context.push('/createIntervention', extra: {
-                            'proID': proID,
+                            'proId': proID,
                           });
                         },
                         icon: const Icon(Icons.add, color: Constants.appBarBackgroundColor),
