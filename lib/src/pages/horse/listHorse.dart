@@ -130,6 +130,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
             : horses;
 
       });
+      await fetchHorses();
     }
   }
 

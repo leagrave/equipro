@@ -8,15 +8,14 @@ import 'package:equipro/src/pages/home.dart';
 import 'package:equipro/src/pages/agenda.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';  
+
 class MyWidgetBottomNavBar extends StatefulWidget {
   final int initialPageIndex;
-
 
   const MyWidgetBottomNavBar({
     Key? key,
     this.initialPageIndex = 0,
-
   }) : super(key: key);
 
   @override
@@ -29,6 +28,8 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
   String? currentToken;
   bool professional = false;
 
+  final _secureStorage = const FlutterSecureStorage();
+
   @override
   void initState() {
     super.initState();
@@ -36,11 +37,9 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
     _loadUserData();
   }
 
-    Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    final token = prefs.getString('token');
-    final userJson = prefs.getString('user');
+  Future<void> _loadUserData() async {
+    final token = await _secureStorage.read(key: 'authToken');
+    final userJson = await _secureStorage.read(key: 'userData');
 
     if (userJson != null) {
       final user = jsonDecode(userJson);
@@ -71,8 +70,8 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
     ];
 
     return Scaffold(
-      appBar:  MyWidgetAppBar(
-        title: 'EquiPro' , //  ${currentIdClient ?? "Invité}
+      appBar: MyWidgetAppBar(
+        title: 'EquiPro',
         logoPath: Constants.logo,
         backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: false,
@@ -81,9 +80,9 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           backgroundColor: Constants.appBarBackgroundColor,
-          indicatorColor: Colors.transparent, // Désactiver l'effet de surbrillance
+          indicatorColor: Colors.transparent,
           labelTextStyle: MaterialStateProperty.all(
-            const TextStyle(color: Colors.white), // Labels en blanc
+            const TextStyle(color: Colors.white),
           ),
           iconTheme: MaterialStateProperty.resolveWith<IconThemeData>(
             (Set<MaterialState> states) {
@@ -113,7 +112,7 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
               label: 'Répertoire',
             ),
             NavigationDestination(
-              icon: Icon(Icons.home_outlined, ), //size: 40,
+              icon: Icon(Icons.home_outlined),
               selectedIcon: Icon(Icons.home),
               label: 'Accueil',
             ),

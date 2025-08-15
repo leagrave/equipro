@@ -219,7 +219,7 @@ final GoRouter go = GoRouter(
             final extra = state.extra as Map<String, dynamic>;
             final userId = extra['userId'] as String?;
             final horseId = extra['horseId']as String?;
-            final proID = extra['proID'] as String;
+            final proID = extra['proId'] as String;
             return CreateInterventionPage(userId: userId, horseId: horseId, proId: proID,);
           },
         ),

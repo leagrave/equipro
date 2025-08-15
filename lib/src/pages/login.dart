@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
 import 'package:equipro/src/utils/constants.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 class MyLoginPage extends StatefulWidget {
+  final http.Client? httpClient;
+
+    MyLoginPage({this.httpClient});
+
   @override
   _MyLoginPageState createState() => _MyLoginPageState();
 }
@@ -15,17 +19,18 @@ class MyLoginPage extends StatefulWidget {
 class _MyLoginPageState extends State<MyLoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   bool _isLoading = false;
   String? _errorMessage;
 
-Future<void> _login() async {
-  setState(() {
-    _isLoading = true;
-    _errorMessage = null;
-  });
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    
+    });
 
-  final storage = const FlutterSecureStorage();
 
   final email = _emailController.text.trim();
   final password = _passwordController.text;
@@ -38,8 +43,13 @@ Future<void> _login() async {
     return;
   }
 
+
   try {
-    final response = await http.post(
+
+    final client = widget.httpClient ?? http.Client();
+
+
+    final response = await client.post(
       Uri.parse('${Constants.apiBaseUrl}/login'), 
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
@@ -52,6 +62,7 @@ Future<void> _login() async {
 
       await storage.write(key: 'authToken', value: token);
       await storage.write(key: 'userData', value: jsonEncode(user));
+      await storage.write(key: 'lastEmail', value: email);
 
       if (user['pro_id'] != null) {
         await storage.write(key: 'pro_id', value: user['pro_id']);
@@ -74,6 +85,7 @@ Future<void> _login() async {
       setState(() {
         _errorMessage = errorData['error'] ?? "Erreur lors de la connexion";
       });
+      print("_errorMessage set to: $_errorMessage");
     }
   } catch (e) {
     setState(() {
@@ -85,6 +97,21 @@ Future<void> _login() async {
     });
   }
 }
+
+  Future<void> _loadSavedEmail() async {
+    String? savedEmail = await storage.read(key: 'lastEmail');
+    if (savedEmail != null && savedEmail.isNotEmpty) {
+      setState(() {
+        _emailController.text = savedEmail;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedEmail();
+  }
 
 
   @override
@@ -130,6 +157,7 @@ Future<void> _login() async {
                   ),
                   const SizedBox(height: 40),
                   TextField(
+                    key: Key('emailField'), 
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
@@ -147,6 +175,7 @@ Future<void> _login() async {
                   ),
                   const SizedBox(height: 20),
                   TextField(
+                    key: Key('passwordField'),
                     controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -166,10 +195,12 @@ Future<void> _login() async {
                   if (_errorMessage != null)
                     Text(
                       _errorMessage!,
+                      key: Key('errorMessage'),
                       style: const TextStyle(color: Colors.redAccent),
                     ),
                   const SizedBox(height: 10),
                   ElevatedButton(
+                    key: Key('loginButton'),
                     onPressed: _isLoading ? null : _login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,

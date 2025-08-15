@@ -2,9 +2,23 @@ import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/widgets/form/signUpFormWidget.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:go_router/go_router.dart'; 
+import 'package:go_router/go_router.dart';
 
-class MySignupPage extends StatelessWidget {
+class MySignupPage extends StatefulWidget {
+  const MySignupPage({super.key});
+
+  @override
+  State<MySignupPage> createState() => _MySignupPageState();
+}
+
+class _MySignupPageState extends State<MySignupPage> {
+  bool _triggerValidation = false;
+
+  void _onCreateAccountPressed() {
+    setState(() {
+      _triggerValidation = !_triggerValidation;
+    });
+  }
 
 
   @override
@@ -28,14 +42,11 @@ class MySignupPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Logo ou image en haut
                     const CircleAvatar(
                       radius: 50,
-                      backgroundImage: AssetImage(
-                          Constants.logo), 
+                      backgroundImage: AssetImage(Constants.logo),
                     ),
                     const SizedBox(height: 20),
-                    // Texte d'en-tête
                     const AutoSizeText(
                       'Bienvenue sur EquiPro',
                       style: TextStyle(
@@ -54,17 +65,19 @@ class MySignupPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 40),
 
-                    SignUpFormWidget(),
+                    // Enfant qui écoute la validation
+                    SignUpFormWidget(
+                      triggerValidation: _triggerValidation,
+                      enSaisie: true,
+                      openWithSignUp: true,
+                    ),
 
                     const SizedBox(height: 30),
-                    // Bouton de création de compte
                     ElevatedButton(
-                      onPressed: () {
-                        print('Création de compte...');
-                      },
+                      onPressed: _onCreateAccountPressed,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        foregroundColor: Color(0xFF28313E),
+                        foregroundColor: const Color(0xFF28313E),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 50,
                           vertical: 15,
@@ -79,7 +92,7 @@ class MySignupPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Lien déjà inscrit
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -88,9 +101,7 @@ class MySignupPage extends StatelessWidget {
                           style: TextStyle(color: Colors.white70),
                         ),
                         GestureDetector(
-                          onTap: () {
-                            context.go('/login');
-                          },
+                          onTap: () => context.go('/login'),
                           child: const AutoSizeText(
                             'Se connecter',
                             style: TextStyle(
@@ -101,6 +112,7 @@ class MySignupPage extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),

@@ -4,25 +4,40 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const _storage = FlutterSecureStorage();
+  static FlutterSecureStorage _storage = const FlutterSecureStorage();
+  static http.Client _httpClient = http.Client();
 
-  /// Récupère le token du secure storage
-static Future<String?> _getToken() async {
-  try {
-    return await _storage.read(key: 'authToken');
-  } catch (e) {
-    print("Erreur lors de la lecture du token : $e");
-    return null;
+  static void overrideDependencies({
+    FlutterSecureStorage? storage,
+    http.Client? httpClient,
+  }) {
+    if (storage != null) _storage = storage;
+    if (httpClient != null) _httpClient = httpClient;
   }
-}
 
+  static Future<http.Response> Function(String endpoint)? mockGetWithAuth;
+  static Future<http.Response> Function(String endpoint)? mockPostWithAuth;
 
-  /// GET avec Auth
+  static Future<String?> _getToken() async {
+    try {
+      return await _storage.read(key: 'authToken');
+    } catch (e) {
+      print("Erreur lors de la lecture du token : $e");
+      return null;
+    }
+  }
+
   static Future<http.Response> getWithAuth(String endpoint) async {
+
+    if (mockGetWithAuth != null) {
+      return mockGetWithAuth!(endpoint);
+    }
+
+
     final token = await _getToken();
     if (token == null) throw Exception("Aucun token trouvé");
 
-    return await http.get(
+    return await _httpClient.get(
       Uri.parse('${Constants.apiBaseUrl}$endpoint'),
       headers: {
         'Content-Type': 'application/json',
@@ -33,6 +48,11 @@ static Future<String?> _getToken() async {
 
   /// POST avec Auth
   static Future<http.Response> postWithAuth(String endpoint, Map<String, dynamic> body) async {
+
+        if (mockPostWithAuth != null) {
+      return mockPostWithAuth!(endpoint);
+    }
+
     final token = await _getToken();
     if (token == null) throw Exception("Aucun token trouvé");
 

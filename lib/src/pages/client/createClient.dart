@@ -8,14 +8,13 @@ import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientAdresseCardWidget.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 class CreateClientPage extends StatefulWidget {
   final String proID;
   final bool?  openWithCreateHorsePage;
+  
 
   const CreateClientPage({Key? key, required this.proID, this.openWithCreateHorsePage =false}) : super(key: key);
 
@@ -26,7 +25,8 @@ class CreateClientPage extends StatefulWidget {
 class _CreateClientPageState extends State<CreateClientPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final secureStorage = const FlutterSecureStorage();
+  // Clé pour accéder au state de ClientCardWidget
+final GlobalKey<ClientCardWidgetState> _clientCardKey = GlobalKey<ClientCardWidgetState>();
 
 
   Users newUser = Users(
@@ -43,119 +43,103 @@ class _CreateClientPageState extends State<CreateClientPage> {
     addresses: [],
   );
 
-  // Variable pour les notes et adresses
   String clientNotes = '';
   List<String> clientAddresses = [];
-
   final String randomPassword = generateRandomPassword();
 
-
   Future<bool> saveClient() async {
-  try {
+    try {
+      // 2. Vérification email
+      final emailCheckResponse = await ApiService.getWithAuth("/user/email/checkEmail?email=${newUser.email}");
 
-    // 2. Vérification email
-    final emailCheckResponse = await ApiService.getWithAuth("/user/email/checkEmail?email=${newUser.email}");
+      if (emailCheckResponse.statusCode != 200) {
+        throw Exception("Erreur lors de la vérification de l'email");
+      }
 
-    if (emailCheckResponse.statusCode != 200) {
-      throw Exception("Erreur lors de la vérification de l'email");
-    }
+      final emailCheckBody = jsonDecode(emailCheckResponse.body);
+      final emailExists = emailCheckBody["exists"] == true;
 
-    final emailCheckBody = jsonDecode(emailCheckResponse.body);
-    final emailExists = emailCheckBody["exists"] == true;
+      String userId = "";
 
-    String userId = "";
+      if (!emailExists) {
+        final createUserResponse = await ApiService.postWithAuth(
+          '/userCreate',
+          {
+            "email": newUser.email,
+            "password": newUser.password,
+            "first_name": newUser.firstName,
+            "last_name": newUser.lastName,
+            "professional": false,
+          },
+        );
 
-    if (!emailExists) {
-      final createUserResponse = await ApiService.postWithAuth(
-        '/userCreate', 
+        if (createUserResponse.statusCode != 201) {
+          throw Exception("Erreur lors de la création de l'utilisateur");
+        }
+
+        final createdUser = jsonDecode(createUserResponse.body);
+        userId = createdUser["id"];
+        newUser = newUser.copyWith(id: userId);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("L'utilisateur avec cet email existe déjà.")),
+        );
+        return false;
+      }
+
+      // Créer le client (Customer)
+      final response = await ApiService.postWithAuth(
+        '/customer',
         {
-          "email": newUser.email,
-          "password": newUser.password,
-          "first_name": newUser.firstName,
-          "last_name": newUser.lastName,
-          "professional": false,
+          "owner_id": widget.proID,
+          "user_id": userId,
+          "phone": newUser.phone,
+          "phone2": newUser.phone2,
+          "is_societe": newUser.isSociete,
+          "societe_name": newUser.societeName,
+          "notes": newUser.notes,
+          "mainAddress": (newUser.addresses != null && newUser.addresses!.isNotEmpty)
+              ? {
+                  "address": newUser.addresses!.first.address,
+                  "city": newUser.addresses!.first.city,
+                  "postal_code": newUser.addresses!.first.postalCode,
+                  "country": newUser.addresses!.first.country,
+                  "latitude": newUser.addresses!.first.latitude,
+                  "longitude": newUser.addresses!.first.longitude,
+                  "user_id": userId,
+                  "horse_id": null,
+                  "type": "main",
+                }
+              : null,
+          "billingAddress": (newUser.addresses != null && newUser.addresses!.length > 1)
+              ? {
+                  "address": newUser.addresses![1].address,
+                  "city": newUser.addresses![1].city,
+                  "postal_code": newUser.addresses![1].postalCode,
+                  "country": newUser.addresses![1].country,
+                  "latitude": newUser.addresses![1].latitude,
+                  "longitude": newUser.addresses![1].longitude,
+                  "user_id": userId,
+                  "horse_id": null,
+                  "type": "billing",
+                }
+              : null,
         },
       );
 
-      if (createUserResponse.statusCode != 201) {
-        throw Exception("Erreur lors de la création de l'utilisateur");
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        print("Erreur lors de la création du client: ${response.body}");
+        return false;
       }
-
-      final createdUser = jsonDecode(createUserResponse.body);
-      userId = createdUser["id"];
-      newUser = newUser.copyWith(id: userId);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("L'utilisateur avec cet email existe déjà.")),
-      );
+    } catch (e) {
+      print("Erreur globale dans saveClient: $e");
       return false;
     }
-
-   //Créer le client (Customer)
-  final response = await ApiService.postWithAuth(
-    '/customer',
-    {
-      "owner_id": widget.proID,
-      "user_id": userId,
-      "phone": newUser.phone,
-      "phone2": newUser.phone2,
-      "is_societe": newUser.isSociete,
-      "societe_name": newUser.societeName,
-      "notes": newUser.notes,
-      "mainAddress": (newUser.addresses != null && newUser.addresses!.isNotEmpty)
-          ? {
-              "address": newUser.addresses!.first.address,
-              "city": newUser.addresses!.first.city,
-              "postal_code": newUser.addresses!.first.postalCode,
-              "country": newUser.addresses!.first.country,
-              "latitude": newUser.addresses!.first.latitude,
-              "longitude": newUser.addresses!.first.longitude,
-              "user_id": userId,
-              "horse_id": null,
-              "type": "main",
-            }
-          : null,
-      "billingAddress": (newUser.addresses != null && newUser.addresses!.length > 1)
-          ? {
-              "address": newUser.addresses![1].address,
-              "city": newUser.addresses![1].city,
-              "postal_code": newUser.addresses![1].postalCode,
-              "country": newUser.addresses![1].country,
-              "latitude": newUser.addresses![1].latitude,
-              "longitude": newUser.addresses![1].longitude,
-              "user_id": userId,
-              "horse_id": null,
-              "type": "billing",
-            }
-          : null,
-    },
-  );
-
-
-    if (response.statusCode == 201) {
-      return true;
-    } else {
-      print("Erreur lors de la création du client: ${response.body}");
-      return false;
-    }
-  } catch (e) {
-    print("Erreur globale dans saveClient: $e");
-    return false;
   }
-}
 
-
-  // void navigateToCreateClientPage(Users user) async {
-  //   context.push('/createHorse', extra: {
-  //     'proID': widget.proID,
-  //     'customer': user,
-  //     'customId': newUser.customer_id
-  //   });
-
-  // }
-
-
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyWidgetAppBar(
@@ -179,6 +163,7 @@ class _CreateClientPageState extends State<CreateClientPage> {
               child: Column(
                 children: [
                   ClientCardWidget(
+                    key: _clientCardKey,
                     user: newUser,
                     onUserUpdated: (updatedUser) {
                       setState(() {
@@ -232,12 +217,15 @@ class _CreateClientPageState extends State<CreateClientPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          bool isValid = await _clientCardKey.currentState!.validateForm();
+          if (!isValid) return;
+
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             bool success = await saveClient();
             if (success) {
               if (widget.openWithCreateHorsePage == true) {
-                Navigator.pop(context, newUser.id); 
+                Navigator.pop(context, newUser.id);
               } else {
                 showDialog(
                   context: context,
@@ -249,14 +237,14 @@ class _CreateClientPageState extends State<CreateClientPage> {
                         TextButton(
                           child: Text('Non'),
                           onPressed: () {
-                            Navigator.pop(context); // Ferme le dialogue
-                            Navigator.pop(context, newUser); // Retour à la page précédente avec le client créé
+                            Navigator.pop(context);
+                            Navigator.pop(context, newUser);
                           },
                         ),
                         ElevatedButton(
                           child: Text('Oui'),
                           onPressed: () {
-                            Navigator.pop(context); // Ferme le dialogue
+                            Navigator.pop(context);
                             context.push('/createHorse', extra: {
                               'proID': widget.proID,
                               'customer': newUser,
@@ -274,7 +262,6 @@ class _CreateClientPageState extends State<CreateClientPage> {
                 SnackBar(content: Text('Erreur lors de la sauvegarde.')),
               );
             }
-
           }
         },
         child: const Icon(Icons.save, color: Constants.white),

@@ -11,8 +11,8 @@ class SplashPage extends StatelessWidget {
 
   Future<void> checkLogin(BuildContext context) async {
     // Lecture sécurisée des données
-    final token = await storage.read(key: 'token');
-    final userString = await storage.read(key: 'user');
+    final token = await storage.read(key: 'authToken');
+    final userString = await storage.read(key: 'userData');
 
     await Future.delayed(const Duration(milliseconds: 500));
 

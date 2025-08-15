@@ -1,32 +1,37 @@
-name: Build Flutter APK
+name: Flutter CI/CD
 
 on:
   push:
-    branches:
-      - develop
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
-    name: Build APK
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.6.1'
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.6.1' 
 
-      - name: Install dependencies
-        run: flutter pub get
+    - name: Install dependencies
+      run: flutter pub get
 
-      - name: Build APK
-        run: flutter build apk --release
+    - name: Run Flutter analyzer
+      run: flutter analyze
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-release.apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+    - name: Run tests
+      run: flutter test
+
+    - name: Build APK (Android)
+      run: flutter build apk --release
+
+    - name: Build IPA (iOS)
+      if: runner.os == 'macOS'
+      run: flutter build ios --release

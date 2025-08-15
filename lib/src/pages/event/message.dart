@@ -4,7 +4,7 @@ import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MessagesPage extends StatefulWidget {
   const MessagesPage({Key? key}) : super(key: key);
@@ -16,6 +16,9 @@ class MessagesPage extends StatefulWidget {
 class _MessagesPageState extends State<MessagesPage> {
   String? currentUserId;
 
+  // Instance de FlutterSecureStorage
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+
   @override
   void initState() {
     super.initState();
@@ -23,8 +26,8 @@ class _MessagesPageState extends State<MessagesPage> {
   }
 
   Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString('user');
+    // Lecture sécurisée des données
+    final userJson = await secureStorage.read(key: 'userData');
     if (userJson != null) {
       final user = jsonDecode(userJson);
       setState(() {
@@ -38,7 +41,7 @@ class _MessagesPageState extends State<MessagesPage> {
     if (currentUserId == null) {
       // Afficher un loader pendant la récupération
       return const Scaffold(
-        body:  Center(child: CircularProgressIndicator()),
+        body: Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -120,12 +123,12 @@ class _MessagesPageState extends State<MessagesPage> {
                           style: const TextStyle(fontSize: 12, color: Colors.grey),
                         )
                       : null,
-                      onTap: () {
-                        context.push(
-                          '/chat/${conv.id}',
-                          extra: currentUserId, 
-                        );
-                      },
+                  onTap: () {
+                    context.push(
+                      '/chat/${conv.id}',
+                      extra: currentUserId,
+                    );
+                  },
                 );
               },
             );

@@ -22,10 +22,11 @@ class ClientCardWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ClientCardWidgetState createState() => _ClientCardWidgetState();
+  ClientCardWidgetState createState() => ClientCardWidgetState();
 }
 
-class _ClientCardWidgetState extends State<ClientCardWidget> {
+class ClientCardWidgetState extends State<ClientCardWidget> {
+  
   late Users _user;
   late Users _originalUser; 
   bool _isEditing = false;
@@ -67,6 +68,10 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
       _isEditing = true;
     }
 
+  }
+
+  Future<bool> validateForm() async {
+    return await _validateForm();
   }
 
   Future<bool> _validateForm() async {
@@ -121,7 +126,6 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
   }
 
   Future<void> _validerEtMettreAJourUtilisateur() async {
-    if (!await _validateForm()) return;
 
     final response = await ApiService.putWithAuth(
       "/customer/${_idController.text.trim()}",
@@ -153,6 +157,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
         _isEditing = false;
       });
 
+
       widget.onUserUpdated?.call(_user);
       widget.onSave?.call();
 
@@ -179,30 +184,33 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
     super.dispose();
   }
 
-  void _handleSaveOrCancel({required bool isSave}) {
+Future<void> _handleSaveOrCancel({required bool isSave}) async {
+  if (isSave) {
+    final isValid = await _validateForm();
+    if (!isValid) return;
+
+    // Appelle onSave et onClientUpdated si nécessaire
+    await _validerEtMettreAJourUtilisateur();
+    // widget.onSave?.call();
+    // if (widget.onUserUpdated != null) {
+    //   widget.onUserUpdated!(_user);
+    // }
+  } else {
     setState(() {
-      if (isSave) {
-        // Appelle onSave et onClientUpdated si nécessaire
-        _validerEtMettreAJourUtilisateur();
-        // widget.onSave?.call();
-        // if (widget.onUserUpdated != null) {
-        //   widget.onUserUpdated!(_user);
-        // }
-      } else {
-        // Restaure l'état initial du client
-        _user = _originalUser;
-        _nomController.text = _user.lastName;
-        _prenomController.text = _user.firstName;
-        _telController.text = _user.phone ?? "";
-        _tel2Controller.text = _user.phone2 ?? "";
-        _emailController.text = _user.email ?? "";
-        _societeNameController.text = _user.societeName ?? "";
-        _tempIsSociete = _user.isSociete;
-        _tempIsProfessional = _user.professional;
-      }
+      // Restaure l'état initial du client
+      _user = _originalUser;
+      _nomController.text = _user.lastName;
+      _prenomController.text = _user.firstName;
+      _telController.text = _user.phone ?? "";
+      _tel2Controller.text = _user.phone2 ?? "";
+      _emailController.text = _user.email ?? "";
+      _societeNameController.text = _user.societeName ?? "";
+      _tempIsSociete = _user.isSociete;
+      _tempIsProfessional = _user.professional;
       _isEditing = false;
     });
   }
+}
 
   void _updateClient({
     //String? id,
@@ -228,6 +236,7 @@ class _ClientCardWidgetState extends State<ClientCardWidget> {
         societeName: societeName ?? _user.societeName,
       );
     });
+   
     widget.onUserUpdated?.call(_user);
     widget.onSave?.call();
   }

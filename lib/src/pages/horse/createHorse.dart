@@ -31,6 +31,7 @@ class CreateHorsePage extends StatefulWidget {
 
 class _CreateHorsePageState extends State<CreateHorsePage> {
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<HorseCardWidgetState> _horseCardKey = GlobalKey<HorseCardWidgetState>();
 
   List<Users> usersList = [];
   List<Users> filteredUsers = [];
@@ -191,7 +192,13 @@ Future<List<Ecurie>> fetchEcuries() async {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       return jsonData.map((data) => Ecurie.fromJson(data)).toList();
-    } else {
+    } else if (response.statusCode == 404) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Aucune écurie trouvée.")),
+      );
+      return [];
+    }
+    else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Impossible de charger les écuries.")),
       );
@@ -230,7 +237,6 @@ Future<List<Address>> fetchAddressById(String id) async {
 
   Future<void> _loadClients() async {
     final users = await fetchClients();
-
     setState(() {
       usersList = users;
       isLoading = false;
@@ -365,6 +371,7 @@ Future<List<Address>> fetchAddressById(String id) async {
 
                   // // Widget pour les informations principales du cheval
                   HorseCardWidget(
+                    key: _horseCardKey,
                     horse: newHorse,
                     onHorseUpdated: (updatedHorse) {
                       setState(() {
@@ -425,10 +432,13 @@ Future<List<Address>> fetchAddressById(String id) async {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          bool isValid = await _horseCardKey.currentState!.validateForm();
+            if (!isValid) return;
+
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
-            saveHorse();
+            await saveHorse();
           }
         },
         child: const Icon(Icons.save, color: Constants.appBarBackgroundColor),

@@ -8,8 +8,6 @@ import 'package:equipro/src/widgets/card/client/clientCardWidget.dart';
 import 'package:equipro/src/widgets/card/client/clientAdresseCardWidget.dart';
 import 'package:equipro/src/widgets/card/client/listBottumClientCardWidget.dart';
 import 'package:equipro/src/widgets/card/noteCardWidget.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ManagementClientPage extends StatefulWidget {

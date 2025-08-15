@@ -44,10 +44,9 @@ class _SettingsPageState extends State<SettingsPage> {
       currentIdUser = userId;
       currentToken = token;
       professional = userMap['professional'] ?? false;
-      currentUser = Users.fromJson(userMap); // on affiche déjà les infos locales
+      currentUser = Users.fromJson(userMap); 
     });
 
-    // Tentative de mise à jour des infos depuis l'API (non bloquante)
     if (userId != null && token != null) {
       fetchCurrentUser(userId, token).then((user) {
         if (user != null) {
@@ -57,7 +56,6 @@ class _SettingsPageState extends State<SettingsPage> {
         }
       }).catchError((error) {
         debugPrint('Erreur fetch user : $error');
-        // Option : logout() si 401
       });
     }
   }
@@ -100,42 +98,44 @@ class _SettingsPageState extends State<SettingsPage> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: Column(
-          children: [
-            if (currentUser != null)
-              UserCard(
-                profileImageUrl: Constants.avatar,
-                firstName: currentUser!.firstName,
-                lastName: currentUser!.lastName,
-                isProfessional: currentUser!.professional ?? false,
-                isVerified: currentUser!.isVerified ?? false,
-                onEditProfile: () {
-                  context.push('/profile', extra: {'currentUser': currentUser});
-                },
-                onUserTap: () {
-                  context.push('/profile', extra: {'currentUser': currentUser});
-                },
-              )
-            else
-              const Padding(
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator(),
-              ),
-            Expanded(child: SettingsScreen()),
-            ElevatedButton(
-              onPressed: logout,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Constants.secondaryRed,
-                foregroundColor: Constants.white,
-                padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              if (currentUser != null)
+                UserCard(
+                  profileImageUrl: Constants.avatar,
+                  firstName: currentUser!.firstName,
+                  lastName: currentUser!.lastName,
+                  isProfessional: currentUser!.professional ?? false,
+                  isVerified: currentUser!.isVerified ?? false,
+                  onEditProfile: () {
+                    context.push('/profile', extra: {'currentUser': currentUser});
+                  },
+                  onUserTap: () {
+                    context.push('/profile', extra: {'currentUser': currentUser});
+                  },
+                )
+              else
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: CircularProgressIndicator(),
                 ),
+              SettingsScreen(),
+              ElevatedButton(
+                onPressed: logout,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Constants.secondaryRed,
+                  foregroundColor: Constants.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text('Déconnexion'),
               ),
-              child: const Text('Déconnexion'),
-            ),
-            const SizedBox(height: 12),
-          ],
+              const SizedBox(height: 12),
+            ],
+          ),
         ),
       ),
     );

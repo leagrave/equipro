@@ -6,12 +6,12 @@ import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/widgets/list/clientListWidget.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:diacritic/diacritic.dart';
 
 class ListClientPage extends StatefulWidget {
   final String? userId;
+
 
   const ListClientPage({Key? key, this.userId}) : super(key: key);
 
@@ -37,7 +37,7 @@ Future<void> fetchClients() async {
 
     // Effectuer la requête avec Authorization: Bearer <token>
     final response = await ApiService.getWithAuth("/agendaAll/${widget.userId}");
-
+  print(response);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       final fetchedClients = jsonData.map((data) => Users.fromJson(data)).toList();
@@ -89,7 +89,7 @@ void filterClients(String query) {
           }
         }
 
-        city = removeDiacritics((mainAddress ?? billingAddress)?.city?.toLowerCase() ?? '');
+        city = removeDiacritics((mainAddress ?? billingAddress)?.city.toLowerCase() ?? '');
       }
 
       final horseMatch = user.horses?.any((horse) =>

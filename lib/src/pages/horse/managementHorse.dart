@@ -134,7 +134,13 @@ Future<List<Ecurie>> fetchEcuries() async {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       return jsonData.map((data) => Ecurie.fromJson(data)).toList();
-    } else {
+    } else if (response.statusCode == 404) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Aucune écurie trouvée.")),
+      );
+      return [];
+    }
+    else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Impossible de charger les écuries.")),
       );

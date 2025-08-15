@@ -35,10 +35,10 @@ class HorseCardWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _HorseCardWidgetState createState() => _HorseCardWidgetState();
+  HorseCardWidgetState createState() => HorseCardWidgetState();
 }
 
-class _HorseCardWidgetState extends State<HorseCardWidget> {
+class HorseCardWidgetState extends State<HorseCardWidget> {
   late Horse _horse;
   late Horse _originalHorse;
 
@@ -130,7 +130,9 @@ void initState() {
     });
   }
 
-
+  Future<bool> validateForm() async {
+    return await _validateForm();
+  }
 
 
 Future<bool> _validateForm() async {
@@ -210,7 +212,7 @@ Future<bool> _validateForm() async {
 
 
 Future<void> _validerEtMettreAJourCheval() async {
-  if (!await _validateForm()) return;
+  //if (!await _validateForm()) return;
 
   final id = _idController.text.trim();
   if (id.isEmpty) {
@@ -287,13 +289,16 @@ Future<void> _validerEtMettreAJourCheval() async {
     super.dispose();
   }
 
-void _handleSaveOrCancel({required bool isSave}) {
-  setState(() {
+void _handleSaveOrCancel({required bool isSave}) async {
+
     if (isSave) {
+      final isValid = await _validateForm();
+      if (!isValid) return;
       // Appelle la méthode de validation et mise à jour
-      _validerEtMettreAJourCheval();
-      widget.onSaveStateChanged?.call(true);
+      await _validerEtMettreAJourCheval();
+      //widget.onSaveStateChanged?.call(true);
     } else {
+      setState(() {
       // Restaure l'état initial du cheval (_originalHorse)
       _horse = _originalHorse;
 
@@ -315,12 +320,12 @@ void _handleSaveOrCancel({required bool isSave}) {
           ? DateFormat('dd/MM/yyyy').format(_horse.nextVisitDate!)
           : '';
 
-    }
+    });
 
-    // Quitte le mode édition dans tous les cas
-    widget.onEditingChanged?.call(false);
-    widget.onSaveStateChanged?.call(false);
-  });
+  }
+  // Quitte le mode édition dans tous les cas
+  widget.onEditingChanged?.call(false);
+  widget.onSaveStateChanged?.call(false);
 }
 
 

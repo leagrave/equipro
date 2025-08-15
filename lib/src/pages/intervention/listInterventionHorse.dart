@@ -49,28 +49,28 @@ void initState() {
 Future<void> _initData() async {
   setState(() => isLoading = true);
 
-  await _loadProId();
+  //await _loadProId();
 
   await fetchInterventions();
 
   setState(() => isLoading = false);
 }
 
-  Future<void> loadAllData() async {
-  setState(() => isLoading = true);
+//   Future<void> loadAllData() async {
+//   setState(() => isLoading = true);
 
 
-  await fetchInterventions();
+//   await fetchInterventions();
 
-  setState(() => isLoading = false);
-}
+//   setState(() => isLoading = false);
+// }
 
-  Future<void> _loadProId() async {
-    final storedProId = await storage.read(key: 'pro_id');
-    setState(() {
-      proId = storedProId;
-    });
-  }
+  // Future<void> _loadProId() async {
+  //   final storedProId = await storage.read(key: 'pro_id');
+  //   setState(() {
+  //     proId = storedProId;
+  //   });
+  // }
 
 
 
@@ -128,6 +128,7 @@ Future<void> fetchInterventions() async {
       'userId': widget.userId,
       'horseId': widget.horseId,
     });
+    fetchInterventions();
   }
 
   @override

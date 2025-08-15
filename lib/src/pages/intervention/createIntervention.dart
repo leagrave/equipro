@@ -31,6 +31,7 @@ class CreateInterventionPage extends StatefulWidget {
 
 class _CreateInterventionPageState extends State<CreateInterventionPage> {
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<InterventionCardWidgetState> _interventionCardKey = GlobalKey<InterventionCardWidgetState>();
   final storage = const FlutterSecureStorage();
 
   List<Users> usersList = [];
@@ -218,7 +219,6 @@ void _onRemoveUser(Users user) async {
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         final fetchedClients = jsonData.map((data) => Users.fromJson(data)).toList();
-        print(List<Users>.from(fetchedClients));
         return List<Users>.from(fetchedClients);
       } else {
         throw Exception("Échec du chargement des clients");
@@ -392,6 +392,7 @@ Future<void> loadClientsAndHorses() async {
 
                   // // Widget pour les informations principales du cheval
                   InterventionCardWidget(
+                    key: _interventionCardKey,
                     intervention: newIntervention,
                     onInterventionUpdated: (updatedIntervention) {
                       setState(() {
@@ -426,6 +427,9 @@ Future<void> loadClientsAndHorses() async {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          bool isValid = await _interventionCardKey.currentState!.validateForm();
+            if (!isValid) return; 
+
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
 

@@ -6,42 +6,43 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAJujsK_ujwDcW48jBXyP9ecBYGp68PrEQ",
-//   authDomain: "equipro-messagerie.firebaseapp.com",
-//   projectId: "equipro-messagerie",
-//   storageBucket: "equipro-messagerie.firebasestorage.app",
-//   messagingSenderId: "706095522218",
-//   appId: "1:706095522218:web:66d53a4dd6ca2b3f284bd3",
-//   measurementId: "G-2922XS9CNY"
-//};
+FirebaseAuth? globalFirebaseAuth; // Instance globale injectable
 
-void main() async {
-
+void main({FirebaseAuth? firebaseAuth}) async {
   WidgetsFlutterBinding.ensureInitialized();
-    await dotenv.load(fileName: ".env");
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform, 
-  );
+  await dotenv.load(fileName: ".env");
+
+  globalFirebaseAuth = firebaseAuth;
+
+  // Ne pas initialiser Firebase en mode test si mock déjà injecté
+  if (!Platform.environment.containsKey('FLUTTER_TEST') && globalFirebaseAuth == null) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
 
   tz.initializeTimeZones(); // Charge les fuseaux horaires
 
   await SentryFlutter.init(
     (options) {
-      options.dsn = 'https://c6afe6a67529f71f0d53028f31a9768c@o4509803034050560.ingest.de.sentry.io/4509803104239696';
-      // Adds request headers and IP for users,
-      // visit: https://docs.sentry.io/platforms/dart/data-management/data-collected/ for more info
+      options.dsn =
+          'https://c6afe6a67529f71f0d53028f31a9768c@o4509803034050560.ingest.de.sentry.io/4509803104239696';
       options.sendDefaultPii = true;
     },
     appRunner: () => runApp(
       SentryWidget(
-        child: MyApp(),
+        child: const MyApp(),
       ),
     ),
   );
-  runApp(const MyApp());
+
+  // Lance l'app au cas où Sentry init ne lance pas runApp (sécurité)
+  if (WidgetsBinding.instance == null) {
+    runApp(const MyApp());
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -51,11 +52,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'EquiPro',
-      locale: const Locale('fr', 'FR'), 
-      supportedLocales: [
-       const Locale('fr', 'FR'),
+      locale: const Locale('fr', 'FR'),
+      supportedLocales: const [
+        Locale('fr', 'FR'),
       ],
-      localizationsDelegates: const [ 
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routerConfig: go, 
+      routerConfig: go,
     );
   }
 }

@@ -34,10 +34,10 @@ class InterventionCardWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _InterventionCardWidgetState createState() => _InterventionCardWidgetState();
+  InterventionCardWidgetState createState() => InterventionCardWidgetState();
 }
 
-class _InterventionCardWidgetState extends State<InterventionCardWidget> {
+class InterventionCardWidgetState extends State<InterventionCardWidget> {
   late Intervention _intervention;
   late Intervention _originalIntervention;
 
@@ -160,19 +160,15 @@ void initState() {
     });
   }
 
-
+  Future<bool> validateForm() async {
+    return await _validateForm();
+  }
 
 
 Future<bool> _validateForm() async {
-  final horse = _horseController.text.trim();
-  final intervantionDate = _interventionDateController.text.trim();
-
-  if (horse.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Le nom du cheval doit être rempli")),
-    );
-    return false;
-  }
+  final intervantionDate = _intervention.interventionDate != null
+          ? DateFormat('dd/MM/yyyy').format(_intervention.interventionDate!)
+          : '';
 
   // Fonction interne pour valider une date (format ISO 8601 ici)
   bool isValidDate(String dateStr) {

@@ -2,23 +2,37 @@ import 'package:equipro/src/services/apiService.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/src/models/user.dart';
-import 'package:equipro/src/models/professionalType.dart'; 
+import 'package:equipro/src/models/professionalType.dart';
+import 'package:go_router/go_router.dart'; 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SignUpFormWidget extends StatefulWidget {
   final Users? currentUser;
   final bool enSaisie;
   final VoidCallback? onCancel;
   final bool originProfil;
+  final bool openWithSignUp;
+  final bool? triggerValidation; 
 
-  const SignUpFormWidget({super.key, this.currentUser, this.enSaisie = false, this.onCancel, this.originProfil = false,});
+  const SignUpFormWidget({super.key, 
+    this.currentUser, 
+    this.enSaisie = false, 
+    this.onCancel, 
+    this.originProfil = false,
+    this.openWithSignUp = false,
+    this.triggerValidation,
+  });
 
   @override
   State<SignUpFormWidget> createState() => _SignUpFormWidgetState();
 }
 
 class _SignUpFormWidgetState extends State<SignUpFormWidget> {
+  final _formKey = GlobalKey<FormState>();
+  final storage = FlutterSecureStorage();
+
   // Controllers
   late final TextEditingController _nomController;
   late final TextEditingController _prenomController;
@@ -43,8 +57,8 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
   late final TextEditingController _adresseFacturationCityController;
   late final TextEditingController _adresseFacturationPostalCodeController;
   late final TextEditingController _adresseFacturationCountryController;
-  String _adresseFacturationType = 'billing';
 
+  late String _adresseFacturationType;
 
  // mot de passe visible
   bool _obscurePassword = true;
@@ -154,12 +168,10 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
 }
 
 
-Future<void> _validerFormulaire() async {
-  if (!await _validateForm()) return;
+  Future<void> _validerFormulaire() async {
+    if (!await _validateForm()) return;
 
-  final response = await ApiService.putWithAuth(
-    "/user/all/${widget.currentUser?.id}",
-    {
+    final body = {
       'lastName': _nomController.text.trim(),
       'firstName': _prenomController.text.trim(),
       'email': _emailController.text.trim(),
@@ -186,31 +198,51 @@ Future<void> _validerFormulaire() async {
           'city': _adresseFacturationCityController.text.trim(),
           'postalCode': _adresseFacturationPostalCodeController.text.trim(),
           'country': _adresseFacturationCountryController.text.trim(),
-          'type': "billing",
+          'type': _adresseFacturationType.trim(),
         },
       ],
-    },
-  );
+    };
 
-  if (response.statusCode == 200) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Modifications enregistrées.")),
-    );
-    if (widget.onCancel != null) {
-      widget.onCancel!();
+    final response = widget.openWithSignUp
+        ? await ApiService.postWithAuth("/signup", body) 
+        : await ApiService.putWithAuth("/user/all/${widget.currentUser?.id}", body); 
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(widget.openWithSignUp ? "Compte créé." : "Modifications enregistrées.")),
+      );
+      if(widget.openWithSignUp == true)
+        // Sauvegarder après inscription
+          await storage.write(key: 'lastEmail', value: _emailController.text);
+
+          // Charger à l'ouverture de la page login
+          String? savedEmail = await storage.read(key: 'lastEmail');
+          _emailController.text = savedEmail ?? '';
+
+    context.go('/login');
+      if (widget.onCancel != null && !widget.openWithSignUp) {
+        widget.onCancel!();
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erreur : ${response.statusCode}")),
+      );
     }
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Erreur : ${response.statusCode}")),
-    );
   }
-}
+
+  // Permet au parent d'appeler la validation
+  Future<bool> validateAndSubmitFromParent() async {
+    if (!await _validateForm()) return false;
+    await _validerFormulaire();
+    return true;
+  }
 
 
   @override
   void initState() {
     super.initState();
     final user = widget.currentUser;
+    _adresseFacturationType = widget.openWithSignUp ? '' : 'billing';
 
     // Init champs
     _nomController = TextEditingController(text: user?.lastName ?? '');
@@ -307,6 +339,13 @@ Future<void> _validerFormulaire() async {
 @override
 void didUpdateWidget(covariant SignUpFormWidget oldWidget) {
   super.didUpdateWidget(oldWidget);
+
+  if (widget.openWithSignUp == true &&
+      widget.triggerValidation == true &&
+      oldWidget.triggerValidation != widget.triggerValidation) {
+    _validerFormulaire();
+  }
+
   if (oldWidget.enSaisie != widget.enSaisie && widget.enSaisie == false) {
     final user = widget.currentUser;
     setState(() {
@@ -370,7 +409,9 @@ void didUpdateWidget(covariant SignUpFormWidget oldWidget) {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Form(
+      key: _formKey,
+      child: Column(
       children: [
         _buildTextField("Nom *", _nomController, Icons.person),
         _buildTextField("Prénom *", _prenomController, Icons.person),
@@ -380,7 +421,7 @@ void didUpdateWidget(covariant SignUpFormWidget oldWidget) {
         _buildRoleSelector(),
         if (_selectedRole == true) _buildProfessionnelFields(),
         if (_selectedRole == false) _buildParticulierFields(),
-        if (widget.enSaisie) ...[
+        if (widget.enSaisie && !widget.openWithSignUp) ...[
         const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -413,6 +454,7 @@ void didUpdateWidget(covariant SignUpFormWidget oldWidget) {
       ],
 
       ],
+    )
     );
   }
 
@@ -530,8 +572,8 @@ Widget _buildTextField(
         _buildTextField("Téléphone secondaire", _tel2Controller, Icons.phone),
         _buildTextField("Nom de la société", _societeController, Icons.business),
         _buildTextField("Adresse", _adresseController, Icons.location_on),
-        _buildTextField("Ville", _adresseCityController, Icons.location_city),
         _buildTextField("Code postal", _adressePostalCodeController, Icons.location_city),
+        _buildTextField("Ville", _adresseCityController, Icons.location_city),
         _buildTextField("Pays", _adresseCountryController, Icons.public),
 
         //_buildTextField("Adresse de facturation", _adresseFacturationController, Icons.location_city),
@@ -552,13 +594,13 @@ Widget _buildTextField(
               : null,
         ),
         _buildTextField("Adresse", _adresseController, Icons.location_on),
-        _buildTextField("Ville", _adresseCityController, Icons.location_city),
         _buildTextField("Code postal", _adressePostalCodeController, Icons.location_city),
+        _buildTextField("Ville", _adresseCityController, Icons.location_city),
         _buildTextField("Pays", _adresseCountryController, Icons.public),
         if (_selectedRole == false) 
           _buildTextField("Adresse de facturation", _adresseFacturationController, Icons.location_city),
-          _buildTextField("Ville", _adresseFacturationCityController, Icons.location_city),
           _buildTextField("Code postal", _adresseFacturationPostalCodeController, Icons.location_city),
+          _buildTextField("Ville", _adresseFacturationCityController, Icons.location_city),
           _buildTextField("Pays", _adresseFacturationCountryController, Icons.public),
 
       ],

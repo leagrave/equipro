@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CreateConversationPage extends StatefulWidget {
   const CreateConversationPage({Key? key}) : super(key: key);
@@ -16,6 +16,9 @@ class _CreateConversationPageState extends State<CreateConversationPage> {
 
   final TextEditingController groupNameController = TextEditingController();
 
+
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+
   @override
   void initState() {
     super.initState();
@@ -23,8 +26,8 @@ class _CreateConversationPageState extends State<CreateConversationPage> {
   }
 
   Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString('user');
+
+    final userJson = await _secureStorage.read(key: 'userData');
 
     if (userJson != null) {
       final user = jsonDecode(userJson);
@@ -78,8 +81,6 @@ class _CreateConversationPageState extends State<CreateConversationPage> {
         'lastMessage': 'Conversation crée',
         'lastUpdated': FieldValue.serverTimestamp(),
         'members': members,
-        
-        //'groupPhotoURL': '', // Tu peux y mettre un lien ou un champ upload plus tard
       });
 
       await conversationDoc.collection('messages').add({
@@ -89,7 +90,7 @@ class _CreateConversationPageState extends State<CreateConversationPage> {
         'timestamp': FieldValue.serverTimestamp(),
         'type': 'text',
         'attachmentURL': null,
-            });
+      });
 
       print('Conversation créée avec l\'ID : ${conversationDoc.id}');
       Navigator.pop(context, conversationDoc.id);
