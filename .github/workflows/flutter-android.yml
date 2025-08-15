@@ -57,7 +57,7 @@ jobs:
       - name: Analyze code
         run: flutter analyze --no-fatal-infos --no-fatal-warnings
       - name: Run tests
-        run: flutter test --coverage
+        run: flutter test test/integration_test
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:

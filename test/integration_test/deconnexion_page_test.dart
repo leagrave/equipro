@@ -12,12 +12,13 @@ void main() {
   const MethodChannel storageChannel =
       MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
 
-  // Stockage simulé
   final Map<String, String> fakeStorage = {};
 
   setUp(() {
-    // Mock des appels FlutterSecureStorage
-    storageChannel.setMockMethodCallHandler((MethodCall methodCall) async {
+  
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(storageChannel,
+            (MethodCall methodCall) async {
       switch (methodCall.method) {
         case 'write':
           final key = methodCall.arguments['key'] as String;
@@ -42,7 +43,8 @@ void main() {
   });
 
   tearDown(() {
-    storageChannel.setMockMethodCallHandler(null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(storageChannel, null);
     fakeStorage.clear();
   });
 
@@ -74,7 +76,7 @@ void main() {
       routes: [
         GoRoute(
           path: '/settings',
-          builder: (context, state) => SettingsPage(),
+          builder: (context, state) => const SettingsPage(),
         ),
         GoRoute(
           path: '/login',
@@ -100,7 +102,6 @@ void main() {
     await tester.pumpWidget(MaterialApp.router(routerConfig: router));
     await tester.pumpAndSettle();
 
-
     expect(find.text('Settings'), findsOneWidget);
     // Vérifie que le bouton Déconnexion est présent
     expect(find.text('Déconnexion'), findsOneWidget);
@@ -109,7 +110,6 @@ void main() {
     await tester.ensureVisible(find.text('Déconnexion'));
     await tester.tap(find.text('Déconnexion'));
     await tester.pumpAndSettle();
-
 
     // Vérifie la redirection
     expect(find.text('Bienvenue sur EquiPro'), findsOneWidget);
