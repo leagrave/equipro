@@ -15,7 +15,7 @@ import 'package:equipro/src/pages/profile.dart';
 import 'package:go_router/go_router.dart';
 import 'package:equipro/src/pages/home.dart';
 import 'package:equipro/src/pages/login.dart';
-import 'package:equipro/src/pages/signup.dart';
+import 'package:equipro/src/pages/signUp.dart';
 import 'package:equipro/src/pages/agenda.dart';
 import 'package:equipro/src/pages/event/calendar.dart';
 import 'package:equipro/src/pages/settings.dart';
