@@ -61,16 +61,16 @@ jobs:
 
       - name: Run tests and generate JSON
         run: |
-          # Exécute les tests et écrit dans test_results.json
-          flutter test --machine test/tests/ > \test\results\test_results.ndjson
-          # Récupère le code de sortie
+          # Exécute les tests et écrit dans test_results.ndjson
+          mkdir -p test/results
+          flutter test --machine test/tests/ > test/results/test_results.ndjson
           TEST_EXIT_CODE=${PIPESTATUS[0]}
           echo "Code de sortie des tests : $TEST_EXIT_CODE"
-          # Exporte la variable pour les étapes suivantes
           echo "TEST_EXIT_CODE=$TEST_EXIT_CODE" >> $GITHUB_ENV
 
       - name: Convert NDJSON to JSON
         run: jq -s '.' test/results/test_results.ndjson > test/results/test_results.json
+
 
       - name: Create GitHub issue if tests fail
         if: env.TEST_EXIT_CODE != '0'

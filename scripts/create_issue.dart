@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 void main() async {
-  final file = File('../test/results/test_results.json');
+  final file = File('test/results/test_results.json');
+
 
   if (!file.existsSync()) {
     print('Fichier test_results.json introuvable');
