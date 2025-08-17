@@ -68,7 +68,7 @@ jobs:
           echo "Code de sortie des tests : $TEST_EXIT_CODE"
           # Exporte la variable pour les étapes suivantes
           echo "TEST_EXIT_CODE=$TEST_EXIT_CODE" >> $GITHUB_ENV
-
+        continue-on-error: true
           
 
       - name: Create GitHub issue if tests fail
