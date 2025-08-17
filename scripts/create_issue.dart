@@ -2,42 +2,34 @@ import 'dart:convert';
 import 'dart:io';
 
 void main() async {
-  final ndjsonFile = File('test/results/test_results.ndjson');
-  final jsonFile = File('test/results/test_results.json');
+  final file = File('test/results/test_results.ndjson');
 
-  // Vérifie si le fichier NDJSON existe
-  if (!ndjsonFile.existsSync()) {
+  if (!file.existsSync()) {
     print('Fichier test_results.ndjson introuvable');
     exit(1);
   }
 
-  // Conversion NDJSON → JSON classique
-  final lines = ndjsonFile.readAsLinesSync().where((l) => l.trim().isNotEmpty);
-  final jsonArray = lines.map((line) => jsonDecode(line)).toList();
-
-  // Sauvegarde en test_results.json (optionnel, utile pour debug)
-  jsonFile.createSync(recursive: true);
-  jsonFile.writeAsStringSync(jsonEncode(jsonArray));
-
+  final lines = file.readAsLinesSync();
   final failedTests = <String>[];
 
-  for (var data in jsonArray) {
+  for (var line in lines) {
+    if (line.trim().isEmpty) continue;
+
+    final data = jsonDecode(line);
+
     if (data['type'] == 'testDone') {
-      final result =
-          data['result'] ?? (data['success'] == true ? 'success' : 'failure');
+      final result = data['result'] ?? (data['success'] == true ? 'success' : 'failure');
       if (result == 'failure') {
-        final testName = data['test']?['name']?.toString() ?? 'Test inconnu';
-        failedTests.add(testName);
+        failedTests.add(data['test']?['name']?.toString() ?? 'Test inconnu');
       }
     }
   }
 
   if (failedTests.isEmpty) {
-    print('Tous les tests ont réussi ✅');
+    print('Aucun test en échec');
     exit(0);
   }
 
-  // Récupération du token GitHub depuis l'environnement
   final githubToken = Platform.environment['GITHUB_TOKEN'];
   if (githubToken == null) {
     print('GITHUB_TOKEN non défini');
@@ -61,14 +53,12 @@ void main() async {
   })));
 
   final response = await request.close();
+  final respBody = await response.transform(utf8.decoder).join();
 
   if (response.statusCode == 201) {
-    print('Issue GitHub créée avec succès ✅');
-    exit(0);
+    print('Issue GitHub créée avec succès');
   } else {
-    final respBody = await response.transform(utf8.decoder).join();
     print('Erreur lors de la création de l\'issue: ${response.statusCode}');
     print(respBody);
-    exit(1);
   }
 }

@@ -60,27 +60,25 @@ jobs:
         run: flutter pub get
 
       - name: Run tests and generate JSON
+        id: run_tests
         run: |
-          flutter test --machine test/tests/ > test/results/test_results.ndjson   
-          dart scripts/create_issue.dart
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
+          mkdir -p test/results
+          set -o pipefail
+          flutter test --machine test/tests/ | tee test/results/test_results.ndjson
+        continue-on-error: true   
 
-      # - name: Create GitHub issue if tests fail
-      #   run: |
-      #     echo "Création de l'issue GitHub pour tests échoués..."
-      #     dart scripts/create_issue.dart
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test/results/test_results.ndjson
 
-      # - name: Stop workflow if tests failed
-      #   if: env.TEST_EXIT_CODE != '0'
-      #   run: |
-      #     echo "Tests échoués, arrêt du workflow."
-      #     exit 1
-
-
+      - name: Fail if tests failed
+        if: steps.run_tests.outcome == 'failure'
+        run: |
+          echo "Tests échoués. Arrêt du workflow."
+          exit 1
 
   build_app:
     name: Build Flutter App
