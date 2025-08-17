@@ -59,17 +59,31 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run tests and generate JSON
+      - name: Run Flutter tests and generate JSON
+        shell: bash
         run: |
-          # Exécute les tests et écrit dans test_results.ndjson
+          # Crée le dossier de résultats si nécessaire
           mkdir -p test/results
+
+          echo "Exécution des tests Flutter..."
+          # Exécute les tests et écrit dans un fichier NDJSON
           flutter test --machine test/tests/ > test/results/test_results.ndjson
           TEST_EXIT_CODE=${PIPESTATUS[0]}
           echo "Code de sortie des tests : $TEST_EXIT_CODE"
+
+          # Convertit le NDJSON en JSON standard
+          if [ -s test/results/test_results.ndjson ]; then
+            echo "Conversion NDJSON -> JSON..."
+            jq -s '.' test/results/test_results.ndjson > test/results/test_results.json
+          else
+            echo "Fichier NDJSON vide, aucun JSON généré."
+            touch test/results/test_results.json
+          fi
+
+          # Exporte le code de sortie pour les étapes suivantes
           echo "TEST_EXIT_CODE=$TEST_EXIT_CODE" >> $GITHUB_ENV
 
-      - name: Convert NDJSON to JSON
-        run: jq -s '.' test/results/test_results.ndjson > test/results/test_results.json
+        continue-on-error: true
 
 
       - name: Create GitHub issue if tests fail
