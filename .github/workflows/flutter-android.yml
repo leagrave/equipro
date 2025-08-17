@@ -62,7 +62,7 @@ jobs:
       - name: Run tests and generate JSON
         run: |
           # Exécute les tests et écrit dans test_results.json
-          flutter test --machine test/tests/ | tee test_results.json
+          flutter test --machine test/tests/ | Tee-Object -FilePath .\test\results\test_results.json
           # Récupère le code de sortie
           TEST_EXIT_CODE=${PIPESTATUS[0]}
           echo "Code de sortie des tests : $TEST_EXIT_CODE"
