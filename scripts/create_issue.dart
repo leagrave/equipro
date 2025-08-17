@@ -18,9 +18,13 @@ void main() async {
     final data = jsonDecode(line);
 
     // On ne garde que les tests échoués
-    if (data['type'] == 'testDone' && data['result'] == 'failure') {
-      final testName = data['test']?['name']?.toString() ?? 'Test inconnu';
-      failedTests.add(testName);
+    if (data['type'] == 'testDone') {
+      // Flutter <3.10 peut utiliser 'result', sinon check via 'success'
+      final result = data['result'] ?? (data['success'] == true ? 'success' : 'failure');
+      if (result == 'failure') {
+        final testName = data['test']?['name']?.toString() ?? 'Test inconnu';
+        failedTests.add(testName);
+      }
     }
   }
 
