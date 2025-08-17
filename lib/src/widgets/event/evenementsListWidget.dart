@@ -47,27 +47,30 @@ class MyWidgetAppointments extends StatelessWidget {
 
                       Row(
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.phone, color: Constants.secondaryGreen, size: 24),
-                            onPressed: () {
-
-                            },
+                          Tooltip(
+                            message: 'Appeler le client', // <-- libellé ajouté
+                            child: IconButton(
+                              icon: const Icon(Icons.phone, color: Constants.secondaryGreen, size: 24),
+                              onPressed: () {},
+                            ),
                           ),
                           const SizedBox(width: 5), 
 
-                          IconButton(
-                            icon: const Icon(Icons.message, color: Constants.secondaryBleu, size: 24),
-                            onPressed: () {
-
-                            },
+                          Tooltip(
+                            message: 'Envoyer un message', // <-- libellé ajouté
+                            child: IconButton(
+                              icon: const Icon(Icons.message, color: Constants.secondaryBleu, size: 24),
+                              onPressed: () {},
+                            ),
                           ),
                           const SizedBox(width: 5), 
 
-                          IconButton(
-                            icon: const Icon(Icons.location_on, color: Color.fromARGB(197, 234, 36, 36), size: 24),
-                            onPressed: () {
-  
-                            },
+                          Tooltip(
+                            message: 'Voir l\'emplacement', // <-- libellé ajouté
+                            child: IconButton(
+                              icon: const Icon(Icons.location_on, color: Color.fromARGB(197, 234, 36, 36), size: 24),
+                              onPressed: () {},
+                            ),
                           ),
                         ],
                       ),
@@ -76,28 +79,29 @@ class MyWidgetAppointments extends StatelessWidget {
                 );
               }),
             ),
-            //const SizedBox(height: 10),
 
             Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  context.push('/', extra: {'initialPageIndex': 3});
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.white,
-                  foregroundColor: Constants.appBarBackgroundColor, 
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              child: Tooltip(
+                message: 'Voir tous les rendez-vous', // <-- libellé ajouté
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.push('/', extra: {'initialPageIndex': 3});
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Constants.white,
+                    foregroundColor: Constants.appBarBackgroundColor, 
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'Voir tous les rendez-vous',
-                  style: TextStyle(color: Constants.appBarBackgroundColor), 
+                  child: const Text(
+                    'Voir tous les rendez-vous',
+                    style: TextStyle(color: Constants.appBarBackgroundColor), 
+                  ),
                 ),
               ),
             ),
-
           ],
         ),
       ),

@@ -38,6 +38,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: isBackButtonVisible
           ? IconButton(
               icon: const Icon(Icons.arrow_back_ios, color: Constants.white),
+              tooltip: 'Retour',
               onPressed: () {
                 if (Navigator.of(context).canPop()) {
                   Navigator.of(context).pop();
@@ -54,9 +55,12 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
               //context.push('/settings');
               context.push('/', extra: {'initialPageIndex': 2}); 
             },
-            child: CircleAvatar(
-              radius: 25,
-              backgroundImage: AssetImage(logoPath),
+            child: Tooltip(
+              message: 'Logo de l\'application', 
+              child: CircleAvatar(
+                radius: 25,
+                backgroundImage: AssetImage(logoPath),
+              ),
             ),
           ),
           const SizedBox(width: 10),
