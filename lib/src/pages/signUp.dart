@@ -105,6 +105,7 @@ class _MySignupPageState extends State<MySignupPage> {
                           child: const AutoSizeText(
                             'Se connecter',
                             style: TextStyle(
+                              fontSize: 18,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
