@@ -13,6 +13,7 @@ import 'package:http/testing.dart';
 
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('CreateClientPage affiche bien tous les widgets principaux', (tester) async {
     const simulatedProID = 'testProID123';
 

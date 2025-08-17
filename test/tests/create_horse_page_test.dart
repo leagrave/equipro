@@ -10,6 +10,7 @@ import 'package:equipro/src/widgets/list/horseListWidget.dart';
 import 'package:equipro/src/services/apiService.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('ListHorsePage Widget Tests', () {
     testWidgets(
       'Vérifie titre, bouton flottant et redirection vers CreateHorsePage',

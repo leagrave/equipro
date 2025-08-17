@@ -9,6 +9,7 @@ import 'package:equipro/src/models/horseActivityType.dart';
 
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('Horse Model Tests', () {
     test('Horse constructor should create an instance', () {
       final horse = Horse(

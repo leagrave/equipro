@@ -9,6 +9,7 @@ import 'package:equipro/src/services/apiService.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   const MethodChannel storageChannel =
       MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
 

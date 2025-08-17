@@ -10,6 +10,7 @@ import 'package:equipro/src/widgets/list/horseListWidget.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
 
     final fakeHorses = [
       {

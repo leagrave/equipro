@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:equipro/src/pages/login.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('affiche message erreur si email ou mot de passe vide', (WidgetTester tester) async {
     // Monte la page
     await tester.pumpWidget(

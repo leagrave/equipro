@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:equipro/src/models/customer.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('Customer Model', () {
     test('fromJson should parse all fields correctly', () {
       final json = {

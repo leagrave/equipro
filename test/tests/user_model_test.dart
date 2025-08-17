@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:equipro/src/models/user.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('Users Model', () {
     test('fromJson should parse all fields correctly', () {
       final json = {

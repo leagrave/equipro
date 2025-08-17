@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:equipro/router/splash.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   const MethodChannel storageChannel =
       MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
 

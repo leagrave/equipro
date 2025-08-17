@@ -13,6 +13,7 @@ import 'package:equipro/src/models/adresses.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   // Création du cheval adresses
     final fakeAddress = Address(
     idAddress: "addr123",

@@ -3,6 +3,7 @@ import 'package:equipro/src/models/user.dart';
 import 'package:equipro/src/models/intervention.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('Intervention', () {
     test('fromJson et toJson fonctionnent correctement', () {
       final json = {

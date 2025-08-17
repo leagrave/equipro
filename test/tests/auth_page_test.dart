@@ -6,6 +6,7 @@ import 'package:equipro/src/pages/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   final mockClient = MockClient((request) async {
     final body = jsonDecode(request.body);
     if (body['email'] == 'test@example.com' && body['password'] == 'password123') {

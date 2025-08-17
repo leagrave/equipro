@@ -9,6 +9,7 @@ import 'package:equipro/src/pages/intervention/listInterventionHorse.dart';
 
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('CreateInterventionPage affiche bien tous les widgets principaux', (tester) async {
     const simulatedProID = 'testProID123';
 
