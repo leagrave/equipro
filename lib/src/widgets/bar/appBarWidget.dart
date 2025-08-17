@@ -74,11 +74,13 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (showEdit)
           IconButton(
             icon: const Icon(Icons.edit, color: Constants.white),
+            tooltip: 'Modifier',
             onPressed: onEditPressed,
           ),
         if (showNotifications)
           IconButton(
             icon: const Icon(Icons.notifications, color: Constants.white),
+            tooltip: 'Notifications', 
             onPressed: () {
               context.push('/notifications');
             },
@@ -86,6 +88,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (showChat)
           IconButton(
             icon: const Icon(Icons.settings, color: Constants.white),
+            tooltip: 'Paramètres', 
             onPressed: () {
               context.push('/settings');
             },
@@ -93,6 +96,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (showSearch)
           IconButton(
             icon: const Icon(Icons.search, color: Constants.white),
+            tooltip: 'Rechercher un client',
             onPressed: () {
               context.push('/searchClient');
             },
@@ -100,6 +104,7 @@ class MyWidgetAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (showSearchEvent)
           IconButton(
             icon: const Icon(Icons.search, color: Constants.white),
+            tooltip: 'Rechercher un événement',
             onPressed: () {
               context.push('/searchEvent');
             },

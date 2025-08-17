@@ -61,22 +61,18 @@ jobs:
 
       - name: Run tests and generate JSON
         run: |
-          # Exécute les tests, écrit dans test_results.json
+          # Exécute les tests et écrit dans test_results.json
           flutter test --machine test/tests/ | tee test_results.json
-          # Récupère le code de sortie des tests
+          # Récupère le code de sortie
           TEST_EXIT_CODE=${PIPESTATUS[0]}
           echo "Code de sortie des tests : $TEST_EXIT_CODE"
           # Exporte la variable pour les étapes suivantes
           echo "TEST_EXIT_CODE=$TEST_EXIT_CODE" >> $GITHUB_ENV
-          # Arrête le workflow si au moins un test échoue
-          if [ $TEST_EXIT_CODE -ne 0 ]; then
-            echo "Des tests ont échoué. Arrêt du workflow."
-            exit $TEST_EXIT_CODE
-          fi
 
       - name: Create GitHub issue if tests fail
         if: env.TEST_EXIT_CODE != '0'
         run: |
+          echo "Création de l'issue GitHub pour tests échoués..."
           dart scripts/create_issue.dart
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -86,6 +82,7 @@ jobs:
         run: |
           echo "Tests échoués, arrêt du workflow."
           exit 1
+
 
 
   build_app:
