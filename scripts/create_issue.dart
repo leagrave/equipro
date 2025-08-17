@@ -20,7 +20,7 @@ void main() async {
   }
 
   if (failedTests.isEmpty) {
-    print('Tous les tests ont réussi ✅');
+    print('Tous les tests ont réussi');
     exit(0);
   }
 

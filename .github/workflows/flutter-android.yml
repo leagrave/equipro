@@ -61,7 +61,7 @@ jobs:
 
       - name: Run tests with JSON output
         run: |
-          flutter test --machine > test_results.json
+          flutter test test/tests/ --machine > test_results.json
 
       - name: Create GitHub issue if tests fail
         run: dart scripts/create_issue.dart
