@@ -139,7 +139,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   const Text(
                     'Bienvenue sur EquiPro',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -162,7 +162,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                       hintText: 'Adresse e-mail',
                       hintStyle: const TextStyle(color: Colors.white70),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.2),
+                      fillColor: Colors.white.withOpacity(0.1),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -180,7 +180,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                       hintText: 'Mot de passe',
                       hintStyle: const TextStyle(color: Colors.white70),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.2),
+                      fillColor: Colors.white.withOpacity(0.1),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -227,6 +227,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     child: const Text(
                       'Mot de passe oublié ?',
                       style: TextStyle(
+                        fontSize: 18,
                         color: Colors.white70,
                         decoration: TextDecoration.underline,
                       ),
@@ -247,6 +248,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         child: const Text(
                           'Créer un compte',
                           style: TextStyle(
+                            fontSize: 18,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),

@@ -119,7 +119,7 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
             NavigationDestination(
               icon: Icon(Icons.calendar_today_outlined),
               selectedIcon: Icon(Icons.calendar_today),
-              label: 'Rendez-vous',
+              label: 'Agenda',
             ),
             NavigationDestination(
               icon: Icon(Icons.settings_outlined),
