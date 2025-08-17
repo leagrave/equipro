@@ -483,7 +483,7 @@ Widget _buildTextField(
         labelText: label,
         prefixIcon: Icon(icon, color: Colors.white),
         filled: true,
-        fillColor: Colors.white.withOpacity(0.2),
+        fillColor: Colors.white.withOpacity(0.1),
         labelStyle: const TextStyle(color: Colors.white70),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

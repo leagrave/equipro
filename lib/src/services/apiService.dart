@@ -7,12 +7,16 @@ class ApiService {
   static FlutterSecureStorage _storage = const FlutterSecureStorage();
   static http.Client _httpClient = http.Client();
 
+  static String apiBaseUrl = Constants.apiBaseUrl;
+
   static void overrideDependencies({
     FlutterSecureStorage? storage,
     http.Client? httpClient,
+    String? baseUrl,
   }) {
     if (storage != null) _storage = storage;
     if (httpClient != null) _httpClient = httpClient;
+    if (baseUrl != null) ApiService.apiBaseUrl = baseUrl;
   }
 
   static Future<http.Response> Function(String endpoint)? mockGetWithAuth;
@@ -38,7 +42,7 @@ class ApiService {
     if (token == null) throw Exception("Aucun token trouvé");
 
     return await _httpClient.get(
-      Uri.parse('${Constants.apiBaseUrl}$endpoint'),
+      Uri.parse('$apiBaseUrl$endpoint'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -57,7 +61,7 @@ class ApiService {
     if (token == null) throw Exception("Aucun token trouvé");
 
     return await http.post(
-      Uri.parse('${Constants.apiBaseUrl}$endpoint'),
+      Uri.parse('$apiBaseUrl$endpoint'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

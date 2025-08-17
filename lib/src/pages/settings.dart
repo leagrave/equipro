@@ -90,6 +90,8 @@ class _SettingsPageState extends State<SettingsPage> {
         isBackButtonVisible: true,
       ),
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: Constants.gradientBackground,
@@ -97,44 +99,59 @@ class _SettingsPageState extends State<SettingsPage> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              if (currentUser != null)
-                UserCard(
-                  profileImageUrl: Constants.avatar,
-                  firstName: currentUser!.firstName,
-                  lastName: currentUser!.lastName,
-                  isProfessional: currentUser!.professional,
-                  isVerified: currentUser!.isVerified ?? false,
-                  onEditProfile: () {
-                    context.push('/profile', extra: {'currentUser': currentUser});
-                  },
-                  onUserTap: () {
-                    context.push('/profile', extra: {'currentUser': currentUser});
-                  },
-                )
-              else
-                const Padding(
-                  padding: EdgeInsets.all(20),
-                  child: CircularProgressIndicator(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
                 ),
-              SettingsScreen(),
-              ElevatedButton(
-                onPressed: logout,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.secondaryRed,
-                  foregroundColor: Constants.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                child: IntrinsicHeight(
+                  child: Column(
+                    children: [
+                      if (currentUser != null)
+                        UserCard(
+                          profileImageUrl: Constants.avatar,
+                          firstName: currentUser!.firstName,
+                          lastName: currentUser!.lastName,
+                          isProfessional: currentUser!.professional,
+                          isVerified: currentUser!.isVerified ?? false,
+                          onEditProfile: () {
+                            context.push('/profile', extra: {'currentUser': currentUser});
+                          },
+                          onUserTap: () {
+                            context.push('/profile', extra: {'currentUser': currentUser});
+                          },
+                        )
+                      else
+                        const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CircularProgressIndicator(),
+                        ),
+                      const SizedBox(height: 12),
+                      Expanded(
+                        child: SettingsScreen(), // prend tout l'espace restant
+                      ),
+                      ElevatedButton(
+                        onPressed: logout,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Constants.secondaryRed,
+                          foregroundColor: Constants.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text('Déconnexion'),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
                   ),
                 ),
-                child: const Text('Déconnexion'),
               ),
-              const SizedBox(height: 12),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

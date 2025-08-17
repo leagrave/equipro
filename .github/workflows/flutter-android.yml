@@ -59,15 +59,14 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run tests with coverage
+      - name: Run tests with JSON output
         run: |
-          flutter test --coverage test/integration_test
+          flutter test --machine > test_results.json
 
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage
-          path: coverage/
+      - name: Create GitHub issue if tests fail
+        run: dart scripts/create_issue.dart
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build_app:
     name: Build Flutter App
@@ -83,9 +82,16 @@ jobs:
 
       - run: flutter pub get
 
+      - name: Decode and setup keystore
+        run: |
+          echo "${{ secrets.EQUIPRO_JKS_BASE64 }}" | base64 --decode > android/app/equipro.jks
+          echo "storePassword=${{ secrets.STORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=equipro_alias" >> android/key.properties
+          echo "storeFile=android/app/equipro.jks" >> android/key.properties
+
       # Build Windows executable
       - name: Build Windows
-        if: runner.os == 'Windows' || runner.os == 'ubuntu-latest'
         run: flutter build windows --release
 
       # Build Android APK
@@ -104,13 +110,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-
       - name: Get current version
         run: |
           current_version=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d '+' -f1)
           echo "current_version=$current_version" >> $GITHUB_ENV
           echo "Current version: $current_version"
-
 
       - name: Bump version
         run: |
@@ -136,7 +140,6 @@ jobs:
           new_version="$major.$minor.$patch"
           echo "new_version=$new_version" >> $GITHUB_ENV
           echo "New version: $new_version"
-
 
       - name: Update pubspec.yaml
         run: |

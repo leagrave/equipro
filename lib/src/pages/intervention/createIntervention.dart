@@ -217,7 +217,7 @@ void _onRemoveUser(Users user) async {
 
 
   Future<List<Users>> fetchClients() async {
-
+    print(proID);
     try {
       final response = await ApiService.getWithAuth("/agendaAll/$proID");
       if (response.statusCode == 200) {
