@@ -2,26 +2,29 @@ import 'dart:convert';
 import 'dart:io';
 
 void main() async {
-  final file = File('test/results/test_results.json');
+  final ndjsonFile = File('test/results/test_results.ndjson');
+  final jsonFile = File('test/results/test_results.json');
 
-
-  if (!file.existsSync()) {
-    print('Fichier test_results.json introuvable');
+  // Vérifie si le fichier NDJSON existe
+  if (!ndjsonFile.existsSync()) {
+    print('Fichier test_results.ndjson introuvable');
     exit(1);
   }
 
-  final content = file.readAsLinesSync();
+  // Conversion NDJSON → JSON classique
+  final lines = ndjsonFile.readAsLinesSync().where((l) => l.trim().isNotEmpty);
+  final jsonArray = lines.map((line) => jsonDecode(line)).toList();
+
+  // Sauvegarde en test_results.json (optionnel, utile pour debug)
+  jsonFile.createSync(recursive: true);
+  jsonFile.writeAsStringSync(jsonEncode(jsonArray));
+
   final failedTests = <String>[];
 
-  for (var line in content) {
-    if (line.trim().isEmpty) continue;
-
-    final data = jsonDecode(line);
-
-    // On ne garde que les tests échoués
+  for (var data in jsonArray) {
     if (data['type'] == 'testDone') {
-      // Flutter <3.10 peut utiliser 'result', sinon check via 'success'
-      final result = data['result'] ?? (data['success'] == true ? 'success' : 'failure');
+      final result =
+          data['result'] ?? (data['success'] == true ? 'success' : 'failure');
       if (result == 'failure') {
         final testName = data['test']?['name']?.toString() ?? 'Test inconnu';
         failedTests.add(testName);
