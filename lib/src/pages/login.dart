@@ -139,7 +139,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   const Text(
                     'Bienvenue sur EquiPro',
                     style: TextStyle(
-                      fontSize: 26,
+                      fontSize: 34,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),

@@ -32,23 +32,26 @@ class ApiService {
   }
 
   static Future<http.Response> getWithAuth(String endpoint) async {
-
     if (mockGetWithAuth != null) {
       return mockGetWithAuth!(endpoint);
     }
 
-
     final token = await _getToken();
-    if (token == null) throw Exception("Aucun token trouvé");
+
+    // Autoriser les requêtes sans token uniquement pour /professionalType
+    if (token == null && endpoint != '/professionalType') {
+      throw Exception("Aucun token trouvé");
+    }
 
     return await _httpClient.get(
       Uri.parse('$apiBaseUrl$endpoint'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
+        if (token != null) 'Authorization': 'Bearer $token',
       },
     );
   }
+
 
   /// POST avec Auth
   static Future<http.Response> postWithAuth(String endpoint, Map<String, dynamic> body) async {

@@ -50,7 +50,7 @@ class _MySignupPageState extends State<MySignupPage> {
                     const AutoSizeText(
                       'Bienvenue sur EquiPro',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 34,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
