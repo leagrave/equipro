@@ -89,6 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Constants.appBarBackgroundColor,
         isBackButtonVisible: true,
       ),
+
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -103,51 +104,47 @@ class _SettingsPageState extends State<SettingsPage> {
           builder: (context, constraints) {
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
-                child: IntrinsicHeight(
-                  child: Column(
-                    children: [
-                      if (currentUser != null)
-                        UserCard(
-                          profileImageUrl: Constants.avatar,
-                          firstName: currentUser!.firstName,
-                          lastName: currentUser!.lastName,
-                          isProfessional: currentUser!.professional,
-                          isVerified: currentUser!.isVerified ?? false,
-                          onEditProfile: () {
-                            context.push('/profile', extra: {'currentUser': currentUser});
-                          },
-                          onUserTap: () {
-                            context.push('/profile', extra: {'currentUser': currentUser});
-                          },
-                        )
-                      else
-                        const Padding(
-                          padding: EdgeInsets.all(20),
-                          child: CircularProgressIndicator(),
-                        ),
-                      const SizedBox(height: 12),
-                      Expanded(
-                        child: SettingsScreen(), 
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (currentUser != null)
+                      UserCard(
+                        profileImageUrl: Constants.avatar,
+                        firstName: currentUser!.firstName,
+                        lastName: currentUser!.lastName,
+                        isProfessional: currentUser!.professional,
+                        isVerified: currentUser!.isVerified ?? false,
+                        onEditProfile: () {
+                          context.push('/profile', extra: {'currentUser': currentUser});
+                        },
+                        onUserTap: () {
+                          context.push('/profile', extra: {'currentUser': currentUser});
+                        },
+                      )
+                    else
+                      const Padding(
+                        padding: EdgeInsets.all(20),
+                        child: CircularProgressIndicator(),
                       ),
-                      ElevatedButton(
-                        onPressed: logout,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Constants.secondaryRed,
-                          foregroundColor: Constants.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                    const SizedBox(height: 12),
+                    SettingsScreen(),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: logout,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Constants.secondaryRed,
+                        foregroundColor: Constants.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Text('Déconnexion'),
                       ),
-                      const SizedBox(height: 12),
-                    ],
-                  ),
+                      child: const Text('Déconnexion'),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
                 ),
               ),
             );

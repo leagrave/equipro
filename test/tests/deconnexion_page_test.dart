@@ -16,10 +16,8 @@ void main() {
   final Map<String, String> fakeStorage = {};
 
   setUp(() {
-  
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(storageChannel,
-            (MethodCall methodCall) async {
+        .setMockMethodCallHandler(storageChannel, (MethodCall methodCall) async {
       switch (methodCall.method) {
         case 'write':
           final key = methodCall.arguments['key'] as String;
@@ -37,6 +35,9 @@ void main() {
           final key = methodCall.arguments['key'] as String;
           fakeStorage.remove(key);
           return null;
+        case 'deleteAll':
+          fakeStorage.clear();
+          return null;
         default:
           return null;
       }
@@ -49,7 +50,6 @@ void main() {
     fakeStorage.clear();
   });
 
-  // --- Mock ApiService ---
   setUpAll(() {
     ApiService.mockGetWithAuth = (endpoint) async {
       if (endpoint == '/user/pro/user123') {
@@ -104,7 +104,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Settings'), findsOneWidget);
-    // Vérifie que le bouton Déconnexion est présent
     expect(find.text('Déconnexion'), findsOneWidget);
 
     // Clique sur Déconnexion
