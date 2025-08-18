@@ -4,6 +4,8 @@ import 'package:equipro/src/pages/event/event.dart';
 import 'package:equipro/src/pages/event/message.dart';
 import 'package:equipro/src/pages/event/notif.dart';
 import 'package:equipro/src/pages/event/searchEvent.dart';
+import 'package:equipro/src/pages/facture/createFacture.dart';
+import 'package:equipro/src/pages/facture/listFacture.dart';
 // import 'package:equipro/src/pages/facture/createFacture.dart';
 // import 'package:equipro/src/pages/facture/managementInvoice.dart';
 import 'package:equipro/src/pages/horse/createHorse.dart';
@@ -201,8 +203,16 @@ final GoRouter go = GoRouter(
         GoRoute(
           path: 'listInvoice',
           builder: (context, state) {
-            final userId = state.extra as String;
-            return ListClientPage(userId: userId,);
+            final extra = state.extra as Map<String, dynamic>;
+            final proID = extra['proID'] as String;
+            final userCustomerID = extra['userCustomerID'] as String?;
+            final customer_id = extra['customer_id'] as String?;
+
+            return ListInvoicePage(
+              proID: proID,
+              customer_id: customer_id,
+              userCustomerID: userCustomerID,
+            );
           },
         ),
         // GoRoute(
@@ -212,12 +222,25 @@ final GoRouter go = GoRouter(
         //     return ManagementInvoicePage(invoice: invoice!);
         //   },
         // ),
-        // GoRoute(
-        //   path: 'createInvoice',
-        //   builder: (context, state) {
-        //     return CreateInvoicePage();
-        //   },
-        // ),
+        GoRoute(
+          path: 'createInvoice',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            final proID = extra['proID'] as String;
+            final userCustomId = extra['userCustomerID'] as String?;
+            final customer_id = extra['customer_id'] as String?;
+            final horseID = extra['horseID'] as String?;
+            final userId = extra['userId'] as String?;
+
+            return CreateInvoicePage(
+              proID: proID,
+              customer_id: customer_id,
+              userCustomerID: userCustomId,
+              horseID: horseID,
+              userId: userId,
+            );
+          },
+        ),
         GoRoute(
           path: 'createIntervention',
           builder: (context, state) {

@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart'; 
 
 class ButtonFactureListWidget extends StatelessWidget {
+  final String proID;
+  final String userCustomID;
+  final String? idUser;
+
+  const ButtonFactureListWidget({Key? key, required this.proID, required this.userCustomID, this.idUser }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -17,7 +22,9 @@ class ButtonFactureListWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), 
         ),
         onPressed: () {
-          context.push('/facture');
+          context.push('/listInvoice', extra: {
+            'proID': proID
+          });
         },
         child: const Column(
           mainAxisSize: MainAxisSize.min,

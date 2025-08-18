@@ -60,6 +60,8 @@ dependencies:
   sentry_flutter: ^9.6.0
   flutter_dotenv: ^5.0.2
   flutter_secure_storage: ^9.2.2
+  pdf: ^3.10.4
+  printing: ^5.11.0
 
 dev_dependencies:
   flutter_test:

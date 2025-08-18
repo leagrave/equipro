@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class ApiService {
   static FlutterSecureStorage _storage = const FlutterSecureStorage();
   static http.Client _httpClient = http.Client();
+  static final Dio _dio = Dio();
 
   static String apiBaseUrl = Constants.apiBaseUrl;
 
@@ -70,6 +73,36 @@ class ApiService {
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(body),
+    );
+  }
+
+static Future<Response> postFileWithAuth(String endpoint, File file, String userId) async {
+    // Récupère le token comme tu le fais déjà
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'authToken');
+    if (token == null) throw Exception("Aucun token trouvé");
+
+    String fileName = file.path.split('/').last;
+    List<int> fileBytes = await file.readAsBytes();
+
+    FormData formData = FormData.fromMap({
+      'userId': userId,
+      'file': MultipartFile.fromBytes(
+        fileBytes,
+        filename: fileName,
+        contentType: DioMediaType('application', 'pdf'),
+      ),
+    });
+
+    return await _dio.post(
+      '${Constants.apiBaseUrl}$endpoint',
+      data: formData,
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'multipart/form-data',
+        },
+      ),
     );
   }
 

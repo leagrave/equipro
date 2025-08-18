@@ -457,9 +457,8 @@ Future<void> _init() async {
                       ElevatedButton(
                         child: const Text('Oui'),
                         onPressed: () {
-                          Navigator.pop(context); 
+                          Navigator.pop(context);
                           context.push('/createInvoice', extra: {
-                            'intervention': newIntervention,
                             'proID': proID,
                           });
                         },

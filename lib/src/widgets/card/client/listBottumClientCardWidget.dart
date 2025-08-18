@@ -60,7 +60,7 @@ class ListbottumClientcardwidget extends StatelessWidget {
                 children: [
                   ButtonHorseListWidget(userCustomID: idUserCustomer, proID: idUserPro,),
                   ButtonHistoVisitListWidget(idUser: idUserCustomer, proID: idUserPro),
-                  ButtonFactureListWidget(),
+                  ButtonFactureListWidget(idUser: idUserCustomer,proID: idUserPro, userCustomID: idUserCustomer),
                 ],
               ),
             ],
