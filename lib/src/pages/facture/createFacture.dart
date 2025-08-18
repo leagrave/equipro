@@ -75,15 +75,17 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
 Future<bool> postInvoice(Invoice invoice) async {
   try {
     final response = await ApiService.postWithAuth(
-      '/facture',
+      '/facture/file',
        {
         'user_id': invoice.user_id,
-        'horse_id': invoice.horse_id,
+        'horse_id': selectedHorse!.id,
         'professional_id': widget.proID,
         'title': invoice.title,
         'total_amount': invoice.totalAmount,
+        'issue_date': invoice.issueDate?.toIso8601String(),
         'due_date': invoice.dueDate?.toIso8601String(),
         'is_company': invoice.isCompany,
+        'is_paid': invoice.isPaid,
         'payment_type_id': null,//invoice.paymentType, 
         'billing_address_id': null, // invoice.billingAddress?.id,
         'status_id': null,//invoice.status, // adapte selon ton modèle

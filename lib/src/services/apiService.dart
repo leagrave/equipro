@@ -42,7 +42,7 @@ class ApiService {
     final token = await _getToken();
 
     // Autoriser les requêtes sans token uniquement pour /professionalType
-    if (token == null && endpoint != '/professionalType') {
+    if (token == null && endpoint != '/professionalType' && endpoint != '/signup' && !endpoint.startsWith("/user/email/checkEmail")) {
       throw Exception("Aucun token trouvé");
     }
 
@@ -64,9 +64,15 @@ class ApiService {
     }
 
     final token = await _getToken();
-    if (token == null) throw Exception("Aucun token trouvé");
+    if (token == null && endpoint != '/signup') {
+      throw Exception("Aucun token trouvé");
+    }
 
-    return await _httpClient.post(
+      print('POST $apiBaseUrl$endpoint');
+
+      print('Body: $body');
+
+    return await http.post(
       Uri.parse('$apiBaseUrl$endpoint'),
       headers: {
         'Content-Type': 'application/json',

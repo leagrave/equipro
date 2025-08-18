@@ -14,6 +14,7 @@ import 'package:equipro/src/widgets/bar/appBarWidget.dart';
 import 'package:equipro/src/widgets/card/horse/horseCardWidget.dart';
 import 'dart:convert';
 
+
 class CreateHorsePage extends StatefulWidget {
   final String proID;
   final Users? customer;
@@ -97,11 +98,11 @@ Future<bool> saveHorse() async {
       Navigator.pop(context, newHorse);
       return true;
     } else {
-      print("Erreur lors de la création du client: ${response.body}");
+      print("Erreur lors de la création du cheval: ${response.body}");
       return false;
     }
   } catch (e) {
-    print("Erreur globale dans saveClient: $e");
+    print("Erreur globale dans saveHorse: $e");
     return false;
   }
 }
