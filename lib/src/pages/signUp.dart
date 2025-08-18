@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:equipro/src/widgets/form/signUpFormWidget.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:go_router/go_router.dart';
-
 class MySignupPage extends StatefulWidget {
   const MySignupPage({super.key});
 
@@ -13,12 +12,26 @@ class MySignupPage extends StatefulWidget {
 
 class _MySignupPageState extends State<MySignupPage> {
   bool _triggerValidation = false;
+  bool _acceptedPrivacy = false;
 
-  void _onCreateAccountPressed() {
-    setState(() {
-      _triggerValidation = !_triggerValidation;
-    });
+void _onCreateAccountPressed() {
+  if (!_acceptedPrivacy) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Vous devez accepter la politique de confidentialité pour continuer.'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return; 
   }
+
+  setState(() {
+    _triggerValidation = !_triggerValidation;
+  });
+
+
+}
+
 
 
   @override
@@ -71,6 +84,36 @@ class _MySignupPageState extends State<MySignupPage> {
                       enSaisie: true,
                       openWithSignUp: true,
                     ),
+
+  
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _acceptedPrivacy,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _acceptedPrivacy = value ?? false;
+                          });
+                        },
+                        activeColor: Colors.white,
+                        checkColor: const Color(0xFF28313E),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+  
+                            context.go('/privatePolicy');
+                          },
+                          child: const Text(
+                            "J'accepte la politique de confidentialité",
+                            style: TextStyle(color: Colors.white70, decoration: TextDecoration.underline),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
 
                     const SizedBox(height: 30),
                     ElevatedButton(

@@ -29,6 +29,7 @@ import 'package:equipro/src/models/user.dart';
 import 'package:equipro/src/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/router/splash.dart';
+import 'package:equipro/src/pages/privacyPolicy.dart';
 
 final GoRouter go = GoRouter(
   initialLocation: '/splash',
@@ -106,6 +107,12 @@ final GoRouter go = GoRouter(
           path: 'calendar',
           builder: (context, state) {
             return CalendarPage();
+          },
+        ),
+        GoRoute(
+          path: 'privatePolicy',
+          builder: (context, state) {
+            return PrivacyPolicyPage();
           },
         ),
         GoRoute(

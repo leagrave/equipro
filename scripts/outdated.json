@@ -1,0 +1,836 @@
+﻿{
+  "packages": [
+    {
+      "package": "_fe_analyzer_shared",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "85.0.0"
+      },
+      "upgradable": {
+        "version": "85.0.0"
+      },
+      "resolvable": {
+        "version": "85.0.0"
+      },
+      "latest": {
+        "version": "88.0.0"
+      }
+    },
+    {
+      "package": "_flutterfire_internals",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "1.3.59"
+      },
+      "upgradable": {
+        "version": "1.3.59"
+      },
+      "resolvable": {
+        "version": "1.3.60"
+      },
+      "latest": {
+        "version": "1.3.60"
+      }
+    },
+    {
+      "package": "analyzer",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "7.7.1"
+      },
+      "upgradable": {
+        "version": "7.7.1"
+      },
+      "resolvable": {
+        "version": "7.7.1"
+      },
+      "latest": {
+        "version": "8.1.1"
+      }
+    },
+    {
+      "package": "characters",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "1.4.0"
+      },
+      "upgradable": {
+        "version": "1.4.0"
+      },
+      "resolvable": {
+        "version": "1.4.0"
+      },
+      "latest": {
+        "version": "1.4.1"
+      }
+    },
+    {
+      "package": "cloud_firestore",
+      "kind": "direct",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "5.6.12"
+      },
+      "upgradable": {
+        "version": "5.6.12"
+      },
+      "resolvable": {
+        "version": "6.0.0"
+      },
+      "latest": {
+        "version": "6.0.0"
+      }
+    },
+    {
+      "package": "cloud_firestore_platform_interface",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "6.6.12"
+      },
+      "upgradable": {
+        "version": "6.6.12"
+      },
+      "resolvable": {
+        "version": "7.0.0"
+      },
+      "latest": {
+        "version": "7.0.0"
+      }
+    },
+    {
+      "package": "cloud_firestore_web",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "4.4.12"
+      },
+      "upgradable": {
+        "version": "4.4.12"
+      },
+      "resolvable": {
+        "version": "5.0.0"
+      },
+      "latest": {
+        "version": "5.0.0"
+      }
+    },
+    {
+      "package": "cross_cache",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": null,
+      "upgradable": null,
+      "resolvable": {
+        "version": "1.0.4"
+      },
+      "latest": {
+        "version": "1.0.4"
+      }
+    },
+    {
+      "package": "dart_style",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "3.1.1"
+      },
+      "upgradable": {
+        "version": "3.1.1"
+      },
+      "resolvable": {
+        "version": "3.1.1"
+      },
+      "latest": {
+        "version": "3.1.2"
+      }
+    },
+    {
+      "package": "dropdown_search",
+      "kind": "direct",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "5.0.6"
+      },
+      "upgradable": {
+        "version": "5.0.6"
+      },
+      "resolvable": {
+        "version": "6.0.2"
+      },
+      "latest": {
+        "version": "6.0.2"
+      }
+    },
+    {
+      "package": "firebase_auth",
+      "kind": "direct",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "5.7.0"
+      },
+      "upgradable": {
+        "version": "5.7.0"
+      },
+      "resolvable": {
+        "version": "6.0.1"
+      },
+      "latest": {
+        "version": "6.0.1"
+      }
+    },
+    {
+      "package": "firebase_auth_platform_interface",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "7.7.3"
+      },
+      "upgradable": {
+        "version": "7.7.3"
+      },
+      "resolvable": {
+        "version": "8.1.0"
+      },
+      "latest": {
+        "version": "8.1.0"
+      }
+    },
+    {
+      "package": "firebase_auth_web",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "5.15.3"
+      },
+      "upgradable": {
+        "version": "5.15.3"
+      },
+      "resolvable": {
+        "version": "6.0.1"
+      },
+      "latest": {
+        "version": "6.0.1"
+      }
+    },
+    {
+      "package": "firebase_core",
+      "kind": "direct",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "3.15.2"
+      },
+      "upgradable": {
+        "version": "3.15.2"
+      },
+      "resolvable": {
+        "version": "4.0.0"
+      },
+      "latest": {
+        "version": "4.0.0"
+      }
+    },
+    {
+      "package": "firebase_core_web",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "2.24.1"
+      },
+      "upgradable": {
+        "version": "2.24.1"
+      },
+      "resolvable": {
+        "version": "3.0.0"
+      },
+      "latest": {
+        "version": "3.0.0"
+      }
+    },
+    {
+      "package": "firebase_messaging",
+      "kind": "direct",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "15.2.10"
+      },
+      "upgradable": {
+        "version": "15.2.10"
+      },
+      "resolvable": {
+        "version": "16.0.0"
+      },
+      "latest": {
+        "version": "16.0.0"
+      }
+    },
+    {
+      "package": "firebase_messaging_platform_interface",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "4.6.10"
+      },
+      "upgradable": {
+        "version": "4.6.10"
+      },
+      "resolvable": {
+        "version": "4.7.0"
+      },
+      "latest": {
+        "version": "4.7.0"
+      }
+    },
+    {
+      "package": "firebase_messaging_web",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "3.10.10"
+      },
+      "upgradable": {
+        "version": "3.10.10"
+      },
+      "resolvable": {
+        "version": "4.0.0"
+      },
+      "latest": {
+        "version": "4.0.0"
+      }
+    },
+    {
+      "package": "flutter_chat_core",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": null,
+      "upgradable": null,
+      "resolvable": {
+        "version": "2.8.0"
+      },
+      "latest": {
+        "version": "2.8.0"
+      }
+    },
+    {
+      "package": "flutter_chat_ui",
+      "kind": "direct",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "1.6.15"
+      },
+      "upgradable": {
+        "version": "1.6.15"
+      },
+      "resolvable": {
+        "version": "2.9.0"
+      },
+      "latest": {
+        "version": "2.9.0"
+      }
+    },
+    {
+      "package": "flutter_link_previewer",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "3.2.2"
+      },
+      "upgradable": {
+        "version": "3.2.2"
+      },
+      "resolvable": null,
+      "latest": {
+        "version": "4.1.2"
+      }
+    },
+    {
+      "package": "flutter_secure_storage_linux",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "1.2.3"
+      },
+      "upgradable": {
+        "version": "1.2.3"
+      },
+      "resolvable": {
+        "version": "1.2.3"
+      },
+      "latest": {
+        "version": "2.0.1"
+      }
+    },
+    {
+      "package": "flutter_secure_storage_macos",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "3.1.3"
+      },
+      "upgradable": {
+        "version": "3.1.3"
+      },
+      "resolvable": {
+        "version": "3.1.3"
+      },
+      "latest": {
+        "version": "4.0.0"
+      }
+    },
+    {
+      "package": "flutter_secure_storage_platform_interface",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "1.1.2"
+      },
+      "upgradable": {
+        "version": "1.1.2"
+      },
+      "resolvable": {
+        "version": "1.1.2"
+      },
+      "latest": {
+        "version": "2.0.1"
+      }
+    },
+    {
+      "package": "flutter_secure_storage_web",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "1.2.1"
+      },
+      "upgradable": {
+        "version": "1.2.1"
+      },
+      "resolvable": {
+        "version": "1.2.1"
+      },
+      "latest": {
+        "version": "2.0.0"
+      }
+    },
+    {
+      "package": "flutter_secure_storage_windows",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "3.1.2"
+      },
+      "upgradable": {
+        "version": "3.1.2"
+      },
+      "resolvable": {
+        "version": "3.1.2"
+      },
+      "latest": {
+        "version": "4.0.0"
+      }
+    },
+    {
+      "package": "freezed_annotation",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": null,
+      "upgradable": null,
+      "resolvable": {
+        "version": "3.1.0"
+      },
+      "latest": {
+        "version": "3.1.0"
+      }
+    },
+    {
+      "package": "go_router",
+      "kind": "direct",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "14.8.1"
+      },
+      "upgradable": {
+        "version": "14.8.1"
+      },
+      "resolvable": {
+        "version": "16.1.0"
+      },
+      "latest": {
+        "version": "16.1.0"
+      }
+    },
+    {
+      "package": "idb_shim",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": null,
+      "upgradable": null,
+      "resolvable": {
+        "version": "2.6.7"
+      },
+      "latest": {
+        "version": "2.6.7"
+      }
+    },
+    {
+      "package": "js",
+      "kind": "transitive",
+      "isDiscontinued": true,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "0.6.7"
+      },
+      "upgradable": {
+        "version": "0.6.7"
+      },
+      "resolvable": {
+        "version": "0.6.7"
+      },
+      "latest": {
+        "version": "0.7.2"
+      }
+    },
+    {
+      "package": "material_color_utilities",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "0.11.1"
+      },
+      "upgradable": {
+        "version": "0.11.1"
+      },
+      "resolvable": {
+        "version": "0.11.1"
+      },
+      "latest": {
+        "version": "0.13.0"
+      }
+    },
+    {
+      "package": "meta",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "1.16.0"
+      },
+      "upgradable": {
+        "version": "1.16.0"
+      },
+      "resolvable": {
+        "version": "1.16.0"
+      },
+      "latest": {
+        "version": "1.17.0"
+      }
+    },
+    {
+      "package": "nested",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": null,
+      "upgradable": null,
+      "resolvable": {
+        "version": "1.0.0"
+      },
+      "latest": {
+        "version": "1.0.0"
+      }
+    },
+    {
+      "package": "process",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "5.0.3"
+      },
+      "upgradable": {
+        "version": "5.0.5"
+      },
+      "resolvable": {
+        "version": "5.0.5"
+      },
+      "latest": {
+        "version": "5.0.5"
+      }
+    },
+    {
+      "package": "provider",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": null,
+      "upgradable": null,
+      "resolvable": {
+        "version": "6.1.5"
+      },
+      "latest": {
+        "version": "6.1.5"
+      }
+    },
+    {
+      "package": "scrollview_observer",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": null,
+      "upgradable": null,
+      "resolvable": {
+        "version": "1.26.2"
+      },
+      "latest": {
+        "version": "1.26.2"
+      }
+    },
+    {
+      "package": "sembast",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": null,
+      "upgradable": null,
+      "resolvable": {
+        "version": "3.8.5+1"
+      },
+      "latest": {
+        "version": "3.8.5+1"
+      }
+    },
+    {
+      "package": "sprintf",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": null,
+      "upgradable": null,
+      "resolvable": {
+        "version": "7.0.0"
+      },
+      "latest": {
+        "version": "7.0.0"
+      }
+    },
+    {
+      "package": "syncfusion_flutter_calendar",
+      "kind": "direct",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "28.2.12"
+      },
+      "upgradable": {
+        "version": "28.2.12"
+      },
+      "resolvable": {
+        "version": "30.2.5"
+      },
+      "latest": {
+        "version": "30.2.5"
+      }
+    },
+    {
+      "package": "syncfusion_flutter_core",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "28.2.12"
+      },
+      "upgradable": {
+        "version": "28.2.12"
+      },
+      "resolvable": {
+        "version": "30.2.5"
+      },
+      "latest": {
+        "version": "30.2.5"
+      }
+    },
+    {
+      "package": "syncfusion_flutter_datepicker",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "28.2.12"
+      },
+      "upgradable": {
+        "version": "28.2.12"
+      },
+      "resolvable": {
+        "version": "30.2.5"
+      },
+      "latest": {
+        "version": "30.2.5"
+      }
+    },
+    {
+      "package": "syncfusion_localizations",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": null,
+      "upgradable": null,
+      "resolvable": {
+        "version": "30.2.5"
+      },
+      "latest": {
+        "version": "30.2.5"
+      }
+    },
+    {
+      "package": "test_api",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "0.7.6"
+      },
+      "upgradable": {
+        "version": "0.7.6"
+      },
+      "resolvable": {
+        "version": "0.7.6"
+      },
+      "latest": {
+        "version": "0.7.7"
+      }
+    },
+    {
+      "package": "timezone",
+      "kind": "direct",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "0.10.0"
+      },
+      "upgradable": {
+        "version": "0.10.0"
+      },
+      "resolvable": {
+        "version": "0.10.1"
+      },
+      "latest": {
+        "version": "0.10.1"
+      }
+    },
+    {
+      "package": "uuid",
+      "kind": "direct",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "3.0.7"
+      },
+      "upgradable": {
+        "version": "3.0.7"
+      },
+      "resolvable": {
+        "version": "4.5.1"
+      },
+      "latest": {
+        "version": "4.5.1"
+      }
+    },
+    {
+      "package": "vm_service",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "15.0.0"
+      },
+      "upgradable": {
+        "version": "15.0.2"
+      },
+      "resolvable": {
+        "version": "15.0.2"
+      },
+      "latest": {
+        "version": "15.0.2"
+      }
+    }
+  ]
+}

@@ -63,7 +63,7 @@ class ApiService {
     final token = await _getToken();
     if (token == null) throw Exception("Aucun token trouvé");
 
-    return await http.post(
+    return await _httpClient.post(
       Uri.parse('$apiBaseUrl$endpoint'),
       headers: {
         'Content-Type': 'application/json',
@@ -78,8 +78,8 @@ class ApiService {
     final token = await _getToken();
     if (token == null) throw Exception("Aucun token trouvé");
 
-    return await http.put(
-      Uri.parse('${Constants.apiBaseUrl}$endpoint'),
+    return await _httpClient.put(
+      Uri.parse('$apiBaseUrl$endpoint'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -93,8 +93,8 @@ class ApiService {
     final token = await _getToken();
     if (token == null) throw Exception("Aucun token trouvé");
 
-    return await http.delete(
-      Uri.parse('${Constants.apiBaseUrl}$endpoint'),
+    return await _httpClient.delete(
+      Uri.parse('$apiBaseUrl$endpoint'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

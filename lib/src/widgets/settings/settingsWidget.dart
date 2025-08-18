@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:equipro/src/utils/constants.dart';
+import 'package:equipro/src/pages/privacyPolicy.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -12,7 +13,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool photoPermissionGranted = false;
   String selectedLanguage = 'Français';
   bool isOnline = true;
-  double storageSpaceLeft = 50.0; // en Go
+  bool privacyPolicyAccepted = false; 
+  double storageSpaceLeft = 50.0; 
   TimeOfDay workStartTime = const TimeOfDay(hour: 9, minute: 0);
   TimeOfDay workEndTime = const TimeOfDay(hour: 18, minute: 0);
 
@@ -47,13 +49,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  void togglePrivacyPolicy(bool? value) {
+    setState(() {
+      privacyPolicyAccepted = value ?? false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Constants.white.withOpacity(0.1), 
+          color: Constants.white.withOpacity(0.1),
           borderRadius: BorderRadius.circular(15),
         ),
         padding: const EdgeInsets.all(16),
@@ -68,7 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               activeColor: Constants.appBarBackgroundColor,
             ),
 
-            // Heure de travail
+            // Heures de travail
             ListTile(
               title: const Text('Heures de travail', style: TextStyle(color: Colors.white)),
               subtitle: Text(
@@ -147,7 +155,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               subtitle: Text('${storageSpaceLeft} Go', style: const TextStyle(color: Colors.white)),
             ),
 
-            // Statut de l'application (en ligne ou hors ligne)
+            // Statut de l'application
             SwitchListTile(
               title: const Text('Statut en ligne', style: TextStyle(color: Colors.white)),
               activeColor: Constants.appBarBackgroundColor,
@@ -157,6 +165,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   isOnline = value;
                 });
               },
+            ),
+
+            // Politique de confidentialité
+            CheckboxListTile(
+              title: const Text('J\'accepte la politique de confidentialité', style: TextStyle(color: Colors.white)),
+              value: privacyPolicyAccepted,
+              onChanged: togglePrivacyPolicy,
+              activeColor: Constants.appBarBackgroundColor,
+            ),
+
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
+                );
+              },
+              child: const Text(
+                'Lire la politique de confidentialité',
+                style: TextStyle(color: Colors.blueAccent),
+              ),
             ),
           ],
         ),

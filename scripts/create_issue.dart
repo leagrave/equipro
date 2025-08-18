@@ -2,24 +2,35 @@ import 'dart:convert';
 import 'dart:io';
 
 void main() async {
-  final file = File('test/results/test_results.ndjson');
+  final file = File('../test/results/test_results.ndjson');
 
   if (!file.existsSync()) {
     print('Fichier test_results.ndjson introuvable');
     exit(1);
   }
 
-  final lines = file.readAsLinesSync();
+  // Lire les bytes pour gérer les caractères spéciaux
+  final bytes = file.readAsBytesSync();
+  final content = latin1.decode(bytes); // décodage plus tolérant
+  final lines = content.split('\n');
+
   final failedTests = <String>[];
 
   for (var line in lines) {
     if (line.trim().isEmpty) continue;
 
-    final data = jsonDecode(line);
+    dynamic data;
+    try {
+      data = jsonDecode(line);
+    } catch (e) {
+      print('Erreur en décodant une ligne JSON: $e\n$line\n');
+      continue;
+    }
 
+    // Vérifie si c'est un test terminé
     if (data['type'] == 'testDone') {
       final result = data['result'] ?? (data['success'] == true ? 'success' : 'failure');
-      if (result == 'failure') {
+      if (result == 'failure' || result == 'error') {
         failedTests.add(data['test']?['name']?.toString() ?? 'Test inconnu');
       }
     }
@@ -30,6 +41,7 @@ void main() async {
     exit(0);
   }
 
+  // Création de l'issue GitHub
   final githubToken = Platform.environment['GITHUB_TOKEN'];
   if (githubToken == null) {
     print('GITHUB_TOKEN non défini');

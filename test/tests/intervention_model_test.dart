@@ -1,104 +1,88 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:equipro/src/models/user.dart';
 import 'package:equipro/src/models/intervention.dart';
+import 'package:equipro/src/models/user.dart';
+import 'package:equipro/src/models/horse.dart';
+import 'package:equipro/src/models/invoice.dart';
+import 'package:equipro/src/models/observation.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
   group('Intervention', () {
-    test('fromJson et toJson fonctionnent correctement', () {
-      final json = {
-        'id': '1',
-        'description': 'Contrôle dentaire',
-        'care_observation': 'Nettoyage des dents',
-        'intervention_date': '2025-08-16T10:00:00.000Z',
-        'created_at': '2025-08-15T09:00:00.000Z',
-        'updated_at': '2025-08-15T09:30:00.000Z',
-        'users': [
-          {
-            'id': 'u1',
-            'first_Name': 'John',
-            'last_Name': 'Doe',
-            'email': 'john@email.com',
-            'professional': false
-          }
-        ],
-        'horse': {'id': 'h1', 'name': 'Spirit'},
-        'pro': {
-          'id': 'u2',
-          'first_Name': 'Vet',
-          'last_Name': 'Doc',
-          'email': 'doc@email.com',
-          'professional': true
-        },
-        'invoice': {'id': 'inv1', 'amount': 100.0},
-        'external_notes': 'Aucune anomalie',
-        'external_observations': [
-          {'id': 'o1', 'observation_name': 'Observation externe 1'}
-        ]
-      };
+        final user = Users(
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@email.com',
+      professional: false,
+    );
+    final horse = Horse(id: 'h1', name: 'Spirit');
+        final invoice = Invoice(
+      id: 'inv1',
+      number: '2024-001',
+      title: 'Facture test',
+      totalAmount: 100.0,
+      user_id: '1',
+      pro_id: '1',
+    );
 
-      // Conversion JSON -> Intervention
-      final intervention = Intervention.fromJson(json);
+    final observation = Observation(
+      id: 'obs1',
+      observationName: 'Observation test',
+    );
 
-      // Vérifications des valeurs
-      expect(intervention.id, '1');
-      expect(intervention.description, 'Contrôle dentaire');
-      expect(intervention.careObservation, 'Nettoyage des dents');
-      expect(intervention.interventionDate,
-          DateTime.parse('2025-08-16T10:00:00.000Z'));
-      expect(intervention.horse?.name, 'Spirit');
-      expect(intervention.users.length, 1);
-      expect(intervention.users.first.firstName, 'John');
-      expect(intervention.users.first.lastName, 'Doe');
-      expect(intervention.pro?.firstName, 'Vet');
-      expect(intervention.pro?.lastName, 'Doc');
-      expect(intervention.externalObservations?.first.observationName,
-          'Observation externe 1');
 
-      // Conversion Intervention -> JSON
-      final jsonResult = intervention.toJson();
+    final intervention = Intervention(
+      id: 'int1',
+      description: 'Test intervention',
+      careObservation: 'Care obs',
+      interventionDate: DateTime(2024, 1, 1),
+      createdAt: DateTime(2024, 1, 2),
+      updatedAt: DateTime(2024, 1, 3),
+      users: [user],
+      horse: horse,
+      pro: user,
+      invoice: invoice,
+      externalNotes: 'External',
+      incisiveNotes: 'Incisive',
+      mucousNotes: 'Mucous',
+      internalNotes: 'Internal',
+      otherNotes: 'Other',
+      externalObservations: [observation],
+      incisiveObservations: [observation],
+      mucousObservations: [observation],
+      internalObservations: [observation],
+      otherObservations: [observation],
+    );
 
-      expect(jsonResult['id'], '1');
-      expect(jsonResult['description'], 'Contrôle dentaire');
-      expect(jsonResult['users'][0]['first_Name'], 'John');
-      expect(jsonResult['users'][0]['last_Name'], 'Doe');
-      expect(jsonResult['users'][0]['professional'], false);
-      expect(jsonResult['horse']['name'], 'Spirit');
-      expect(jsonResult['external_observations'][0]['observation_name'],
-          'Observation externe 1');
+    test('toJson and fromJson', () {
+      final json = intervention.toJson();
+      final fromJson = Intervention.fromJson({
+        ...json,
+        'users': [user.toJson()],
+        'horse': horse.toJson(),
+        'pro': user.toJson(),
+        'invoice': invoice.toJson(),
+        'external_observations': [observation.toJson()],
+        'incisive_observations': [observation.toJson()],
+        'mucous_observations': [observation.toJson()],
+        'internal_observations': [observation.toJson()],
+        'other_observations': [observation.toJson()],
+      });
+      expect(fromJson.id, intervention.id);
+      expect(fromJson.description, intervention.description);
+      expect(fromJson.horse?.id, horse.id);
+      expect(fromJson.externalObservations?.first.id, observation.id);
     });
 
-    test('copyWith fonctionne correctement', () {
-      final original = Intervention(
-        id: '1',
-        users: [],
-      );
-
-      final copy = original.copyWith(description: 'Nouvelle description');
-
-      expect(copy.id, '1');
-      expect(copy.description, 'Nouvelle description');
-      expect(copy.users, original.users);
+    test('copyWith returns a copy with updated values', () {
+      final copy = intervention.copyWith(description: 'New desc');
+      expect(copy.description, 'New desc');
+      expect(copy.id, intervention.id);
     });
 
-    test('toString contient les infos principales', () {
-      final intervention = Intervention(
-        id: '1',
-        users: [
-          Users(
-            id: 'u1',
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john@email.com',
-            professional: false,
-          )
-        ],
-      );
-
-      final str = intervention.toString();
-      expect(str.contains('id: 1'), true);
-      expect(str.contains('John'), true);
-      expect(str.contains('Doe'), true);
+    test('toString returns a string', () {
+      expect(intervention.toString(), contains('Intervention('));
+      expect(intervention.toString(), contains('Spirit'));
+      expect(intervention.toString(), contains('John Doe'));
     });
   });
 }

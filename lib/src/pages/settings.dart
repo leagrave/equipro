@@ -131,7 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       const SizedBox(height: 12),
                       Expanded(
-                        child: SettingsScreen(), // prend tout l'espace restant
+                        child: SettingsScreen(), 
                       ),
                       ElevatedButton(
                         onPressed: logout,

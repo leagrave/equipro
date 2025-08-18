@@ -1,0 +1,180 @@
+{"protocolVersion":"0.1.1","runnerVersion":null,"pid":2452,"type":"start","time":0}
+{"suite":{"id":0,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/user_model_test.dart"},"type":"suite","time":0}
+{"test":{"id":1,"name":"loading /home/runner/work/equipro/equipro/test/tests/user_model_test.dart","suiteID":0,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":1}
+{"count":14,"time":6,"type":"allSuites"}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":1,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":10398}
+{"group":{"id":2,"suiteID":0,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":10402}
+{"group":{"id":3,"suiteID":0,"parentID":2,"name":"Users Model","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":6,"column":3,"url":"file:///home/runner/work/equipro/equipro/test/tests/user_model_test.dart"},"type":"group","time":10402}
+{"test":{"id":4,"name":"Users Model fromJson should parse all fields correctly","suiteID":0,"groupIDs":[2,3],"metadata":{"skip":false,"skipReason":null},"line":7,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/user_model_test.dart"},"type":"testStart","time":10403}
+{"testID":4,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":10449}
+{"suite":{"id":5,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/gestion_horse_page_test.dart"},"type":"suite","time":10471}
+{"test":{"id":6,"name":"loading /home/runner/work/equipro/equipro/test/tests/gestion_horse_page_test.dart","suiteID":5,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":10472}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":6,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":12431}
+{"group":{"id":7,"suiteID":5,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":null,"column":null,"url":null},"type":"group","time":12432}
+{"test":{"id":8,"name":"ListHorsePage affiche champ recherche, bouton flottant et titre Mes Chevaux","suiteID":5,"groupIDs":[7],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":50,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/gestion_horse_page_test.dart"},"type":"testStart","time":12433}
+{"testID":8,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":13365}
+{"test":{"id":9,"name":"Affiche le nom du cheval quand la liste contient un cheval","suiteID":5,"groupIDs":[7],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":84,"root_column":4,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/gestion_horse_page_test.dart"},"type":"testStart","time":13366}
+{"testID":9,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":13397}
+{"test":{"id":10,"name":"Affiche \"Aucun cheval trouvé\" quand la liste est vide","suiteID":5,"groupIDs":[7],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":105,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/gestion_horse_page_test.dart"},"type":"testStart","time":13398}
+{"testID":10,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":13428}
+{"test":{"id":11,"name":"Navigation vers ManagementHorsePage quand on clique sur un cheval","suiteID":5,"groupIDs":[7],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":125,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/gestion_horse_page_test.dart"},"type":"testStart","time":13429}
+{"testID":11,"messageType":"print","message":"build triggered, _isEditingAdresse: false","type":"print","time":13712}
+{"testID":11,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":13988}
+{"suite":{"id":12,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/gestion_client_page_test.dart"},"type":"suite","time":14011}
+{"test":{"id":13,"name":"loading /home/runner/work/equipro/equipro/test/tests/gestion_client_page_test.dart","suiteID":12,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":14012}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":13,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":15433}
+{"group":{"id":14,"suiteID":12,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":15434}
+{"test":{"id":15,"name":"ListClientPage affiche TextField et FloatingActionButton","suiteID":12,"groupIDs":[14],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":83,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/gestion_client_page_test.dart"},"type":"testStart","time":15437}
+{"testID":15,"messageType":"print","message":"Instance of 'Response'","type":"print","time":15974}
+{"testID":15,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":16328}
+{"test":{"id":16,"name":"ClientListWidget affiche correctement le nom, la ville et chevaux","suiteID":12,"groupIDs":[14],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":106,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/gestion_client_page_test.dart"},"type":"testStart","time":16328}
+{"testID":16,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":16520}
+{"test":{"id":17,"name":"Navigation vers ManagementClientPage avec clic sur client","suiteID":12,"groupIDs":[14],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":147,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/gestion_client_page_test.dart"},"type":"testStart","time":16521}
+{"testID":17,"messageType":"print","message":"build triggered, _isEditingAdresse: false","type":"print","time":16721}
+{"testID":17,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":17092}
+{"suite":{"id":18,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/create_client_page_test.dart"},"type":"suite","time":17114}
+{"test":{"id":19,"name":"loading /home/runner/work/equipro/equipro/test/tests/create_client_page_test.dart","suiteID":18,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":17114}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":19,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":18484}
+{"group":{"id":20,"suiteID":18,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":null,"column":null,"url":null},"type":"group","time":18485}
+{"test":{"id":21,"name":"CreateClientPage affiche bien tous les widgets principaux","suiteID":18,"groupIDs":[20],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":17,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/create_client_page_test.dart"},"type":"testStart","time":18485}
+{"testID":21,"messageType":"print","message":"build triggered, _isEditingAdresse: true","type":"print","time":19186}
+{"testID":21,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19695}
+{"test":{"id":22,"name":"Validation du formulaire empêche sauvegarde si champs invalides","suiteID":18,"groupIDs":[20],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":54,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/create_client_page_test.dart"},"type":"testStart","time":19697}
+{"testID":22,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":20551}
+{"group":{"id":23,"suiteID":18,"parentID":20,"name":"UserService.createUser","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":124,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/create_client_page_test.dart"},"type":"group","time":20554}
+{"test":{"id":24,"name":"UserService.createUser retourne true quand le serveur répond 201","suiteID":18,"groupIDs":[20,23],"metadata":{"skip":false,"skipReason":null},"line":125,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/create_client_page_test.dart"},"type":"testStart","time":20554}
+{"testID":24,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":20625}
+{"test":{"id":25,"name":"UserService.createUser retourne false quand le serveur répond une erreur","suiteID":18,"groupIDs":[20,23],"metadata":{"skip":false,"skipReason":null},"line":145,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/create_client_page_test.dart"},"type":"testStart","time":20625}
+{"testID":25,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":20640}
+{"suite":{"id":26,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/create_horse_page_test.dart"},"type":"suite","time":20691}
+{"test":{"id":27,"name":"loading /home/runner/work/equipro/equipro/test/tests/create_horse_page_test.dart","suiteID":26,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":20692}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":27,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":22212}
+{"group":{"id":28,"suiteID":26,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":22215}
+{"group":{"id":29,"suiteID":26,"parentID":28,"name":"ListHorsePage Widget Tests","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":14,"column":3,"url":"file:///home/runner/work/equipro/equipro/test/tests/create_horse_page_test.dart"},"type":"group","time":22215}
+{"test":{"id":30,"name":"ListHorsePage Widget Tests Vérifie titre, bouton flottant et redirection vers CreateHorsePage","suiteID":26,"groupIDs":[28,29],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":15,"root_column":5,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/create_horse_page_test.dart"},"type":"testStart","time":22216}
+{"testID":30,"messageType":"print","message":"build triggered, _isEditingAdresse: true","type":"print","time":23227}
+{"testID":30,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":23563}
+{"test":{"id":31,"name":"Navigation vers CreateHorsePage quand on clique sur le btn plus","suiteID":26,"groupIDs":[28],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":53,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/create_horse_page_test.dart"},"type":"testStart","time":23564}
+{"testID":31,"messageType":"print","message":"build triggered, _isEditingAdresse: true","type":"print","time":23656}
+{"testID":31,"messageType":"print","message":"build triggered, _isEditingAdresse: true","type":"print","time":23766}
+{"testID":31,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":24023}
+{"suite":{"id":32,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/auth_page_test.dart"},"type":"suite","time":24047}
+{"test":{"id":33,"name":"loading /home/runner/work/equipro/equipro/test/tests/auth_page_test.dart","suiteID":32,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":24047}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":33,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":25480}
+{"group":{"id":34,"suiteID":32,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":25482}
+{"test":{"id":35,"name":"login success with mock api","suiteID":32,"groupIDs":[34],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":19,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/auth_page_test.dart"},"type":"testStart","time":25482}
+{"testID":35,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":26690}
+{"test":{"id":36,"name":"login fails with wrong password","suiteID":32,"groupIDs":[34],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":36,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/auth_page_test.dart"},"type":"testStart","time":26690}
+{"testID":36,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":26838}
+{"test":{"id":37,"name":"login fails with wrong email","suiteID":32,"groupIDs":[34],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":53,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/auth_page_test.dart"},"type":"testStart","time":26839}
+{"testID":37,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":26952}
+{"suite":{"id":38,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/intervention_model_test.dart"},"type":"suite","time":26976}
+{"test":{"id":39,"name":"loading /home/runner/work/equipro/equipro/test/tests/intervention_model_test.dart","suiteID":38,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":26976}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":39,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":28176}
+{"group":{"id":40,"suiteID":38,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":28177}
+{"group":{"id":41,"suiteID":38,"parentID":40,"name":"Intervention","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":7,"column":3,"url":"file:///home/runner/work/equipro/equipro/test/tests/intervention_model_test.dart"},"type":"group","time":28177}
+{"test":{"id":42,"name":"Intervention fromJson et toJson fonctionnent correctement","suiteID":38,"groupIDs":[40,41],"metadata":{"skip":false,"skipReason":null},"line":8,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/intervention_model_test.dart"},"type":"testStart","time":28178}
+{"testID":42,"error":"Expected: 'John'\n  Actual: ''\n   Which: is different. Both strings start the same, but the actual value is missing the following trailing characters: John\n","stackTrace":"package:matcher                                     expect\npackage:flutter_test/src/widget_tester.dart 474:18  expect\ntest/tests/intervention_model_test.dart 51:7        main.<fn>.<fn>\n","isFailure":true,"type":"error","time":28272}
+{"testID":42,"result":"failure","skipped":false,"hidden":false,"type":"testDone","time":28273}
+{"test":{"id":43,"name":"Intervention copyWith fonctionne correctement","suiteID":38,"groupIDs":[40,41],"metadata":{"skip":false,"skipReason":null},"line":71,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/intervention_model_test.dart"},"type":"testStart","time":28274}
+{"testID":43,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":28285}
+{"test":{"id":44,"name":"Intervention toString contient les infos principales","suiteID":38,"groupIDs":[40,41],"metadata":{"skip":false,"skipReason":null},"line":84,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/intervention_model_test.dart"},"type":"testStart","time":28286}
+{"testID":44,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":28290}
+{"suite":{"id":45,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/splash_test.dart"},"type":"suite","time":28308}
+{"test":{"id":46,"name":"loading /home/runner/work/equipro/equipro/test/tests/splash_test.dart","suiteID":45,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":28308}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":46,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":29507}
+{"group":{"id":47,"suiteID":45,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":29507}
+{"test":{"id":48,"name":"Redirige vers / quand pro","suiteID":45,"groupIDs":[47],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":74,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/splash_test.dart"},"type":"testStart","time":29507}
+{"testID":48,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":30180}
+{"test":{"id":49,"name":"Redirige vers /homeClient quand pas pro","suiteID":45,"groupIDs":[47],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":85,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/splash_test.dart"},"type":"testStart","time":30180}
+{"testID":49,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":30238}
+{"test":{"id":50,"name":"Redirige vers /login quand pas de token","suiteID":45,"groupIDs":[47],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":96,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/splash_test.dart"},"type":"testStart","time":30238}
+{"testID":50,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":30294}
+{"suite":{"id":51,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/api_service_test.dart"},"type":"suite","time":30314}
+{"test":{"id":52,"name":"loading /home/runner/work/equipro/equipro/test/tests/api_service_test.dart","suiteID":51,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":30314}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":52,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":31677}
+{"group":{"id":53,"suiteID":51,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":31679}
+{"test":{"id":54,"name":"getWithAuth retourne les données quand le token existe","suiteID":51,"groupIDs":[53],"metadata":{"skip":false,"skipReason":null},"line":44,"column":3,"url":"file:///home/runner/work/equipro/equipro/test/tests/api_service_test.dart"},"type":"testStart","time":31680}
+{"testID":54,"error":"Instance of 'NotInitializedError'","stackTrace":"package:flutter_dotenv/src/dotenv.dart 41:7         DotEnv.env\npackage:equipro/src/utils/constants.dart 89:40      Constants.apiBaseUrl\npackage:equipro/src/services/apiService.dart 10:40  ApiService.apiBaseUrl\npackage:equipro/src/services/apiService.dart        ApiService.apiBaseUrl\npackage:equipro/src/services/apiService.dart 47:19  ApiService.getWithAuth\n","isFailure":false,"type":"error","time":31743}
+{"testID":54,"messageType":"print","message":"Warning: At least one test in this suite creates an HttpClient. When running a test suite that uses\nTestWidgetsFlutterBinding, all HTTP requests will return status code 400, and no network request\nwill actually be made. Any test expecting a real network connection and status code will fail.\nTo test code that needs an HttpClient, provide your own HttpClient implementation to the code under\ntest, so that your test can consistently provide a testable response to the code under test.","type":"print","time":31743}
+{"testID":54,"result":"error","skipped":false,"hidden":false,"type":"testDone","time":31747}
+{"test":{"id":55,"name":"getWithAuth lance une exception quand le token est null","suiteID":51,"groupIDs":[53],"metadata":{"skip":false,"skipReason":null},"line":53,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/api_service_test.dart"},"type":"testStart","time":31747}
+{"testID":55,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":31750}
+{"suite":{"id":56,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/deconnexion_page_test.dart"},"type":"suite","time":31768}
+{"test":{"id":57,"name":"loading /home/runner/work/equipro/equipro/test/tests/deconnexion_page_test.dart","suiteID":56,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":31768}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":57,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":32950}
+{"group":{"id":58,"suiteID":56,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":32951}
+{"test":{"id":59,"name":"(setUpAll)","suiteID":56,"groupIDs":[58],"metadata":{"skip":false,"skipReason":null},"line":53,"column":3,"url":"file:///home/runner/work/equipro/equipro/test/tests/deconnexion_page_test.dart"},"type":"testStart","time":32952}
+{"testID":59,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":32971}
+{"test":{"id":60,"name":"Affiche bouton déconnexion et redirige vers login après clic + supprime storage","suiteID":56,"groupIDs":[58],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":90,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/deconnexion_page_test.dart"},"type":"testStart","time":32972}
+{"testID":60,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":34314}
+{"test":{"id":61,"name":"(tearDownAll)","suiteID":56,"groupIDs":[58],"metadata":{"skip":false,"skipReason":null},"line":68,"column":3,"url":"file:///home/runner/work/equipro/equipro/test/tests/deconnexion_page_test.dart"},"type":"testStart","time":34315}
+{"testID":61,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":34320}
+{"suite":{"id":62,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/login_page_test.dart"},"type":"suite","time":34343}
+{"test":{"id":63,"name":"loading /home/runner/work/equipro/equipro/test/tests/login_page_test.dart","suiteID":62,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":34343}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":63,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":35508}
+{"group":{"id":64,"suiteID":62,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":35511}
+{"test":{"id":65,"name":"affiche message erreur si email ou mot de passe vide","suiteID":62,"groupIDs":[64],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":7,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/login_page_test.dart"},"type":"testStart","time":35511}
+{"testID":65,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":36633}
+{"suite":{"id":66,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/horse_model_test.dart"},"type":"suite","time":36655}
+{"test":{"id":67,"name":"loading /home/runner/work/equipro/equipro/test/tests/horse_model_test.dart","suiteID":66,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":36656}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":67,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":38035}
+{"group":{"id":68,"suiteID":66,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":38036}
+{"group":{"id":69,"suiteID":66,"parentID":68,"name":"Horse Model Tests","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":13,"column":3,"url":"file:///home/runner/work/equipro/equipro/test/tests/horse_model_test.dart"},"type":"group","time":38036}
+{"test":{"id":70,"name":"Horse Model Tests Horse constructor should create an instance","suiteID":66,"groupIDs":[68,69],"metadata":{"skip":false,"skipReason":null},"line":14,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/horse_model_test.dart"},"type":"testStart","time":38036}
+{"testID":70,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":38075}
+{"test":{"id":71,"name":"Horse Model Tests Horse toJson and fromJson should work correctly","suiteID":66,"groupIDs":[68,69],"metadata":{"skip":false,"skipReason":null},"line":42,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/horse_model_test.dart"},"type":"testStart","time":38075}
+{"testID":71,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":38085}
+{"test":{"id":72,"name":"Horse Model Tests Horse copyWith should copy and override properties","suiteID":66,"groupIDs":[68,69],"metadata":{"skip":false,"skipReason":null},"line":63,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/horse_model_test.dart"},"type":"testStart","time":38085}
+{"testID":72,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":38088}
+{"suite":{"id":73,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/customer_model_test.dart"},"type":"suite","time":38107}
+{"test":{"id":74,"name":"loading /home/runner/work/equipro/equipro/test/tests/customer_model_test.dart","suiteID":73,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":38107}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":74,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":39290}
+{"group":{"id":75,"suiteID":73,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":null,"column":null,"url":null},"type":"group","time":39291}
+{"group":{"id":76,"suiteID":73,"parentID":75,"name":"Customer Model","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":6,"column":3,"url":"file:///home/runner/work/equipro/equipro/test/tests/customer_model_test.dart"},"type":"group","time":39292}
+{"test":{"id":77,"name":"Customer Model fromJson should parse all fields correctly","suiteID":73,"groupIDs":[75,76],"metadata":{"skip":false,"skipReason":null},"line":7,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/customer_model_test.dart"},"type":"testStart","time":39293}
+{"testID":77,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":39324}
+{"test":{"id":78,"name":"Customer Model toJson should convert object to Map correctly","suiteID":73,"groupIDs":[75,76],"metadata":{"skip":false,"skipReason":null},"line":29,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/customer_model_test.dart"},"type":"testStart","time":39325}
+{"testID":78,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":39329}
+{"group":{"id":79,"suiteID":73,"parentID":75,"name":"CustomerProfessionnal Model","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":52,"column":3,"url":"file:///home/runner/work/equipro/equipro/test/tests/customer_model_test.dart"},"type":"group","time":39329}
+{"test":{"id":80,"name":"CustomerProfessionnal Model fromJson should parse all fields correctly","suiteID":73,"groupIDs":[75,79],"metadata":{"skip":false,"skipReason":null},"line":53,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/customer_model_test.dart"},"type":"testStart","time":39329}
+{"testID":80,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":39349}
+{"test":{"id":81,"name":"CustomerProfessionnal Model toJson should convert object to Map correctly","suiteID":73,"groupIDs":[75,79],"metadata":{"skip":false,"skipReason":null},"line":71,"column":5,"url":"file:///home/runner/work/equipro/equipro/test/tests/customer_model_test.dart"},"type":"testStart","time":39350}
+{"testID":81,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":39356}
+{"suite":{"id":82,"platform":"vm","path":"/home/runner/work/equipro/equipro/test/tests/gestion_interventions_page_test.dart"},"type":"suite","time":39374}
+{"test":{"id":83,"name":"loading /home/runner/work/equipro/equipro/test/tests/gestion_interventions_page_test.dart","suiteID":82,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":39374}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":83,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":40579}
+{"group":{"id":84,"suiteID":82,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":40580}
+{"test":{"id":85,"name":"CreateInterventionPage affiche bien tous les widgets principaux","suiteID":82,"groupIDs":[84],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":13,"root_column":3,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/gestion_interventions_page_test.dart"},"type":"testStart","time":40581}
+{"testID":85,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":41676}
+{"test":{"id":86,"name":"ListIntervention affiche bien tous les widgets principaux","suiteID":82,"groupIDs":[84],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":47,"root_column":5,"root_url":"file:///home/runner/work/equipro/equipro/test/tests/gestion_interventions_page_test.dart"},"type":"testStart","time":41678}
+{"testID":86,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":41732}
+{"success":false,"type":"done","time":41758}

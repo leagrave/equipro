@@ -473,49 +473,44 @@ void _onOtherSelected() {
     );
   }
 
-@override
-Widget build(BuildContext context) {
-  return Center(
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Intervention',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-              color: Constants.white, 
-            ),
-          ),
-          const SizedBox(height: 8),
-
-          //if (!widget.openWithCreateInterventionPage)
-     
-          Row(
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView( // Ajouté pour éviter l'overflow
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 115, 
-                child: SelectedDateField(
-                  label: "Date de la visite",
-                  selectedDate: _intervention.interventionDate,
-                  enabled: widget.isEditing,
-                  onDateSelected: (date) {
-                    setState(() {
-                      _intervention = _intervention.copyWith(interventionDate: date);
-                      _interventionDateController.text = date != null ? DateFormat('dd/MM/yyyy').format(date) : '';
-                    });
-                  },
+              Text(
+                'Intervention',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  color: Constants.white, 
                 ),
               ),
-            ],
-          ),
+              const SizedBox(height: 8),
 
-
-     
-    
+              Row(
+                children: [
+                  SizedBox(
+                    width: 115, 
+                    child: SelectedDateField(
+                      label: "Date de la visite",
+                      selectedDate: _intervention.interventionDate,
+                      enabled: widget.isEditing,
+                      onDateSelected: (date) {
+                        setState(() {
+                          _intervention = _intervention.copyWith(interventionDate: date);
+                          _interventionDateController.text = date != null ? DateFormat('dd/MM/yyyy').format(date) : '';
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 8),
 
               // External Observation
@@ -539,7 +534,7 @@ Widget build(BuildContext context) {
                 searchHintText: "Rechercher une oberservation externe",
                 readOnly: !widget.isEditing,
               ),
-          const SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               // External Note
               TextField(
@@ -554,13 +549,11 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 style: const TextStyle(color: Colors.white),
-
                 controller: _externalNotesController,
                 readOnly: !widget.isEditing,
                 onChanged: (value) => _updateIntervention(externalNotes: value),
               ),
-
-               const SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               // Incisives Observation
               SelectedMultipleComboCardWidget<Observation>(
@@ -583,8 +576,8 @@ Widget build(BuildContext context) {
                 searchHintText: "Rechercher une oberservation des incisives",
                 readOnly: !widget.isEditing,
               ),
+              const SizedBox(height: 8),
 
-          const SizedBox(height: 8),
               // Incisives Note
               TextField(
                 decoration: InputDecoration(
@@ -598,7 +591,6 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 style: const TextStyle(color: Colors.white),
-
                 controller: _incisiveNotesController,
                 readOnly: !widget.isEditing,
                 onChanged: (value) => _updateIntervention(incisiveNotes: value),
@@ -626,7 +618,7 @@ Widget build(BuildContext context) {
                 searchHintText: "Rechercher une oberservation des muqueuses",
                 readOnly: !widget.isEditing,
               ),
-          const SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               // Mucous Note
               TextField(
@@ -641,12 +633,10 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 style: const TextStyle(color: Colors.white),
-
                 controller: _mucousNotesDateController,
                 readOnly: !widget.isEditing,
                 onChanged: (value) => _updateIntervention(mucousNotes: value),
               ),
-
               const SizedBox(height: 8),
 
               // Internal Observation
@@ -670,7 +660,7 @@ Widget build(BuildContext context) {
                 searchHintText: "Rechercher une oberservation interne",
                 readOnly: !widget.isEditing,
               ),
-          const SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               // Internal Note
               TextField(
@@ -685,12 +675,10 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 style: const TextStyle(color: Colors.white),
-
                 controller: _internalNotesController,
                 readOnly: !widget.isEditing,
                 onChanged: (value) => _updateIntervention(internalNotes: value),
               ),
-
               const SizedBox(height: 8),
 
               // Other Observation
@@ -714,7 +702,7 @@ Widget build(BuildContext context) {
                 searchHintText: "Rechercher une oberservation autre",
                 readOnly: !widget.isEditing,
               ),
-          const SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               // Other Note
               TextField(
@@ -729,7 +717,6 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 style: const TextStyle(color: Colors.white),
-
                 controller: _otherNotesDateController,
                 readOnly: !widget.isEditing,
                 onChanged: (value) => _updateIntervention(otherNotes: value),
@@ -739,35 +726,32 @@ Widget build(BuildContext context) {
               // Afficher les boutons si onHorseUpdated est null
               if (!widget.openWithCreateInterventionPage)
                 Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (widget.isEditing)
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (widget.isEditing)
+                      ElevatedButton(
+                        onPressed: () => _handleSaveOrCancel(isSave: false),
+                        child: const Text('Annuler', style: TextStyle(color: Constants.appBarBackgroundColor)),
+                      ),
+                    const SizedBox(width: 8),
                     ElevatedButton(
-                      onPressed: () => _handleSaveOrCancel(isSave: false),
-                      child: const Text('Annuler', style: TextStyle(color: Constants.appBarBackgroundColor),),
+                      onPressed: () {
+                        if (widget.isEditing) {
+                          _handleSaveOrCancel(isSave: true);
+                        } else {
+                          setState(() {
+                            widget.onEditingChanged?.call(true);
+                          });
+                        }
+                      },
+                      child: Text(widget.isEditing ? 'Enregistrer' : 'Modifier', style: TextStyle(color: Constants.appBarBackgroundColor)),
                     ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (widget.isEditing) {
-                        _handleSaveOrCancel(isSave: true);
-                      } else {
-                        setState(() {
-                          //widget.isEditing = true;
-                          widget.onEditingChanged?.call(true);
-
-                        });
-                      }
-                    },
-                    child: Text(widget.isEditing ? 'Enregistrer' : 'Modifier',style: TextStyle(color: Constants.appBarBackgroundColor),),
-                  ),
-                ],
-              ),
-
+                  ],
+                ),
             ],
           ),
         ),
-      );
+      ),
+    );
   }
 }
-
