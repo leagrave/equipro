@@ -102,9 +102,6 @@ jobs:
           echo "keyAlias=equipro_alias" >> android/key.properties
           echo "storeFile=android/app/equipro.jks" >> android/key.properties
 
-      # Build Windows executable
-      - name: Build Windows
-        run: flutter build windows --release
 
       # Build Android APK
       - name: Build Android APK
