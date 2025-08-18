@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '706095522218',
     projectId: 'equipro-messagerie',
     storageBucket: 'equipro-messagerie.firebasestorage.app',
-    iosBundleId: 'com.example.equipro',
+    iosBundleId: 'com.lg.equipro',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '706095522218',
     projectId: 'equipro-messagerie',
     storageBucket: 'equipro-messagerie.firebasestorage.app',
-    iosBundleId: 'com.example.equipro',
+    iosBundleId: 'com.lg.equipro',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

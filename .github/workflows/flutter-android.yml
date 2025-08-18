@@ -102,6 +102,18 @@ jobs:
           echo "keyAlias=equipro_alias" >> android/key.properties
           echo "storeFile=android/app/equipro.jks" >> android/key.properties
 
+      - name: Decode keystore
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/equipro.jks
+
+      - name: Create key.properties
+        run: |
+          echo "storePassword=$KEYSTORE_PASSWORD" > android/key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+          echo "keyAlias=$KEY_ALIAS" >> android/key.properties
+          echo "storeFile=app/equipro.jks" >> android/key.properties
+
+
 
       # Build Android APK
       - name: Build Android APK

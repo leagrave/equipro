@@ -61,10 +61,8 @@ class _CreateHorsePageState extends State<CreateHorsePage> {
   );
   
 Future<bool> saveHorse() async {
-  try {
-    final response = await ApiService.postWithAuth(
-      '/horse',
-      {
+  final body = 
+  {
         "horse": {
           'name': newHorse.name,
           'age': newHorse.age,
@@ -91,7 +89,13 @@ Future<bool> saveHorse() async {
               }
             : null,
         'users': selectedUsers.map((u) => u.id).toList(),
-      },
+      };
+
+
+  try {
+    final response = await ApiService.postWithAuth(
+      '/horse', body
+      
     );
 
     if (response.statusCode == 201) {

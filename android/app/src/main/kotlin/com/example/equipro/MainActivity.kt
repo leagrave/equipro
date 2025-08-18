@@ -1,4 +1,4 @@
-package com.example.equipro
+package com.lg.equipro
 
 import io.flutter.embedding.android.FlutterActivity
 
