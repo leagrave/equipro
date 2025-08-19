@@ -111,6 +111,7 @@ class _ListHorsePageState extends State<ListHorsePage> {
       'horseId': horseId,
       'proID': widget.proID,
     });
+    await fetchHorses();
   }
 
   void navigateToCreateHorsePage() async {

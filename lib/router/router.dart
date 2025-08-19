@@ -205,7 +205,7 @@ final GoRouter go = GoRouter(
           builder: (context, state) {
             final extra = state.extra as Map<String, dynamic>;
             final proID = extra['proID'] as String;
-            final userCustomerID = extra['userCustomerID'] as String?;
+            final userCustomerID = extra['userCustomID'] as String?;
             final customer_id = extra['customer_id'] as String?;
 
             return ListInvoicePage(
@@ -258,7 +258,8 @@ final GoRouter go = GoRouter(
             final userId = extra['userId'] as String?;
             final horseId = extra['horseId']as String?;
             final proID = extra['proID'] as String;
-            return HorseInterventionListWidget(userId: userId, horseId: horseId, proID: proID,);
+            final userCustomID = extra['userCustomID'] as String?;
+            return HorseInterventionListWidget(userId: userId, horseId: horseId, proID: proID, userCustomID: userCustomID);
           },
         ),
         GoRoute(

@@ -46,6 +46,8 @@ class _CreateInterventionPageState extends State<CreateInterventionPage> {
   List<Horse> horsesUsersList = [];
   String? proID;
   String? token;
+  String? user_idStore;
+  String? lastUser;
 
   bool showHorseCard = false; 
 
@@ -79,15 +81,18 @@ Intervention newIntervention = Intervention(
 );
 
   Future<void> _loadProId() async {
-    final storedProId = await storage.read(key: 'user_id');
+    final storedUserId= await storage.read(key: 'user_id');
+    final storedProId = await storage.read(key: 'pro_id');
     final storedToken = await storage.read(key: 'authToken');
     setState(() {
       proID = storedProId;
       token =storedToken;
+      user_idStore = storedUserId;
     });
   }
   
 Future<bool> saveIntervention() async {
+  final lastUser = selectedUsers.map((u) => u.id).toList();
   try {
     final response = await ApiService.postWithAuth(
       '/intervention',
@@ -217,9 +222,9 @@ void _onRemoveUser(Users user) async {
 
 
   Future<List<Users>> fetchClients() async {
-    print(proID);
+    
     try {
-      final response = await ApiService.getWithAuth("/agendaAll/$proID");
+      final response = await ApiService.getWithAuth("/agendaAll/$user_idStore");
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         final fetchedClients = jsonData.map((data) => Users.fromJson(data)).toList();
@@ -460,6 +465,8 @@ Future<void> _init() async {
                           Navigator.pop(context);
                           context.push('/createInvoice', extra: {
                             'proID': proID,
+                            'user_id': selectedUsers.first.id,
+                            'horseID': selectedHorse!.id,
                           });
                         },
                       ),

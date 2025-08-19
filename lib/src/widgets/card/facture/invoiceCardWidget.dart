@@ -114,16 +114,18 @@ class InvoiceCardWidgetState extends State<InvoiceCardWidget> {
     return _formKey.currentState?.validate() ?? false;
   }
 
-  void _onFieldChanged() {
-    final updated = _invoice.copyWith(
+void _onFieldChanged() {
+  setState(() {
+    _invoice = _invoice.copyWith(
       number: _numberController.text,
       title: _titleController.text,
       totalAmount: double.tryParse(_amountController.text) ?? 0.0,
       issueDate: _issueDate,
       dueDate: _dueDate,
     );
-    widget.onInvoiceUpdated(updated);
-  }
+    widget.onInvoiceUpdated(_invoice);
+  });
+}
 
   @override
   Widget build(BuildContext context) {

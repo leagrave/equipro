@@ -7,6 +7,7 @@ import 'package:equipro/src/widgets/list/invoiceListWidget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:equipro/src/services/apiService.dart'; 
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ListInvoicePage extends StatefulWidget {
   final String proID;
@@ -29,6 +30,9 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
   List<Invoice> filteredInvoices = [];
   String searchQuery = "";
   bool isLoading = true;
+  final storage = const FlutterSecureStorage();
+  String? token;
+  String? proID_secure;
 
   @override
   void initState() {
@@ -36,31 +40,55 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
     fetchInvoices();
   }
 
-  Future<void> fetchInvoices() async {
+
+  
+
+    Future<void> _loadProId() async {
+    final storedProId = await storage.read(key: 'pro_id');
+    final storedToken = await storage.read(key: 'authToken');
     setState(() {
-      isLoading = true;
+      proID_secure = storedProId;
+      token =storedToken;
     });
-    try {
-      // Utilise le bon endpoint pour récupérer les factures d’un utilisateur
-      final response = await ApiService.getWithAuth(
-        '/factures/user/${widget.userCustomerID}'
-      );
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        invoices = data.map((json) => Invoice.fromJson(json)).toList();
-        filteredInvoices = invoices;
-      } else {
-        invoices = [];
-        filteredInvoices = [];
-      }
-    } catch (e) {
+  }
+
+
+Future<void> fetchInvoices() async {
+  setState(() {
+    isLoading = true;
+  });
+
+  try {
+    String endpoint;
+
+    if (widget.userCustomerID == null) {
+      // Si userCustomerID est null → fetch toutes les factures du pro
+      endpoint = '/factures/pro/$proID_secure';
+    } else {
+      // Sinon → fetch les factures de l'utilisateur
+      endpoint = '/factures/user/${widget.userCustomerID}';
+    }
+
+    final response = await ApiService.getWithAuth(endpoint);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      invoices = data.map((json) => Invoice.fromJson(json)).toList();
+      filteredInvoices = invoices;
+    } else {
       invoices = [];
       filteredInvoices = [];
     }
-    setState(() {
-      isLoading = false;
-    });
+  } catch (e) {
+    invoices = [];
+    filteredInvoices = [];
   }
+
+  setState(() {
+    isLoading = false;
+  });
+}
+
 
   void filterInvoices(String query) {
     setState(() {
@@ -132,7 +160,6 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
               ),
               const SizedBox(height: 16),
 
-              // Liste des factures filtrées ou loader
               Expanded(
                 child: isLoading
                     ? const Center(child: CircularProgressIndicator())
@@ -141,6 +168,8 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
                         onInvoiceTap: (invoice) {
                           navigateToInvoiceDetailsPage(invoice);
                         },
+                        userId: widget.userCustomerID ?? widget.proID, 
+                        token: token ?? '', 
                       ),
               ),
             ],
@@ -148,10 +177,12 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.push('/createInvoice', extra: {
+        onPressed: () async {
+          await context.push('/createInvoice', extra: {
             'proID': widget.proID,
+            'userId': widget.userCustomerID,
           });
+          fetchInvoices(); 
         },
         backgroundColor: Constants.turquoiseDark, 
         child: const Icon(Icons.add, color: Constants.white),

@@ -47,6 +47,7 @@ void main() {
     testWidgets('ListIntervention affiche bien tous les widgets principaux', (tester) async {
     const simulatedProID = 'testProID123';
 
+
     // Monte la page dans un MaterialApp (avec GoRouter si nécessaire)
     await tester.pumpWidget(
       MaterialApp.router(
@@ -54,7 +55,7 @@ void main() {
           routes: [
             GoRoute(
               path: '/listIntervention',
-              builder: (context, state) => HorseInterventionListWidget(proID: simulatedProID),
+              builder: (context, state) => HorseInterventionListWidget(proID: simulatedProID, userId: 'testUserID', horseId: 'testHorseID'),
             ),
           ],
           initialLocation: '/listIntervention',

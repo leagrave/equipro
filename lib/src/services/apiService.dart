@@ -1,9 +1,11 @@
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+
 
 class ApiService {
   static FlutterSecureStorage _storage = const FlutterSecureStorage();
@@ -42,7 +44,7 @@ class ApiService {
     final token = await _getToken();
 
     // Autoriser les requêtes sans token uniquement pour /professionalType
-    if (token == null && endpoint != '/professionalType' && endpoint != '/signup' && !endpoint.startsWith("/user/email/checkEmail")) {
+    if (token == null && endpoint != '/professionalType' && !endpoint.startsWith("/user/email/checkEmail")) {
       throw Exception("Aucun token trouvé");
     }
 
@@ -68,11 +70,8 @@ class ApiService {
       throw Exception("Aucun token trouvé");
     }
 
-      print('POST $apiBaseUrl$endpoint');
 
-      print('Body: $body');
-
-    return await http.post(
+    return await _httpClient.post(
       Uri.parse('$apiBaseUrl$endpoint'),
       headers: {
         'Content-Type': 'application/json',
@@ -111,6 +110,42 @@ static Future<Response> postFileWithAuth(String endpoint, File file, String user
       ),
     );
   }
+
+  static Future<Response> postFileWithAuthFromUrl(String endpoint, String fileUrl, String userId) async {
+  final storage = FlutterSecureStorage();
+  final token = await storage.read(key: 'authToken');
+  if (token == null) throw Exception("Aucun token trouvé");
+
+  // Télécharger le fichier depuis l’URL
+  final response = await _dio.get<List<int>>(
+    fileUrl,
+    options: Options(responseType: ResponseType.bytes),
+  );
+
+  // Nom du fichier depuis l’URL
+  String fileName = fileUrl.split('/').last;
+
+  FormData formData = FormData.fromMap({
+    'userId': userId,
+    'file': MultipartFile.fromBytes(
+      response.data!,
+      filename: fileName,
+      contentType: DioMediaType('application', 'pdf'),
+    ),
+  });
+
+  return await _dio.post(
+    '${Constants.apiBaseUrl}$endpoint',
+    data: formData,
+    options: Options(
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'multipart/form-data',
+      },
+    ),
+  );
+}
+
 
   /// PUT avec Auth
   static Future<http.Response> putWithAuth(String endpoint, Map<String, dynamic> body) async {

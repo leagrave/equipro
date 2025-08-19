@@ -15,12 +15,14 @@ class HorseInterventionListWidget extends StatefulWidget {
   final String? userId;
   final String? horseId;
   final String proID;
+  final String? userCustomID;
 
   const HorseInterventionListWidget({
     Key? key,
     this.userId,
     this.horseId,
     required this.proID,
+    this.userCustomID,
   }) : super(key: key);
 
   @override

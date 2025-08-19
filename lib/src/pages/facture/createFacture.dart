@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:math';
 import 'package:equipro/src/models/horse.dart';
 import 'package:equipro/src/models/user.dart';
 import 'package:equipro/src/services/apiService.dart';
@@ -14,6 +14,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+
+
+String generateInvoiceNumber() {
+  final random = DateTime.now().millisecondsSinceEpoch.remainder(1000000);
+  return 'INV-${random.toString().padLeft(6, '0')}';
+}
 
 class CreateInvoicePage extends StatefulWidget {
   final String proID;
@@ -52,7 +58,9 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
   List<Horse> horsesUsersList = [];
   String? proID;
   String? token;
+  String? user_idStore;
 
+final user_id_select_first = "";
   bool showHorseCard = false; 
 
   Horse newHorse = Horse(
@@ -62,11 +70,13 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
 
 
   Future<void> _loadProId() async {
-    final storedProId = await storage.read(key: 'user_id');
+    final storedUserId= await storage.read(key: 'user_id');
+    final storedProId = await storage.read(key: 'pro_id');
     final storedToken = await storage.read(key: 'authToken');
     setState(() {
       proID = storedProId;
       token =storedToken;
+      user_idStore = storedUserId;
     });
   }
 
@@ -77,15 +87,16 @@ Future<bool> postInvoice(Invoice invoice) async {
     final response = await ApiService.postWithAuth(
       '/facture/file',
        {
-        'user_id': invoice.user_id,
+        'user_id': selectedUsers.isNotEmpty ? selectedUsers.first.id : widget.userCustomerID,
         'horse_id': selectedHorse!.id,
-        'professional_id': widget.proID,
+        'professional_id': proID,
         'title': invoice.title,
+        'number' : invoice.number,
         'total_amount': invoice.totalAmount,
         'issue_date': invoice.issueDate?.toIso8601String(),
         'due_date': invoice.dueDate?.toIso8601String(),
         'is_company': invoice.isCompany,
-        'is_paid': invoice.isPaid,
+        'is_paid': newInvoice.isPaid,
         'payment_type_id': null,//invoice.paymentType, 
         'billing_address_id': null, // invoice.billingAddress?.id,
         'status_id': null,//invoice.status, // adapte selon ton modèle
@@ -168,28 +179,14 @@ Future<bool> uploadInvoicePdfWithApiService(File pdfFile, String userId) async {
   }
 }
 
-Invoice newInvoice = Invoice(
-  id: 'inv0',
-  number: 'INV-000',
-  title: 'Facture equipro',
-  totalAmount: 0.0,
-  user_id: 'user0',
-  pro_id: 'pro0',
-  issueDate: DateTime.now(),
-  dueDate: null,
-  isPaid: false,
-  isCompany: false,
-  horse_id: null,
-  paymentType: null,
-  status: null,
-  billingAddress: null,
-  intervention: null,
-  createdAt: DateTime.now(),
-  updatedAt: null,
-);
+
 
 void _onClientSelected(Users? user) async {
   if (user == null) return;
+
+    newInvoice = newInvoice.copyWith(
+    user_id: selectedUsers.isNotEmpty ? selectedUsers.first.id! : null,
+  );
 
   final alreadyExists = selectedUsers.any((u) => u.id == user.id);
   if (!alreadyExists) {
@@ -228,7 +225,25 @@ void _onClientSelected(Users? user) async {
 }
 
 
-
+Invoice newInvoice = Invoice(
+  id: 'inv0',
+  number: generateInvoiceNumber(),
+  title: 'Facture equipro',
+  totalAmount: 0.0,
+  user_id: 'Us01',
+  pro_id: 'pro0',
+  issueDate: DateTime.now(),
+  dueDate: null,
+  isPaid: false,
+  isCompany: false,
+  horse_id: null,
+  paymentType: null,
+  status: null,
+  billingAddress: null,
+  intervention: null,
+  createdAt: DateTime.now(),
+  updatedAt: null,
+);
 
 void _onRemoveUser(Users user) async {
   setState(() {
@@ -278,7 +293,7 @@ void _onRemoveUser(Users user) async {
   Future<List<Users>> fetchClients() async {
     print(proID);
     try {
-      final response = await ApiService.getWithAuth("/agendaAll/$proID");
+      final response = await ApiService.getWithAuth("/agendaAll/$user_idStore");
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         final fetchedClients = jsonData.map((data) => Users.fromJson(data)).toList();
@@ -340,6 +355,8 @@ Future<void> loadClientsAndHorses() async {
       if (preselectedUser.id != null) {
         setState(() {
           selectedUsers = [preselectedUser]; 
+          newInvoice = newInvoice.copyWith(user_id: preselectedUser.id);
+
         });
       }
     }
@@ -450,7 +467,7 @@ Future<void> _init() async {
                     invoice: newInvoice,
                     onInvoiceUpdated: (updatedInvoice) {
                       setState(() {
-                        newInvoice = updatedInvoice;
+                        newInvoice = updatedInvoice;               
                       });
                     },
                   ),
@@ -479,7 +496,18 @@ Future<void> _init() async {
                   const SnackBar(content: Text('Facture créée avec succès !')),
                 );
                 final pdfFile = await generateInvoicePdfFile(newInvoice);
-                final uploadSuccess = await uploadInvoicePdfWithApiService(pdfFile, newInvoice.user_id);
+                  final userId = selectedUsers.isNotEmpty
+                      ? selectedUsers.first.id
+                      : widget.userCustomerID;
+
+                  if (userId == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Aucun utilisateur sélectionné pour l\'upload du PDF')),
+                    );
+                    return;
+                  }
+
+                  final uploadSuccess = await uploadInvoicePdfWithApiService(pdfFile, userId);
                 if (uploadSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('PDF de la facture uploadé avec succès !')),

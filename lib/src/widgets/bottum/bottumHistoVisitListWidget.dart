@@ -5,9 +5,10 @@ import 'package:go_router/go_router.dart';
 class ButtonHistoVisitListWidget extends StatelessWidget {
   final String? idUser;
   final String? horseId;
+  final String? userCustomID;
   final String proID;
 
-  const ButtonHistoVisitListWidget({Key? key, this.idUser, this.horseId, required this.proID}) : super(key: key);
+  const ButtonHistoVisitListWidget({Key? key, this.idUser, this.horseId, required this.proID, this.userCustomID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class ButtonHistoVisitListWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), 
         ),
         onPressed: () {
-          context.push('/listIntervention', extra: {'userId': idUser, 'horseId': horseId, 'proID':proID});
+          context.push('/listIntervention', extra: {'userId': idUser, 'horseId': horseId, 'proID':proID, 'userCustomID': userCustomID});
         },
         child: const Column(
           mainAxisSize: MainAxisSize.min,

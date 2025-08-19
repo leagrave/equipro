@@ -112,6 +112,7 @@ void filterClients(String query) {
             'userSelected': user,
             'currentUserId': widget.userId,
           });
+    fetchClients();
   }
 
   void navigateToCreateClientPage() async {
@@ -125,6 +126,7 @@ void filterClients(String query) {
         filteredUsers = users;
       });
     }
+    fetchClients();
   }
 
   @override

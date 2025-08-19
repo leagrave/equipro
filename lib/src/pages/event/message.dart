@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equipro/src/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -79,7 +80,7 @@ class _MessagesPageState extends State<MessagesPage> {
             final conversations = snapshot.data!.docs;
 
             if (conversations.isEmpty) {
-              return const Center(child: Text("Aucune conversation trouvée"));
+              return const Center(child: Text("Aucune conversation trouvée", style: TextStyle(color: Colors.white)));
             }
 
             return ListView.builder(
@@ -115,11 +116,12 @@ class _MessagesPageState extends State<MessagesPage> {
                     title,
                     style: const TextStyle(color: Colors.white),
                   ),
-                  subtitle: Text(lastMessage, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  subtitle: Text(lastMessage, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white)),
                   trailing: lastUpdated != null
                       ? Text(
                           "${lastUpdated.hour.toString().padLeft(2, '0')}:${lastUpdated.minute.toString().padLeft(2, '0')}",
-                          style: const TextStyle(fontSize: 12, color: Colors.grey),
+                          style: const TextStyle(fontSize: 12, color: Colors.white),
+                          
                         )
                       : null,
                   onTap: () {
