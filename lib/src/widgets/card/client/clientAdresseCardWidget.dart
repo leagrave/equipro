@@ -481,7 +481,6 @@ Widget build(BuildContext context) {
         _buildField(_postalController, "Code Postal", Icons.local_post_office, onChanged: (value) => _updateAddress(index: 0,postalCode: value)),
         _buildField(_cityController, "Ville", Icons.location_city, onChanged: (value) => _updateAddress(index: 0,city: value)),
         _buildField(_countryController, "Pays", Icons.flag,  onChanged: (value) => _updateAddress(index: 0,country: value)),
-        _buildField(_typeController, "Type", Icons.info_outline, onChanged: (value) => _updateAddress(index: 0,type: value)),
       ],
     );
   }
@@ -494,7 +493,6 @@ Widget build(BuildContext context) {
         _buildField(_postalFacturationController, "Code Postal Facturation", Icons.markunread_mailbox,  onChanged: (value) => _updateAddress(index: 1,postalCode: value)),
         _buildField(_cityFacturationController, "Ville Facturation", Icons.location_city_outlined,  onChanged: (value) => _updateAddress(index: 1,city: value)),
         _buildField(_countryFacturationController, "Pays Facturation", Icons.flag_outlined, onChanged: (value) => _updateAddress(index: 1,country: value)),
-        _buildField(_typeFacturationController, "Type", Icons.info_outline, onChanged: (value) => _updateAddress(index: 1,type: value)),
       ],
     );
   }

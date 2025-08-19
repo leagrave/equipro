@@ -33,6 +33,7 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
   final storage = const FlutterSecureStorage();
   String? token;
   String? proID_secure;
+  String? userID;
 
   @override
   void initState() {
@@ -46,9 +47,11 @@ class _ListInvoicePageState extends State<ListInvoicePage> {
     Future<void> _loadProId() async {
     final storedProId = await storage.read(key: 'pro_id');
     final storedToken = await storage.read(key: 'authToken');
+    final storedUserId = await storage.read(key: 'user_id');
     setState(() {
       proID_secure = storedProId;
       token =storedToken;
+      userID = storedUserId;
     });
   }
 
@@ -168,7 +171,7 @@ Future<void> fetchInvoices() async {
                         onInvoiceTap: (invoice) {
                           navigateToInvoiceDetailsPage(invoice);
                         },
-                        userId: widget.userCustomerID ?? widget.proID, 
+                        userId: widget.userCustomerID ?? userID ?? '', 
                         token: token ?? '', 
                       ),
               ),

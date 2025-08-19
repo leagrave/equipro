@@ -1,5 +1,4 @@
 import 'package:equipro/src/pages/event/message.dart';
-import 'package:equipro/src/pages/facture/listFacture.dart';
 import 'package:equipro/src/pages/homeClient.dart';
 import 'package:equipro/src/pages/invoice.dart';
 import 'package:equipro/src/pages/event/calendar.dart';
@@ -27,7 +26,6 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
   late int currentPageIndex;
   String? currentIdUser;
   String? currentToken;
-  String? profesionnelId;
   bool professional = false;
 
   final _secureStorage = const FlutterSecureStorage();
@@ -42,7 +40,6 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
   Future<void> _loadUserData() async {
     final token = await _secureStorage.read(key: 'authToken');
     final userJson = await _secureStorage.read(key: 'userData');
-    final storedProId = await _secureStorage.read(key: 'pro_id'); 
 
     if (userJson != null) {
       final user = jsonDecode(userJson);
@@ -50,18 +47,15 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
         currentIdUser = user['id']?.toString();
         professional = user['professional'] ?? false;
         currentToken = token;
-        profesionnelId = storedProId; 
       });
     } else {
       setState(() {
         currentIdUser = null;
         currentToken = null;
         professional = false;
-        profesionnelId = null; 
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +66,7 @@ class _MyWidgetBottomNavBarState extends State<MyWidgetBottomNavBar> {
       MyAgendaPage(userId: currentIdUser),
       homePage,
       CalendarPage(),
-      ListInvoicePage(
-        proID: profesionnelId ?? '',
-        customer_id: null,
-        userCustomerID: null,
-      ),
+      InvoicePage(userId: currentIdUser),
     ];
 
     return Scaffold(
